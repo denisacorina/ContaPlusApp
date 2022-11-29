@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "QNvPz6sl2W8332xm20aTq2tv4S8SWGpMBEmK6TWfk5XkyWTNN1HXHleYgr/dJDFY9I8Cy29FP/GX2tP7ZJIBMw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\DENI\\Desktop\\ContaPlus\\ContaPlusAPI\\ContaPlusAPI\\ContaPlusAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\DENI\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\DENI\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\DENI\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\DENI\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\DENI\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\DENI\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
+  "logs": []
+}
