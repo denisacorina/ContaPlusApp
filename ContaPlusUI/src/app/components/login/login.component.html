@@ -1,0 +1,51 @@
+<div class="loginForm">
+<form style="box-sizing: unset!important; ">
+<h1 class="mb-4">LOGIN</h1>
+
+    <!-- Email input -->
+    <div class="form-outline mb-4 ">
+        <mat-form-field appearance="fill" style="width: 600px!important;">
+            <mat-label>Enter your email</mat-label>
+            <input matInput placeholder="pat@example.com" required>
+          </mat-form-field>
+    </div>
+  
+    <!-- Password input -->
+    <div class="form-outline mb-4">
+        <mat-form-field appearance="fill" style="width: 600px!important;">
+            <mat-label>Enter your password</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" required>
+        </mat-form-field>
+    </div>
+  
+    <!-- 2 column grid layout for inline styling -->
+    <div class="text-center mb-4">
+        <a href="#!">Forgot password?</a>
+    </div>
+   
+  <div class="row mb-4">
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary btn-block mb-4">Login</button>
+  </div>
+    <!-- Register buttons -->
+    <div class="text-center">
+      <p>Not a member? <a href="#!">Register</a></p>
+      <p>or sign up with:</p>
+      <button type="button" class="btn btn-secondary btn-floating mx-1">
+        <i class="fab fa-facebook-f"></i>
+      </button>
+  
+      <button type="button" class="btn btn-secondary btn-floating mx-1">
+        <i class="fab fa-google"></i>
+      </button>
+  
+      <button type="button" class="btn btn-secondary btn-floating mx-1">
+        <i class="fab fa-twitter"></i>
+      </button>
+  
+      <button type="button" class="btn btn-secondary btn-floating mx-1">
+        <i class="fab fa-github"></i>
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,10 @@
+form {
+    height: 600px;
+    width: 600px;
+    
+}
+
+.loginForm{
+    position:absolute;
+    top:16%; bottom:20%; left: 7%;
+}
