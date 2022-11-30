@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2, ViewChild } from '@angular/core';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-login',
@@ -6,6 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  hide = true;
+
+  
 }
+
 
