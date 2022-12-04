@@ -2,14 +2,24 @@
 #loginBtn{
     background-color: #4f4feb;
     color: white;
-  
+    border-radius: 30px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    width: 99%;
+    font-weight: 500;
+    font-size: 14px;
 }
+
 #loginBtn:hover{
     background-color: #3939cc;
 }
 
 .loginText{
-    font-weight: 600;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: 50px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #loginForm{
@@ -19,8 +29,8 @@
     display: inline-block;
 }
  .logo{
-    width: 250px;
-    margin-top: -80px;
+  width: 250px;
+  margin-bottom: 20px;
  }
 
 .split {
@@ -43,7 +53,7 @@
   .right {
     right: 0;
     background-color: rgb(79, 79, 235);
-    background-image: url("../../../assets/img/cover2.jpg");
+    background-image: url("../../../assets/img/cover3.jpg");
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -62,7 +72,11 @@
     border-radius: 30px;
     border-style: solid;
     border-width: medium;
-   
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+  div.border:hover{
+    background-color: rgb(246, 245, 255);
   }
 
   a{
@@ -77,7 +91,13 @@
   .googleImg{
     width: 50px;
   }
-
+  form{
+    font-size: 14px!important;
+  }
+  
+  mat-label{
+    font-size: 12px!important;
+  }
 
   .hr-text {
     line-height: 1em;
@@ -92,7 +112,7 @@
     .hr-text::before {
       content: '';
      
-      background-color: #6e6e6a;
+      background-color: #c7c7c7;
       position: absolute;
       left: 0;
       top: 50%;
@@ -105,7 +125,7 @@
       display: inline-block;  
       padding: 0 .5em;
       line-height: 1.5em;
-      color: #6e6e6a;
+      color: #a8a8a8;
       background-color: #fcfcfa;
     }
   
@@ -119,9 +139,20 @@
 }
 */
 .heading{
-    margin-top: 400px;
-    font-size: 36px;
-    font-weight: 600;
-    color: rgb(255, 255, 255);
+  font-size: 36px!important;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  line-height: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.lorem{
+  font-size: 18px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 22px;
+}
+
+.carousel-inner{
+  width: 600px;
+
+}
