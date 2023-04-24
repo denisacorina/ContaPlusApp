@@ -19,6 +19,8 @@ import { AuthGuard } from 'src/app/shared/guards/auth.guard'
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from 'src/app/shared/jwt.incerceptor';
+import { SideBarComponent } from './components/navigation/side-bar/side-bar.component';
+import { TopNavBarComponent } from './components/navigation/top-nav-bar/top-nav-bar.component';
 
 
 
@@ -33,6 +35,8 @@ export function tokenGetter()
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
+    SideBarComponent,
+    TopNavBarComponent,
 
   ],
   imports: [

@@ -1,0 +1,31 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse">
+      <div *ngIf="companyData">
+        <h4 class="companyName">
+          Current company: 
+          <span class="companyNameValue">{{ companyData[0]?.companyName || "doesn't exist" | uppercase }}</span>
+        </h4>
+      </div>
+      
+    
+      <a class="navbar-brand" href="#">
+        <img src="../../../assets/img/contaplus.png"  alt="Logo" style="width: 150px; padding-top: 10px;">
+      </a>
+      
+        <div class="dropdown">
+          <img src="../../../assets/img/contaplusLOGO.png" alt="User Photo">
+          <span class="username">{{ user?.firstName.split(' ')[0] | uppercase }} {{ user?.lastName.charAt(0) | uppercase }}.</span>
+          <img src="../../../assets/img/dropdown.png" style="width: 15px; height: 15px; margin-left: 10px;">
+          <div class="dropdown-content">
+          <a href="#">My profile</a>
+          <div *ngIf="showCompanyDropdown">
+          <h6 style="margin-left: 15px; color: #5959e3; font-size: 12px;">Choose another company:</h6>
+          <a *ngFor="let company of companies" (click)="selectCompany(company.companyId)" href="/dashboard">
+            <img src="../../../assets/img/building.png" style="width: 20px; height: 20px; margin-left: 10px;"> {{ company.companyName || "DOESN'T EXIST" }}</a>
+           </div> <a href="#">Add new company</a>
+          <a [href]="'/dashboard'" (click)="logout()" class="logoutBtn">Logout</a>
+        </div>
+        
+        </div>
+    </div>
+  </nav>

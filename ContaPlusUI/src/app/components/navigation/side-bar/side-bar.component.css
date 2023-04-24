@@ -1,0 +1,87 @@
+
+.sidebar {
+    height: 97%;
+    width: 85px;
+    margin: 10px 10px 10px 20px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background: linear-gradient( #4f4feb,#5959e3 );
+    font-size: 16px;
+
+
+    bottom: 0;
+    
+    transition: 0.5s;
+    overflow-x: hidden;
+    white-space: nowrap;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 0px rgba(67, 67, 231, 0.57);
+    
+  }
+  
+  .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #ffffff;
+    display: block;
+    width: 70px;
+  }
+  
+  .sidebar a:hover {
+    color: #b8b8b8;
+
+  }
+
+  .w3-bar-item {
+    color: #fff; 
+    background-color: #5959e3; 
+    font-size: 12px!important;
+    width: 100%!important;
+  }
+
+  .sideBarText{
+    font-size: 12px;
+  }
+
+  main .sidebar {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  .material-icons,
+  .icon-text {
+    vertical-align: middle;
+  }
+  
+  .material-icons {
+    padding-bottom: 3px;
+    margin-right: 30px;
+  }
+
+
+  #logo{
+    width: 50px;
+    margin: 18px;
+  }
+
+  .logo{
+    color: rgb(236, 236, 236);
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+  }
+
+  @media screen and (max-height: 450px) {
+    .sidebar {
+      padding-top: 15px;
+    }
+    .sidebar a {
+      font-size: 18px;
+    }
+  }

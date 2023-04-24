@@ -3,17 +3,14 @@ import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CompanyService } from 'src/app/services/company.service';
 import { UserService } from 'src/app/services/user.service';
-import { AuthGuard } from 'src/app/shared/guards/auth.guard';
-
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
-  providers: [AuthGuard]
+  selector: 'app-top-nav-bar',
+  templateUrl: './top-nav-bar.component.html',
+  styleUrls: ['./top-nav-bar.component.css']
 })
-export class DashboardComponent implements OnInit {
-  model : any;
+export class TopNavBarComponent implements OnInit {
+ model : any;
 
   userId: any;
   user: any;
@@ -22,20 +19,18 @@ export class DashboardComponent implements OnInit {
   companyData: any;
   showCompanyDropdown: boolean = false;
 
+  
   constructor(private companyService : CompanyService, 
               private userService : UserService, 
               private router: Router, 
               private jwtHelper: JwtHelperService) {}
 
   ngOnInit(): void {
-   document.body.classList.remove('no-scroll');
-    document.body.classList.add('custom-scrollbar');
    this.getLoggedInUser();
    this.fetchListOfCompaniesForUser();
  
   }
-
-  getLoggedInUser()
+   getLoggedInUser()
   {
     const userId = this.getLoggedInUserId();
     if (userId) {
@@ -50,7 +45,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  fetchListOfCompaniesForUser() {
+   fetchListOfCompaniesForUser() {
     const userId = this.getLoggedInUserId();
   
     if (userId) {
@@ -77,6 +72,7 @@ export class DashboardComponent implements OnInit {
       });
     }
   }
+
 
   selectCompany(companyId: string) {
     console.log('selected companyId:', companyId);
@@ -107,6 +103,4 @@ export class DashboardComponent implements OnInit {
     localStorage.removeItem('selectedCompanyId');
   }
 }
-  
-
 
