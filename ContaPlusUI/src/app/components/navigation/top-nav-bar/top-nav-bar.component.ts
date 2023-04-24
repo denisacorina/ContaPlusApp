@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CompanyService } from 'src/app/services/company.service';
 import { UserService } from 'src/app/services/user.service';
+
+
+
 
 @Component({
   selector: 'app-top-nav-bar',
@@ -18,16 +22,23 @@ export class TopNavBarComponent implements OnInit {
   selectedCompanyId!: string;
   companyData: any;
   showCompanyDropdown: boolean = false;
+  dialog: any;
+
+  addCompanyForm!: FormGroup;
+
+  isAddCompanyDialogOpen = false;
 
   
   constructor(private companyService : CompanyService, 
               private userService : UserService, 
               private router: Router, 
-              private jwtHelper: JwtHelperService) {}
+              private jwtHelper: JwtHelperService,
+              private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
    this.getLoggedInUser();
    this.fetchListOfCompaniesForUser();
+   this.addCompanyToUser();
  
   }
    getLoggedInUser()
@@ -44,6 +55,40 @@ export class TopNavBarComponent implements OnInit {
       );
     }
   }
+
+  addCompanyToUser() {
+    this.addCompanyForm = new FormGroup({
+      companyName:  new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      fiscalCode: new FormControl(''),
+      tradeRegister: new FormControl('', Validators.pattern('^J\\d{2}/\\d{3}/\\d{4}$')),
+      phoneNumber: new FormControl(''),
+      address: new FormControl(''),
+      tvaPayer: new FormControl(false),
+      socialCapital: new FormControl('', Validators.min(200))
+    });
+     
+  }
+
+  onAddCompanySubmit(): void {
+    if (this.addCompanyForm.invalid) {
+      return;
+    }
+    this.userId = this.getLoggedInUserId();
+    this.companyService.addCompanyToUser(this.addCompanyForm.value, this.userId).subscribe(
+      () => console.log("Company added"),
+      error => console.error(error)
+    );
+
+    this.isAddCompanyDialogOpen = false;
+  }
+
+
+
+  onCancel(): void {
+    this.isAddCompanyDialogOpen = false;   
+  }
+
 
    fetchListOfCompaniesForUser() {
     const userId = this.getLoggedInUserId();

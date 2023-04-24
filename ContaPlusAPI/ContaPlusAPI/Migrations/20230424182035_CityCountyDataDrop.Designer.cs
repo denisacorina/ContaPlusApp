@@ -4,6 +4,7 @@ using ContaPlusAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContaPlusAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230424182035_CityCountyDataDrop")]
+    partial class CityCountyDataDrop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace ContaPlusAPI.Migrations
 
                     b.HasKey("RegionNumber");
 
-                    b.ToTable("Cities_Counties");
+                    b.ToTable("CityCountyData");
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.Company", b =>

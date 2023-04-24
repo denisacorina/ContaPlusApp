@@ -1,31 +1,83 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-    <div class="collapse navbar-collapse">
-      <div *ngIf="companyData">
-        <h4 class="companyName">
-          Current company: 
-          <span class="companyNameValue">{{ companyData[0]?.companyName || "doesn't exist" | uppercase }}</span>
-        </h4>
-      </div>
-      
-    
-      <a class="navbar-brand" href="#">
-        <img src="../../../assets/img/contaplus.png"  alt="Logo" style="width: 150px; padding-top: 10px;">
-      </a>
-      
-        <div class="dropdown">
-          <img src="../../../assets/img/contaplusLOGO.png" alt="User Photo">
-          <span class="username">{{ user?.firstName.split(' ')[0] | uppercase }} {{ user?.lastName.charAt(0) | uppercase }}.</span>
-          <img src="../../../assets/img/dropdown.png" style="width: 15px; height: 15px; margin-left: 10px;">
-          <div class="dropdown-content">
-          <a href="#">My profile</a>
-          <div *ngIf="showCompanyDropdown">
+  <div class="collapse navbar-collapse">
+    <div *ngIf="companyData">
+      <h4 class="companyName">
+        Current company:
+        <span class="companyNameValue">{{ companyData[0]?.companyName || "doesn't exist" | uppercase }}</span>
+      </h4>
+    </div>
+
+
+    <a class="navbar-brand" href="#">
+      <img src="../../../assets/img/contaplus.png" alt="Logo" style="width: 150px; padding-top: 10px;">
+    </a>
+
+    <div class="dropdown">
+      <img src="../../../assets/img/contaplusLOGO.png" alt="User Photo">
+      <span class="username">{{ user?.firstName.split(' ')[0] | uppercase }} {{ user?.lastName.charAt(0) | uppercase
+        }}.</span>
+      <img src="../../../assets/img/dropdown.png" style="width: 15px; height: 15px; margin-left: 10px;">
+      <div class="dropdown-content">
+        <a href="#">My profile</a>
+        <div *ngIf="showCompanyDropdown">
           <h6 style="margin-left: 15px; color: #5959e3; font-size: 12px;">Choose another company:</h6>
           <a *ngFor="let company of companies" (click)="selectCompany(company.companyId)" href="/dashboard">
-            <img src="../../../assets/img/building.png" style="width: 20px; height: 20px; margin-left: 10px;"> {{ company.companyName || "DOESN'T EXIST" }}</a>
-           </div> <a href="#">Add new company</a>
-          <a [href]="'/dashboard'" (click)="logout()" class="logoutBtn">Logout</a>
+            <img src="../../../assets/img/building.png" style="width: 20px; height: 20px; margin-left: 10px;"> {{
+            company.companyName || "DOESN'T EXIST" }}</a>
         </div>
-        
-        </div>
+        <a (click)="isAddCompanyDialogOpen = true">Add new company</a>
+        <a [href]="'/dashboard'" (click)="logout()" class="logoutBtn">Logout</a>
+      </div>
+
     </div>
-  </nav>
+  </div>
+</nav>
+
+<div *ngIf="isAddCompanyDialogOpen">
+  <h4 mat-dialog-title>Add New Company</h4>
+  <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['tradeRegister'].hasError('pattern')">
+    Trade register must be in the format 'J01/123/4567'.
+  </mat-error>
+
+  <form [formGroup]="addCompanyForm" (ngSubmit)="onAddCompanySubmit()">
+    <mat-dialog-content>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Company Name" formControlName="companyName" name="companyName"
+          required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="email" placeholder="Email" formControlName="email" name="email" required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="number" placeholder="Fiscal Code" formControlName="fiscalCode" name="fiscalCode">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Trade Register" formControlName="tradeRegister" name="tradeRegister">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="tel" placeholder="Phone Number" formControlName="phoneNumber" name="phoneNumber">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Address" formControlName="address" name="address">
+      </mat-form-field>
+
+
+      <mat-checkbox formControlName="tvaPayer" name="tvaPayer">TVA Payer</mat-checkbox>
+
+      <mat-form-field>
+        <input matInput type="number" placeholder="Social Capital" formControlName="socialCapital" name="socialCapital">
+      </mat-form-field>
+
+
+      <mat-dialog-actions>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!addCompanyForm.valid">Add Company</button>
+        <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
+      </mat-dialog-actions>
+
+    </mat-dialog-content>
+  </form>

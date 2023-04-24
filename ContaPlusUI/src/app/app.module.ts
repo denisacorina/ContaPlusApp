@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,8 +20,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from 'src/app/shared/jwt.incerceptor';
 import { SideBarComponent } from './components/navigation/side-bar/side-bar.component';
 import { TopNavBarComponent } from './components/navigation/top-nav-bar/top-nav-bar.component';
-
-
+import { BsModalService, BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
+import { ComponentLoaderFactory } from 'ngx-bootstrap/component-loader';
 
 export function tokenGetter()
 {
@@ -37,6 +36,7 @@ export function tokenGetter()
     DashboardComponent,
     SideBarComponent,
     TopNavBarComponent,
+    
 
   ],
   imports: [
@@ -51,6 +51,7 @@ export function tokenGetter()
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    ModalModule.forRoot(),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -60,7 +61,7 @@ export function tokenGetter()
     })
   
   ],
-providers: [[
+providers: [BsModalService, BsModalRef, ComponentLoaderFactory, [
   {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
