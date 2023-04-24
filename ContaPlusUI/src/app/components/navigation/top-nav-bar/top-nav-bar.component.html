@@ -33,51 +33,70 @@
   </div>
 </nav>
 
-<div *ngIf="isAddCompanyDialogOpen">
-  <h4 mat-dialog-title>Add New Company</h4>
+<div *ngIf="isAddCompanyDialogOpen" class="add-company-dialog">
+  <h4 class="mb-4" mat-dialog-title>Add New Company</h4>
   <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['tradeRegister'].hasError('pattern')">
     Trade register must be in the format 'J01/123/4567'.
   </mat-error>
 
   <form [formGroup]="addCompanyForm" (ngSubmit)="onAddCompanySubmit()">
     <mat-dialog-content>
-      <mat-form-field>
-        <input matInput type="text" placeholder="Company Name" formControlName="companyName" name="companyName"
-          required>
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput type="email" placeholder="Email" formControlName="email" name="email" required>
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput type="number" placeholder="Fiscal Code" formControlName="fiscalCode" name="fiscalCode">
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput type="text" placeholder="Trade Register" formControlName="tradeRegister" name="tradeRegister">
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput type="tel" placeholder="Phone Number" formControlName="phoneNumber" name="phoneNumber">
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput type="text" placeholder="Address" formControlName="address" name="address">
-      </mat-form-field>
-
-
-      <mat-checkbox formControlName="tvaPayer" name="tvaPayer">TVA Payer</mat-checkbox>
-
-      <mat-form-field>
-        <input matInput type="number" placeholder="Social Capital" formControlName="socialCapital" name="socialCapital">
-      </mat-form-field>
-
-
-      <mat-dialog-actions>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!addCompanyForm.valid">Add Company</button>
-        <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
-      </mat-dialog-actions>
-
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Company Name" formControlName="companyName" name="companyName" required>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <input matInput type="email" placeholder="Email" formControlName="email" name="email" required>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Fiscal Code" formControlName="fiscalCode" name="fiscalCode">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Trade Register" formControlName="tradeRegister" name="tradeRegister">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input matInput type="tel" placeholder="Phone Number" formControlName="phoneNumber" name="phoneNumber">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Address" formControlName="address" name="address">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Social Capital" formControlName="socialCapital" name="socialCapital" required>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox formControlName="tvaPayer" name="tvaPayer">TVA Payer</mat-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-dialog-actions>
+            <button mat-raised-button 
+            style="background-color: #4f4feb; color: white; margin-right: 10px;" 
+            type="submit">Add Company</button>
+            <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
+          </mat-dialog-actions>
+        </div>
+      </div>
     </mat-dialog-content>
   </form>
+  </div>

@@ -95,3 +95,36 @@
     font-weight: bold;
     padding-right: 250px;
 }
+
+.add-company-dialog {
+    width: 50%;
+    height: 80%;
+    background-color: white;
+    padding: 70px 70px 0px 125px;
+    z-index: 9999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 70vmax rgba(0,0,0,.7);
+    border-radius: 10px;
+}
+
+
+mat-form-field {
+    font-size: 14px;
+}
+
+mat-dialog-actions {
+  
+  display: flex;
+  justify-content: center;
+    
+}
+
+.mat-mdc-checkbox.mat-accent {
+    --mdc-checkbox-selected-focus-icon-color: #4f4feb!important;
+    --mdc-checkbox-selected-hover-icon-color: #4f4feb!important;
+    --mdc-checkbox-selected-icon-color: #4f4feb!important;
+    --mdc-checkbox-selected-pressed-icon-color: #4f4feb!important;
+}

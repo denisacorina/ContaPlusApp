@@ -22,7 +22,6 @@ export class TopNavBarComponent implements OnInit {
   selectedCompanyId!: string;
   companyData: any;
   showCompanyDropdown: boolean = false;
-  dialog: any;
 
   addCompanyForm!: FormGroup;
 
@@ -31,9 +30,7 @@ export class TopNavBarComponent implements OnInit {
   
   constructor(private companyService : CompanyService, 
               private userService : UserService, 
-              private router: Router, 
-              private jwtHelper: JwtHelperService,
-              private formBuilder: FormBuilder) {}
+              private jwtHelper: JwtHelperService) {}
 
   ngOnInit(): void {
    this.getLoggedInUser();
@@ -81,6 +78,7 @@ export class TopNavBarComponent implements OnInit {
     );
 
     this.isAddCompanyDialogOpen = false;
+    alert("company created")
   }
 
 
@@ -114,7 +112,7 @@ export class TopNavBarComponent implements OnInit {
         } else {
           console.error("No companies");
         }
-      });
+      }); 
     }
   }
 
