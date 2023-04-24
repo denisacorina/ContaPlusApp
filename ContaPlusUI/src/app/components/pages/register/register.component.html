@@ -1,0 +1,99 @@
+<div class="split left" id="registerForm">
+  <div class="centered">
+    <form style="box-sizing: unset!important;" autocomplete="off" [formGroup]="registrationForm"
+      (ngSubmit)="submitData()">
+
+
+      <h2 class="registerText">Register</h2>
+
+      <mat-error style="font-size: 14px;" *ngIf="registrationForm.controls['password'].hasError('pattern')">
+        Password must be at least 8 characters long, must contain at least one uppercase letter, one lowercase letter,
+        and one number
+      </mat-error>
+      <mat-error style="font-size: 14px;" *ngIf="this.errorMessage">
+        {{this.errorMessage}}
+      </mat-error>
+
+      <!-- firstName input -->
+      <div class="form-outline mt-4 ">
+        <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
+          <mat-label>First Name</mat-label>
+          <input formControlName="firstName" type="text" matInput placeholder="Denisa">
+        </mat-form-field>
+      </div>
+
+
+      <div class="form-outline">
+        <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
+          <mat-label>Last Name</mat-label>
+          <input formControlName="lastName" type="text" matInput placeholder="Black">
+        </mat-form-field>
+      </div>
+
+      <!-- Email input -->
+      <div class="form-outline">
+        <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
+          <mat-label>Enter your email</mat-label>
+          <input formControlName="email" type="email" matInput placeholder="123@example.com">
+        </mat-form-field>
+      </div>
+
+      <!-- Password input -->
+      <div class="form-outline">
+
+        <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
+          <mat-label>Enter your password</mat-label>
+          <input formControlName="password" type="password" matInput placeholder="Legacy">
+        </mat-form-field>
+      </div>
+
+
+
+
+      <div class="row mb-4">
+        <!-- Submit button -->
+        <button value="Submit" class="btn btn-block" id="registerBtn">Register</button>
+      </div>
+    </form>
+    <div class="text-center mb-4">
+      <a href="#!">Forgot password?</a>
+    </div>
+
+    <div class="text-center">
+      <p style="font-size: 14px!important;">Already have an account? <a routerLink="/login">Login</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="split right ">
+  <div class="centered">
+
+    <img src="../../../assets/img/contapluslight.png" class="logo">
+
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="../../../assets/img/slide1.png" alt="" style="width:600px; height: 350px;">
+          <p class="heading">Get your business <br> goals in order</p>
+          <p class="lorem" style="color: rgb(226, 226, 226)">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Incidunt explicabo necessitatibus laboriosam tempore nu</p>
+
+        </div>
+
+        <div class="item">
+          <img src="../../../assets/img/slide1.png" alt="" style="width:600px; height: 350px;">
+          <p class="heading">Get yourlife <br> goals in order</p>
+          <p class="lorem" style="color: rgb(226, 226, 226)">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Incidunt explicabo necessitatibus laboriosam tempore nu</p>
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+</div>

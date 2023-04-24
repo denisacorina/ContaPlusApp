@@ -6,8 +6,10 @@ namespace ContaPlusAPI.Helpers
     public class AutoMapper : Profile
     {
         public AutoMapper() {
-            CreateMap<User, UserDTO>().ReverseMap();        
-            CreateMap<User, UserRegDTO>().ReverseMap();        
+            CreateMap<User, LoginUserDTO>().ReverseMap();        
+            CreateMap<User, RegisterUserDTO>().ReverseMap();
+            CreateMap<User, UserProfileUpdateDTO>().ReverseMap();
+
         }
     }
 }

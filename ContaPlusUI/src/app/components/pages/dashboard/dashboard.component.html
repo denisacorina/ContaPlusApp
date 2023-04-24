@@ -1,0 +1,113 @@
+<!-- Side Bar -->
+<div id="mySidebar" class="sidebar" (mouseover)="toggleSidebar()" (mouseout)="toggleSidebar()">
+ <div id="logo">
+  <img src="../../../assets/img/whitelogo.png" class="logo"></div>
+  <a href="#">
+    <i class="material-icons">info</i><span class="sideBarText">Dropdown</span></a><br>
+ 
+    <div class="w3-dropdown-hover">
+      <a class=""><i class="material-icons">info</i> <span class="sideBarText">Dropdown</span></a>
+      <div class="w3-dropdown-content">
+        <a href="#" class="w3-bar-item">Link</a>
+        <a href="#" class="w3-bar-item">Link</a>
+      </div>
+    </div> 
+    </div>
+
+
+
+<!-- Main Content -->
+<div id="main">
+    <!-- Top Nav Bar -->
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse">
+    <div *ngIf="companyData">
+      <h4 class="companyName">
+        Current company: 
+        <span class="companyNameValue">{{ companyData[0]?.companyName || "doesn't exist" | uppercase }}</span>
+      </h4>
+    </div>
+    
+  
+    <a class="navbar-brand" href="#">
+      <img src="../../../assets/img/contaplus.png"  alt="Logo" style="width: 150px; padding-top: 10px;">
+    </a>
+    
+      <div class="dropdown">
+        <img src="../../../assets/img/contaplusLOGO.png" alt="User Photo">
+        <span class="username">{{ user?.firstName.split(' ')[0] | uppercase }} {{ user?.lastName.charAt(0) | uppercase }}.</span>
+        <img src="../../../assets/img/dropdown.png" style="width: 15px; height: 15px; margin-left: 10px;">
+        <div class="dropdown-content">
+        <a href="#">My profile</a>
+        <div *ngIf="showCompanyDropdown">
+        <h6 style="margin-left: 15px; color: #5959e3; font-size: 12px;">Choose another company:</h6>
+        <a *ngFor="let company of companies" (click)="selectCompany(company.companyId)" href="/dashboard">
+          <img src="../../../assets/img/building.png" style="width: 20px; height: 20px; margin-left: 10px;"> {{ company.companyName || "DOESN'T EXIST" }}</a>
+         </div> <a href="#">Add new company</a>
+        <a [href]="'/dashboard'" (click)="logout()" class="logoutBtn">Logout</a>
+      </div>
+      
+      </div>
+          <!-- Logout button -->
+      <!-- <button type="button" class="btn btn-primary logoutBtn" (click)="logout()">Logout</button> -->
+  
+  </div>
+</nav>
+
+<div class="custom-scrollbar scrollable">
+  <h3>Dashboard</h3>
+  <!-- Cards for displaying data -->
+  <div class="card-container">
+    <div class="card">
+      <!-- Card content goes here -->
+      Card 1
+    </div>
+    <div class="card">
+      <!-- Card content goes here -->
+      Card 2
+    </div>
+    <div class="card">
+      <!-- Card content goes here -->
+      Card 3
+    </div>
+  </div>
+
+  <div>
+    <p>User ID: {{ user?.userId }}</p>
+    <p>Email: {{ user?.email }}</p>
+    <p>First name: {{ user?.firstName }}</p>
+    <p>Last name: {{ user?.lastName }}</p>
+    <p>Created at: {{ user?.createdAt }}</p>
+    <h4>Roles:</h4>
+    <ul>
+      <li *ngFor="let role of user?.roles">{{ role?.roleName }}</li>
+    </ul>
+    
+    </div> 
+    <h4>Companies:</h4>
+    <ul>
+    <li *ngFor="let company of companies">{{ company.companyId}}, {{ company.companyName }}</li>
+  </ul>
+
+<div *ngIf="companyData">
+
+  <h3>Company Info</h3>
+<p>Company ID: {{ companyData[0]?.companyId }}</p>
+<p>Company Name: {{ companyData[0]?.companyName || "doesn't exist"}}</p>
+<p>Fiscal Code: {{ companyData[0]?.fiscalCode || "doesn't exist"}}</p>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+

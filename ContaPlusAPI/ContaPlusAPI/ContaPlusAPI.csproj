@@ -9,7 +9,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.EF6" Version="2.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -20,11 +22,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\NewFolder\" />
+    <PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
   </ItemGroup>
 
 </Project>
