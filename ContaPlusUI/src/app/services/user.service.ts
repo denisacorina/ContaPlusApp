@@ -7,18 +7,18 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class UserService {
-    baseUserUrl = "https://localhost:7121/api/Users";
+  baseUserUrl = "https://localhost:7121/api/Users";
 
-    constructor(private http : HttpClient, private jwtHelper: JwtHelperService, private router: Router) { }
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private router: Router) { }
 
-    getUserInfo(userId: string): Observable<any> {
-        return this.http.get<any>(`${this.baseUserUrl}/getUserById`, { params: { userId } });
-      }
-      
-      
-      updateUser(model:any, userId: string) {
-        return this.http.put<any>(`${this.baseUserUrl}/updateUser/${userId}`, model);
-      }
-      
-      
+  getUserInfo(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUserUrl}/getUserById`, { params: { userId } });
+  }
+
+
+  updateUser(model: any, userId: string) {
+    return this.http.put<any>(`${this.baseUserUrl}/updateUser/${userId}`, model);
+  }
+
+
 }

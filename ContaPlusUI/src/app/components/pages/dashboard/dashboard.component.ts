@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CompanyService } from 'src/app/services/company.service';
@@ -13,7 +14,7 @@ import { AuthGuard } from 'src/app/shared/guards/auth.guard';
   providers: [AuthGuard]
 })
 export class DashboardComponent implements OnInit {
-  model : any;
+  model: any;
 
   userId: any;
   user: any;
@@ -21,22 +22,68 @@ export class DashboardComponent implements OnInit {
   selectedCompanyId!: string;
   companyData: any;
   showCompanyDropdown: boolean = false;
+  isUpdateCompanyDialogOpen: boolean = false;
+  updateCompanyForm!: FormGroup;
+  companyWithNullName: any;
 
-  constructor(private companyService : CompanyService, 
-              private userService : UserService, 
-              private router: Router, 
-              private jwtHelper: JwtHelperService) {}
+  constructor(private companyService: CompanyService,
+    private userService: UserService,
+    private router: Router,
+    private jwtHelper: JwtHelperService) { }
 
   ngOnInit(): void {
-   document.body.classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll');
     document.body.classList.add('custom-scrollbar');
-   this.getLoggedInUser();
-   this.fetchListOfCompaniesForUser();
- 
+    this.getLoggedInUser();
+    this.fetchListOfCompaniesForUser();
+    this.showUpdateCompanyModal();
   }
 
-  getLoggedInUser()
-  {
+  updateCompany() {
+    this.updateCompanyForm = new FormGroup({
+      companyName: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      fiscalCode: new FormControl(''),
+      tradeRegister: new FormControl('', Validators.pattern('^J\\d{2}/\\d{3}/\\d{4}$')),
+      phoneNumber: new FormControl(''),
+      address: new FormControl(''),
+      socialCapital: new FormControl('', Validators.min(200)),
+      tvaPayer: new FormControl(false)
+    });
+  }
+
+  onUpdateCompanySubmit(): void {
+    if (this.updateCompanyForm.invalid) {
+      return;
+    }
+    const companyId = this.companyWithNullName.companyId;
+    this.companyService.updateCompany(this.updateCompanyForm.value, companyId).subscribe(
+      () => location.reload(),
+      error => console.error(error)
+    );
+
+    this.isUpdateCompanyDialogOpen = false;
+    alert("company updated")
+  }
+
+  showUpdateCompanyModal() {
+    const userId = this.getLoggedInUserId();
+    if (!userId) {
+      return;
+    }
+
+    this.companyService.getCompaniesForUser(userId).subscribe(companies => {
+      this.companyWithNullName = companies.find(c => !c.companyName);
+
+      if (this.companyWithNullName) {
+        this.isUpdateCompanyDialogOpen = true;
+        this.updateCompany();
+      }
+    });
+  }
+
+
+  getLoggedInUser() {
     const userId = this.getLoggedInUserId();
     if (userId) {
       this.userService.getUserInfo(userId).subscribe(
@@ -52,25 +99,25 @@ export class DashboardComponent implements OnInit {
 
   fetchListOfCompaniesForUser() {
     const userId = this.getLoggedInUserId();
-  
+
     if (userId) {
       this.companyService.getCompaniesForUser(userId).subscribe(companies => {
         this.companies = companies;
-        
+
         if (this.companies) {
           if (this.companies.length == 1 || !localStorage.getItem('selectedCompanyId')) {
             this.selectedCompanyId = this.companies[0].companyId;
             localStorage.setItem('selectedCompanyId', this.selectedCompanyId);
             this.selectCompany(this.selectedCompanyId);
             this.showCompanyDropdown = false;
-          } 
-          
+          }
+
           if (this.companies.length > 1) {
             this.showCompanyDropdown = true;
             this.selectedCompanyId = localStorage.getItem('selectedCompanyId') as string;
             this.selectCompany(this.selectedCompanyId);
           }
-          
+
         } else {
           console.error("No companies");
         }
@@ -107,6 +154,6 @@ export class DashboardComponent implements OnInit {
     localStorage.removeItem('selectedCompanyId');
   }
 }
-  
+
 
 

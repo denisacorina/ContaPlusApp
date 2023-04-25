@@ -73,7 +73,7 @@ export class TopNavBarComponent implements OnInit {
     }
     this.userId = this.getLoggedInUserId();
     this.companyService.addCompanyToUser(this.addCompanyForm.value, this.userId).subscribe(
-      () => console.log("Company added"),
+      () => location.reload(),
       error => console.error(error)
     );
 

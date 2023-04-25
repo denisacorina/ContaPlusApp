@@ -106,7 +106,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 70vmax rgba(0,0,0,.7);
+    box-shadow: 0 0 0 70vmax rgba(0,0,0,.7), rgba(32, 32, 32, 0.35) 0px 5px 15px;
     border-radius: 10px;
 }
 
@@ -128,3 +128,4 @@ mat-dialog-actions {
     --mdc-checkbox-selected-icon-color: #4f4feb!important;
     --mdc-checkbox-selected-pressed-icon-color: #4f4feb!important;
 }
+

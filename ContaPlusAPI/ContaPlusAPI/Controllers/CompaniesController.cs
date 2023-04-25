@@ -53,5 +53,54 @@ namespace ContaPlusAPI.Controllers
 
             return Ok();
         }
+
+        [HttpPut("updateCompany/{companyId}")]
+        public async Task<IActionResult> UpdateCompany([FromBody] Company updatedCompany, Guid companyId)
+        {
+            var currentCompanyInfo = await _context.Companies
+                .Include(c => c.CityCountyData)
+                .FirstOrDefaultAsync(c => c.CompanyId == companyId);
+
+            if (currentCompanyInfo == null)
+            {
+                return NotFound();
+            }
+
+            if (updatedCompany.CompanyName != null)
+                currentCompanyInfo.CompanyName = updatedCompany.CompanyName ?? currentCompanyInfo.CompanyName;
+
+            if (updatedCompany.Email != null)
+                currentCompanyInfo.Email = updatedCompany.Email ?? currentCompanyInfo.Email;
+
+            if (updatedCompany.FiscalCode != null)
+                currentCompanyInfo.FiscalCode = updatedCompany.FiscalCode ?? currentCompanyInfo.FiscalCode;
+
+            if (updatedCompany.TradeRegister != null)
+                currentCompanyInfo.TradeRegister = updatedCompany.TradeRegister ?? currentCompanyInfo.TradeRegister;
+
+            if (updatedCompany.PhoneNumber != null)
+                currentCompanyInfo.PhoneNumber = updatedCompany.PhoneNumber ?? currentCompanyInfo.PhoneNumber;
+
+            if (updatedCompany.Address != null)
+                currentCompanyInfo.Address = updatedCompany.Address ?? currentCompanyInfo.Address;
+
+            if (updatedCompany.SocialCapital != null)
+                currentCompanyInfo.SocialCapital = updatedCompany.SocialCapital ?? currentCompanyInfo.SocialCapital;
+
+            if (updatedCompany.Logo != null)
+                currentCompanyInfo.Logo = updatedCompany.Logo ?? currentCompanyInfo.Logo;
+
+            if (updatedCompany.Signature != null)
+                currentCompanyInfo.Signature = updatedCompany.Signature ?? currentCompanyInfo.Signature;
+
+
+            currentCompanyInfo.TvaPayer = updatedCompany.TvaPayer ? updatedCompany.TvaPayer : currentCompanyInfo.TvaPayer;
+
+            currentCompanyInfo.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(currentCompanyInfo);
+        }
     }
 }

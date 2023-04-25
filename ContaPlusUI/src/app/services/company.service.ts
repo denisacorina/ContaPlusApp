@@ -8,22 +8,26 @@ import { Router } from '@angular/router';
 })
 export class CompanyService {
 
-    baseCompanyUrl = "https://localhost:7121/api/Companies";
+  baseCompanyUrl = "https://localhost:7121/api/Companies";
 
-    constructor(private http : HttpClient, private jwtHelper: JwtHelperService, private router: Router) { }
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private router: Router) { }
 
 
-    getCompaniesForUser(userId: string): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseCompanyUrl}/getCompaniesForCurrentUser`, { params: { userId } });
-      }
-      
-      getCompanyById(companyId: string): Observable<any[]> {
-        return this.http.get<any>(`${this.baseCompanyUrl}/getCompanyById`, { params: { companyId } }); 
-      }
-      
-      addCompanyToUser(model:any, userId: string) {
-        return this.http.post<any>(`${this.baseCompanyUrl}/${userId}/addCompany`, model);
-      }
+  getCompaniesForUser(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseCompanyUrl}/getCompaniesForCurrentUser`, { params: { userId } });
+  }
+
+  getCompanyById(companyId: string): Observable<any[]> {
+    return this.http.get<any>(`${this.baseCompanyUrl}/getCompanyById`, { params: { companyId } });
+  }
+
+  addCompanyToUser(model: any, userId: string) {
+    return this.http.post<any>(`${this.baseCompanyUrl}/${userId}/addCompany`, model);
+  }
+
+  updateCompany(model:any, companyId: string) {
+    return this.http.put<any>(`${this.baseCompanyUrl}/updateCompany/${companyId}`, model);
+  }
 
 
 
