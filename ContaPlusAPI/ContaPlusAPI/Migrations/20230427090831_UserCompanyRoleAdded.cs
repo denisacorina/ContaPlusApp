@@ -8,24 +8,32 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ContaPlusAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class CityCountyDataTableAdded : Migration
+    public partial class UserCompanyRoleAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Cities_Counties",
+                name: "Companies",
                 columns: table => new
                 {
-                    RegionNumber = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Abbreviation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    County = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FiscalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TradeRegister = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TvaPayer = table.Column<bool>(type: "bit", nullable: false),
+                    SocialCapital = table.Column<int>(type: "int", nullable: false),
+                    Logo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Signature = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cities_Counties", x => x.RegionNumber);
+                    table.PrimaryKey("PK_Companies", x => x.CompanyId);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,9 +54,9 @@ namespace ContaPlusAPI.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     PaswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -62,60 +70,6 @@ namespace ContaPlusAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Companies",
-                columns: table => new
-                {
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FiscalCode = table.Column<int>(type: "int", nullable: true),
-                    TradeRegister = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CityCountyDataRegionNumber = table.Column<int>(type: "int", nullable: false),
-                    TvaPayer = table.Column<bool>(type: "bit", nullable: false),
-                    SocialCapital = table.Column<int>(type: "int", nullable: true),
-                    Logo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Signature = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companies", x => x.CompanyId);
-                    table.ForeignKey(
-                        name: "FK_Companies_Cities_Counties_CityCountyDataRegionNumber",
-                        column: x => x.CityCountyDataRegionNumber,
-                        principalTable: "Cities_Counties",
-                        principalColumn: "RegionNumber",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoleUser",
-                columns: table => new
-                {
-                    RolesRoleId = table.Column<int>(type: "int", nullable: false),
-                    UsersUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoleUser", x => new { x.RolesRoleId, x.UsersUserId });
-                    table.ForeignKey(
-                        name: "FK_RoleUser_Roles_RolesRoleId",
-                        column: x => x.RolesRoleId,
-                        principalTable: "Roles",
-                        principalColumn: "RoleId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RoleUser_Users_UsersUserId",
-                        column: x => x.UsersUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,6 +96,38 @@ namespace ContaPlusAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserCompanyRole",
+                columns: table => new
+                {
+                    UserCompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCompanyRole", x => x.UserCompanyId);
+                    table.ForeignKey(
+                        name: "FK_UserCompanyRole_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "CompanyId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserCompanyRole_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserCompanyRole_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "RoleId", "RoleName" },
@@ -153,19 +139,24 @@ namespace ContaPlusAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Companies_CityCountyDataRegionNumber",
-                table: "Companies",
-                column: "CityCountyDataRegionNumber");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CompanyUser_UsersUserId",
                 table: "CompanyUser",
                 column: "UsersUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleUser_UsersUserId",
-                table: "RoleUser",
-                column: "UsersUserId");
+                name: "IX_UserCompanyRole_CompanyId",
+                table: "UserCompanyRole",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCompanyRole_RoleId",
+                table: "UserCompanyRole",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCompanyRole_UserId",
+                table: "UserCompanyRole",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -175,7 +166,7 @@ namespace ContaPlusAPI.Migrations
                 name: "CompanyUser");
 
             migrationBuilder.DropTable(
-                name: "RoleUser");
+                name: "UserCompanyRole");
 
             migrationBuilder.DropTable(
                 name: "Companies");
@@ -185,9 +176,6 @@ namespace ContaPlusAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Cities_Counties");
         }
     }
 }

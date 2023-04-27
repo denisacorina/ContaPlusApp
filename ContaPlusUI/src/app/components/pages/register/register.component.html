@@ -6,12 +6,21 @@
 
       <h2 class="registerText">Register</h2>
 
+      <mat-error style="font-size: 14px;" *ngIf="registrationForm.controls['firstName'].hasError('pattern')">
+        First Name cannot contain digits or special characters.
+      </mat-error>
+      <mat-error style="font-size: 14px;" *ngIf="registrationForm.controls['lastName'].hasError('pattern')">
+        Last Name cannot contain digits or special characters.
+      </mat-error>
       <mat-error style="font-size: 14px;" *ngIf="registrationForm.controls['password'].hasError('pattern')">
         Password must be at least 8 characters long, must contain at least one uppercase letter, one lowercase letter,
         and one number
       </mat-error>
       <mat-error style="font-size: 14px;" *ngIf="this.errorMessage">
         {{this.errorMessage}}
+      </mat-error>
+      <mat-error style="font-size: 14px;" *ngIf="registrationForm.controls['email'].hasError('email')">
+        The email is not valid
       </mat-error>
 
       <!-- firstName input -->

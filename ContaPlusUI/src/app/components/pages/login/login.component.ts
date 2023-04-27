@@ -4,7 +4,6 @@ import { Component, OnInit} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, TitleStrategy, UrlSerializer } from '@angular/router';
 import { catchError, map, tap, throwError } from 'rxjs';
-import { MatDialogRef } from '@angular/material/dialog';
 
 import { AuthService } from 'src/app/services/auth.service';
 

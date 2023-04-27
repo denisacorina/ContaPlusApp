@@ -25,20 +25,9 @@ export class AuthService {
     return this.http.post<any>(`${this.baseUrl}login`, { ...model, rememberMe })
       .pipe(
         map(response => {
-          const userId = response.userId;
-          localStorage.setItem('userId', userId);
-
+           response.userId;
           return response;
         })
       );
   }
-
-
-
-  isUserAuthenticated = (): any => {
-    const token = localStorage.getItem("token");
-    return token && !this.jwtHelper.isTokenExpired(token);
-  }
-
-
 }

@@ -9,7 +9,6 @@ namespace ContaPlusAPI.Helpers
             CreateMap<User, LoginUserDTO>().ReverseMap();        
             CreateMap<User, RegisterUserDTO>().ReverseMap();
             CreateMap<User, UserProfileUpdateDTO>().ReverseMap();
-
         }
     }
 }

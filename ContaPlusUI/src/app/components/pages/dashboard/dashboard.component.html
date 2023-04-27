@@ -9,16 +9,16 @@
 <div class="custom-scrollbar scrollable">
   <h3>Dashboard</h3>
   <!-- Cards for displaying data -->
-  <div class="card-container">
-    <div class="card">
+  <div class="">
+    <div class="">
       <!-- Card content goes here -->
       Card 1
     </div>
-    <div class="card">
+    <div class="">
       <!-- Card content goes here -->
       Card 2
     </div>
-    <div class="card">
+    <div class="">
       <!-- Card content goes here -->
       Card 3
     </div>
@@ -32,7 +32,11 @@
     <p>Created at: {{ user?.createdAt }}</p>
     <h4>Roles:</h4>
     <ul>
-      <li *ngFor="let role of user?.roles">{{ role?.roleName }}</li>
+      <div *ngFor="let userCompanyRole of user?.userCompanyRoles">
+          <li *ngFor="let role of userCompanyRole?.roles">
+            {{ role?.roleName }}
+          </li>
+        </div>
     </ul>
     
     </div> 
@@ -51,7 +55,10 @@
 
 </div>
 
+
+
 <div *ngIf="isUpdateCompanyDialogOpen" class="update-company-dialog">
+  <div class="centered">
   <h4 class="mb-4" mat-dialog-title>Update Company</h4>
   <mat-error style="font-size: 14px;" *ngIf="updateCompanyForm.controls['tradeRegister'].hasError('pattern')">
     Trade register must be in the format 'J01/123/4567'.
@@ -110,14 +117,14 @@
           <mat-dialog-actions>
             <button mat-raised-button 
             style="background-color: #4f4feb; color: white; margin-right: 10px;" 
-            type="submit">Update Company</button>
+            type="submit">Create Company</button>
           </mat-dialog-actions>
         </div>
       </div>
     </mat-dialog-content>
   </form>
 </div>
-
+</div>
 
 
 

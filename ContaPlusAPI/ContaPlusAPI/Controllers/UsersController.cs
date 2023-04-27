@@ -23,25 +23,55 @@ namespace ContaPlusAPI.Controllers
         [HttpGet("usersList")]
         public async Task<ActionResult> GetUsersList()
         {
-
             var users = await _context.Users.ToListAsync();
             return Ok(users);
-
-
         }
 
         [HttpGet("getUserById")]
-        public async Task<ActionResult<User>> GetUserById(Guid userId)
+        public ActionResult<User> GetUserById(Guid userId)
         {
-            var user = await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(u => u.UserId == userId);
+            var user = _context.Users
+                .Include(u => u.UserCompanyRoles)
+                .ThenInclude(u => u.Roles)
+                .FirstOrDefault(u => u.UserId == userId);
+
             if (user == null)
-            {
                 return NotFound();
-            }
 
             return user;
         }
 
+        [HttpPost("addUserRoleToCompany")]
+        public IActionResult AddUserRoleToCompany(Guid userId, int roleId, Guid companyId)
+        {
+            var userCompanyRole = _context.UserCompanyRoles
+                .Include(u => u.User)
+                .Include(u => u.Company)
+                .Include(u => u.Roles)
+                .FirstOrDefault(u => u.User.UserId == userId && u.Company.CompanyId == companyId);
+
+            if (userCompanyRole == null)
+            {
+                return NotFound();
+            }
+
+            var role = _context.Roles.FirstOrDefault(r => r.RoleId == roleId);
+
+            if (role == null)
+            {
+                return NotFound();
+            }
+
+            if (userCompanyRole.Roles.Any(r => r.RoleId == roleId))
+            {
+                return BadRequest("User already has this role for the given company.");
+            }
+
+            userCompanyRole.Roles.Add(role);
+            _context.SaveChanges();
+
+            return Ok();
+        }
 
         [HttpGet("currentUser")]
         public async Task<IActionResult> GetCurrentUserDetails()
@@ -49,20 +79,16 @@ namespace ContaPlusAPI.Controllers
             var currentUser = User.Identity.Name;
 
             if (string.IsNullOrEmpty(currentUser))
-            {
                 return Unauthorized();
-            }
 
             var currentUserInfo = await _context.Users.FirstOrDefaultAsync(u => u.UserId.ToString() == currentUser);
 
             if (currentUserInfo == null)
-            {
                 return Unauthorized();
-            }
 
-            // Return the user details
             return Ok(currentUserInfo);
         }
+
 
         [HttpPut("updateUser/{userId}")]
         public async Task<IActionResult> UpdateUser([FromBody] UserProfileUpdateDTO updatedUser, Guid userId)
@@ -70,9 +96,7 @@ namespace ContaPlusAPI.Controllers
             var currentUserInfo = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (currentUserInfo == null)
-            {
                 return NotFound();
-            }
 
             if (updatedUser.FirstName != null)  
                 currentUserInfo.FirstName = updatedUser.FirstName ?? currentUserInfo.FirstName; 

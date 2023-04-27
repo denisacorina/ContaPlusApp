@@ -16,7 +16,6 @@ namespace ContaPlusAPI.Controllers
             _context = context;
         }
 
-
         [HttpGet("getCompaniesForCurrentUser")]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompanies(Guid userId)
         {
@@ -47,8 +46,27 @@ namespace ContaPlusAPI.Controllers
                 return NotFound("User not found.");
             }
 
+            Role adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == 1);
+            if (adminRole != null)
+            {
+                UserCompanyRole userCompanyRole = existingUser.UserCompanyRoles.FirstOrDefault(u => u.Company.CompanyId == company.CompanyId);
+                if (userCompanyRole == null)
+                {
+                    userCompanyRole = new UserCompanyRole
+                    {
+                        User = existingUser,
+                        Company = company
+                    };
+                    existingUser.UserCompanyRoles.Add(userCompanyRole);
+                    company.UserCompanyRoles.Add(userCompanyRole);
+                }
+                userCompanyRole.Roles.Add(adminRole);
+            }
+
+            company.Users = new List<User> { existingUser };
             company.CreatedAt = DateTime.UtcNow;
             existingUser.Companies.Add(company);
+
             await _context.SaveChangesAsync();
 
             return Ok();
@@ -58,7 +76,6 @@ namespace ContaPlusAPI.Controllers
         public async Task<IActionResult> UpdateCompany([FromBody] Company updatedCompany, Guid companyId)
         {
             var currentCompanyInfo = await _context.Companies
-                .Include(c => c.CityCountyData)
                 .FirstOrDefaultAsync(c => c.CompanyId == companyId);
 
             if (currentCompanyInfo == null)
@@ -83,16 +100,16 @@ namespace ContaPlusAPI.Controllers
 
             if (updatedCompany.Address != null)
                 currentCompanyInfo.Address = updatedCompany.Address ?? currentCompanyInfo.Address;
-
-            if (updatedCompany.SocialCapital != null)
-                currentCompanyInfo.SocialCapital = updatedCompany.SocialCapital ?? currentCompanyInfo.SocialCapital;
+        
+            if (updatedCompany.SocialCapital >= 200)
+                currentCompanyInfo.SocialCapital = updatedCompany.SocialCapital;
+            else updatedCompany.SocialCapital = currentCompanyInfo.SocialCapital;
 
             if (updatedCompany.Logo != null)
                 currentCompanyInfo.Logo = updatedCompany.Logo ?? currentCompanyInfo.Logo;
 
             if (updatedCompany.Signature != null)
                 currentCompanyInfo.Signature = updatedCompany.Signature ?? currentCompanyInfo.Signature;
-
 
             currentCompanyInfo.TvaPayer = updatedCompany.TvaPayer ? updatedCompany.TvaPayer : currentCompanyInfo.TvaPayer;
 

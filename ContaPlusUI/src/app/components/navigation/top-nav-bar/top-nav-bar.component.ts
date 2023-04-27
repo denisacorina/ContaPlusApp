@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./top-nav-bar.component.css']
 })
 export class TopNavBarComponent implements OnInit {
- model : any;
+  model: any;
 
   userId: any;
   user: any;
@@ -27,19 +27,18 @@ export class TopNavBarComponent implements OnInit {
 
   isAddCompanyDialogOpen = false;
 
-  
-  constructor(private companyService : CompanyService, 
-              private userService : UserService, 
-              private jwtHelper: JwtHelperService) {}
+
+  constructor(private companyService: CompanyService,
+    private userService: UserService,
+    private jwtHelper: JwtHelperService) { }
 
   ngOnInit(): void {
-   this.getLoggedInUser();
-   this.fetchListOfCompaniesForUser();
-   this.addCompanyToUser();
- 
+    this.getLoggedInUser();
+    this.fetchListOfCompaniesForUser();
+    this.addCompanyToUser();
+
   }
-   getLoggedInUser()
-  {
+  getLoggedInUser() {
     const userId = this.getLoggedInUserId();
     if (userId) {
       this.userService.getUserInfo(userId).subscribe(
@@ -55,16 +54,16 @@ export class TopNavBarComponent implements OnInit {
 
   addCompanyToUser() {
     this.addCompanyForm = new FormGroup({
-      companyName:  new FormControl('', Validators.required),
+      companyName: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
-      fiscalCode: new FormControl(''),
-      tradeRegister: new FormControl('', Validators.pattern('^J\\d{2}/\\d{3}/\\d{4}$')),
-      phoneNumber: new FormControl(''),
-      address: new FormControl(''),
+      fiscalCode: new FormControl('', [Validators.pattern('^RO\d+$'), Validators.required]),
+      tradeRegister: new FormControl('', [Validators.pattern('^J\\d{2}/\\d{3}/\\d{4}$'), Validators.required]),
+      phoneNumber: new FormControl('', [Validators.pattern('^07\d{8}$'), Validators.required]),
+      address: new FormControl('', Validators.required),
       tvaPayer: new FormControl(false),
-      socialCapital: new FormControl('', Validators.min(200))
+      socialCapital: new FormControl('', [Validators.min(200), Validators.required])
     });
-     
+
   }
 
   onAddCompanySubmit(): void {
@@ -84,38 +83,40 @@ export class TopNavBarComponent implements OnInit {
 
 
   onCancel(): void {
-    this.isAddCompanyDialogOpen = false;   
+    this.isAddCompanyDialogOpen = false;
   }
 
-
-   fetchListOfCompaniesForUser() {
+  fetchListOfCompaniesForUser() {
     const userId = this.getLoggedInUserId();
-  
+
     if (userId) {
       this.companyService.getCompaniesForUser(userId).subscribe(companies => {
         this.companies = companies;
-        
+
         if (this.companies) {
-          if (this.companies.length == 1 || !localStorage.getItem('selectedCompanyId')) {
+          if (this.companies.length == 1 || !sessionStorage.getItem('selectedCompanyId')) {
             this.selectedCompanyId = this.companies[0].companyId;
-            localStorage.setItem('selectedCompanyId', this.selectedCompanyId);
+            sessionStorage.setItem('selectedCompanyId', this.selectedCompanyId);
             this.selectCompany(this.selectedCompanyId);
             this.showCompanyDropdown = false;
-          } 
-          
+          }
+
           if (this.companies.length > 1) {
             this.showCompanyDropdown = true;
-            this.selectedCompanyId = localStorage.getItem('selectedCompanyId') as string;
+            this.selectedCompanyId = sessionStorage.getItem('selectedCompanyId') as string;
             this.selectCompany(this.selectedCompanyId);
           }
-          
-        } else {
-          console.error("No companies");
-        }
-      }); 
+
+          if (this.companies.length == 0) {
+            this.isAddCompanyDialogOpen = true;
+            this.selectedCompanyId = this.companies[0].companyId;
+            sessionStorage.setItem('selectedCompanyId', this.selectedCompanyId);
+            this.selectCompany(this.selectedCompanyId);
+          }
+        } 
+      });
     }
   }
-
 
   selectCompany(companyId: string) {
     console.log('selected companyId:', companyId);
@@ -125,8 +126,9 @@ export class TopNavBarComponent implements OnInit {
         console.log('company data:', this.companyData);
       });
     }
-    localStorage.setItem('selectedCompanyId', companyId);
+    sessionStorage.setItem('selectedCompanyId', companyId);
   }
+
 
   getLoggedInUserId(): string | null {
     const token = localStorage.getItem('accessToken');
@@ -142,7 +144,6 @@ export class TopNavBarComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('userId');
     localStorage.removeItem('selectedCompanyId');
   }
 }

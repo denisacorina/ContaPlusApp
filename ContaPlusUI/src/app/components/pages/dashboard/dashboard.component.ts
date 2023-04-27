@@ -24,7 +24,9 @@ export class DashboardComponent implements OnInit {
   showCompanyDropdown: boolean = false;
   isUpdateCompanyDialogOpen: boolean = false;
   updateCompanyForm!: FormGroup;
-  companyWithNullName: any;
+  companyNeverUpdated: any;
+  selectedCounty: any;
+  counties!: any[];
 
   constructor(private companyService: CompanyService,
     private userService: UserService,
@@ -45,7 +47,7 @@ export class DashboardComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       fiscalCode: new FormControl(''),
       tradeRegister: new FormControl('', Validators.pattern('^J\\d{2}/\\d{3}/\\d{4}$')),
-      phoneNumber: new FormControl(''),
+      phoneNumber: new FormControl(''),      
       address: new FormControl(''),
       socialCapital: new FormControl('', Validators.min(200)),
       tvaPayer: new FormControl(false)
@@ -56,7 +58,7 @@ export class DashboardComponent implements OnInit {
     if (this.updateCompanyForm.invalid) {
       return;
     }
-    const companyId = this.companyWithNullName.companyId;
+    const companyId = this.companyNeverUpdated.companyId;
     this.companyService.updateCompany(this.updateCompanyForm.value, companyId).subscribe(
       () => location.reload(),
       error => console.error(error)
@@ -71,11 +73,10 @@ export class DashboardComponent implements OnInit {
     if (!userId) {
       return;
     }
-
     this.companyService.getCompaniesForUser(userId).subscribe(companies => {
-      this.companyWithNullName = companies.find(c => !c.companyName);
+      this.companyNeverUpdated = companies.find(c => c.UpdatedAt === null);
 
-      if (this.companyWithNullName) {
+      if (this.companyNeverUpdated) {
         this.isUpdateCompanyDialogOpen = true;
         this.updateCompany();
       }
@@ -105,16 +106,16 @@ export class DashboardComponent implements OnInit {
         this.companies = companies;
 
         if (this.companies) {
-          if (this.companies.length == 1 || !localStorage.getItem('selectedCompanyId')) {
+          if (this.companies.length == 1 || !sessionStorage.getItem('selectedCompanyId')) {
             this.selectedCompanyId = this.companies[0].companyId;
-            localStorage.setItem('selectedCompanyId', this.selectedCompanyId);
+            sessionStorage.setItem('selectedCompanyId', this.selectedCompanyId);
             this.selectCompany(this.selectedCompanyId);
             this.showCompanyDropdown = false;
           }
 
           if (this.companies.length > 1) {
             this.showCompanyDropdown = true;
-            this.selectedCompanyId = localStorage.getItem('selectedCompanyId') as string;
+            this.selectedCompanyId = sessionStorage.getItem('selectedCompanyId') as string;
             this.selectCompany(this.selectedCompanyId);
           }
 
@@ -133,7 +134,7 @@ export class DashboardComponent implements OnInit {
         console.log('company data:', this.companyData);
       });
     }
-    localStorage.setItem('selectedCompanyId', companyId);
+    sessionStorage.setItem('selectedCompanyId', companyId);
   }
 
   getLoggedInUserId(): string | null {
@@ -147,11 +148,9 @@ export class DashboardComponent implements OnInit {
     return null;
   }
 
-
   logout(): void {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('selectedCompanyId');
+    sessionStorage.removeItem('selectedCompanyId');
   }
 }
 

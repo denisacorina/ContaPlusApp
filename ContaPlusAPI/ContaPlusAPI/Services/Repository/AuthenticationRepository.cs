@@ -37,28 +37,14 @@ namespace ContaPlusAPI.Services.Repository
                 mappedUser.PaswordHash = passwordHash;
                 mappedUser.PaswordSalt = passwordSalt;
                 mappedUser.CreatedAt = DateTime.UtcNow;
-                Role adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == 1);
-                if (adminRole != null)
-                {
-                    mappedUser.Roles.Add(adminRole);
-                }
-
-                Company company = new()
-                {
-                    CreatedAt = DateTime.UtcNow,
-                    Users = new List<User> { mappedUser },
-                };
-
-                _context.Companies.Add(company);
+             
                 _context.Users.Add(mappedUser);
 
                 await _context.SaveChangesAsync();
                 return new OkObjectResult(mappedUser);
             }
             else
-            {
                 return new BadRequestObjectResult("User already exists");
-            }
         }
 
         public async Task<IActionResult> Login(LoginUserDTO loginUser)

@@ -38,10 +38,10 @@ registrationForm!: FormGroup;
 
   registrationFormMethod() {
     this.registrationForm = new FormGroup({
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl('', Validators.required),
+      firstName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+      lastName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required,  Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)]),
+      password: new FormControl('', [Validators.required,  Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')]),
     });
   }
 
@@ -53,7 +53,7 @@ registrationForm!: FormGroup;
       next: response => {
         console.log(response);
         this.registered = true;
-        this.router.navigateByUrl("login");
+        this.router.navigateByUrl("dashboard");
       },
       error: err => {
         if (err.status == 400) {

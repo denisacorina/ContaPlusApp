@@ -61,7 +61,7 @@ export function tokenGetter()
     })
   
   ],
-providers: [BsModalService, BsModalRef, ComponentLoaderFactory, [
+providers: [ [
   {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

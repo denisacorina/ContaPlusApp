@@ -37,30 +37,6 @@ namespace ContaPlusAPI.Migrations
                     b.ToTable("CompanyUser");
                 });
 
-            modelBuilder.Entity("ContaPlusAPI.Models.CityCountyData", b =>
-                {
-                    b.Property<int>("RegionNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RegionNumber"));
-
-                    b.Property<string>("Abbreviation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("County")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RegionNumber");
-
-                    b.ToTable("Cities_Counties");
-                });
-
             modelBuilder.Entity("ContaPlusAPI.Models.Company", b =>
                 {
                     b.Property<Guid>("CompanyId")
@@ -68,36 +44,39 @@ namespace ContaPlusAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CityCountyDataRegionNumber")
-                        .HasColumnType("int");
-
                     b.Property<string>("CompanyName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FiscalCode")
-                        .HasColumnType("int");
+                    b.Property<string>("FiscalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Logo")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Signature")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("SocialCapital")
+                    b.Property<int>("SocialCapital")
                         .HasColumnType("int");
 
                     b.Property<string>("TradeRegister")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TvaPayer")
@@ -107,8 +86,6 @@ namespace ContaPlusAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("CompanyId");
-
-                    b.HasIndex("CityCountyDataRegionNumber");
 
                     b.ToTable("Companies");
                 });
@@ -160,12 +137,15 @@ namespace ContaPlusAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PaswordHash")
@@ -196,19 +176,40 @@ namespace ContaPlusAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("ContaPlusAPI.Models.UserCompanyRole", b =>
+                {
+                    b.Property<Guid>("UserCompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserCompanyId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCompanyRoles");
+                });
+
+            modelBuilder.Entity("RoleUserCompanyRole", b =>
                 {
                     b.Property<int>("RolesRoleId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UsersUserId")
+                    b.Property<Guid>("RolesUserCompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("RolesRoleId", "UsersUserId");
+                    b.HasKey("RolesRoleId", "RolesUserCompanyId");
 
-                    b.HasIndex("UsersUserId");
+                    b.HasIndex("RolesUserCompanyId");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("RoleUserCompanyRole");
                 });
 
             modelBuilder.Entity("CompanyUser", b =>
@@ -226,16 +227,26 @@ namespace ContaPlusAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ContaPlusAPI.Models.Company", b =>
+            modelBuilder.Entity("ContaPlusAPI.Models.UserCompanyRole", b =>
                 {
-                    b.HasOne("ContaPlusAPI.Models.CityCountyData", "CityCountyData")
-                        .WithMany()
-                        .HasForeignKey("CityCountyDataRegionNumber");
+                    b.HasOne("ContaPlusAPI.Models.Company", "Company")
+                        .WithMany("UserCompanyRoles")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("CityCountyData");
+                    b.HasOne("ContaPlusAPI.Models.User", "User")
+                        .WithMany("UserCompanyRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("RoleUserCompanyRole", b =>
                 {
                     b.HasOne("ContaPlusAPI.Models.Role", null)
                         .WithMany()
@@ -243,11 +254,21 @@ namespace ContaPlusAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ContaPlusAPI.Models.User", null)
+                    b.HasOne("ContaPlusAPI.Models.UserCompanyRole", null)
                         .WithMany()
-                        .HasForeignKey("UsersUserId")
+                        .HasForeignKey("RolesUserCompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.Company", b =>
+                {
+                    b.Navigation("UserCompanyRoles");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.User", b =>
+                {
+                    b.Navigation("UserCompanyRoles");
                 });
 #pragma warning restore 612, 618
         }
