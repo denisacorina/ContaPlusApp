@@ -100,13 +100,11 @@ export class TopNavBarComponent implements OnInit {
             this.selectCompany(this.selectedCompanyId);
             this.showCompanyDropdown = false;
           }
-
           if (this.companies.length > 1) {
             this.showCompanyDropdown = true;
             this.selectedCompanyId = sessionStorage.getItem('selectedCompanyId') as string;
             this.selectCompany(this.selectedCompanyId);
           }
-
           if (this.companies.length == 0) {
             this.isAddCompanyDialogOpen = true;
             this.selectedCompanyId = this.companies[0].companyId;
