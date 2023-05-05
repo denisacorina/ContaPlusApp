@@ -127,11 +127,9 @@ export class DashboardComponent implements OnInit {
   }
 
   selectCompany(companyId: string) {
-    console.log('selected companyId:', companyId);
     if (companyId) {
       this.companyService.getCompanyById(companyId).subscribe(data => {
         this.companyData = data;
-        console.log('company data:', this.companyData);
       });
     }
     sessionStorage.setItem('selectedCompanyId', companyId);
@@ -148,10 +146,7 @@ export class DashboardComponent implements OnInit {
     return null;
   }
 
-  logout(): void {
-    localStorage.removeItem('accessToken');
-    sessionStorage.removeItem('selectedCompanyId');
-  }
+
 }
 
 

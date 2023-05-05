@@ -31,7 +31,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-bin/debug/net6.0/
+bin/
 obj/
 
 # Visual Studio 2015/2017 cache/options directory

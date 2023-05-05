@@ -1,7 +1,7 @@
 <div class="split left" id="registerForm">
   <div class="centered">
     <form style="box-sizing: unset!important;" autocomplete="off" [formGroup]="registrationForm"
-      (ngSubmit)="submitData()">
+      (ngSubmit)="onRegisterSubmit()">
 
 
       <h2 class="registerText">Register</h2>
@@ -16,13 +16,12 @@
         Password must be at least 8 characters long, must contain at least one uppercase letter, one lowercase letter,
         and one number
       </mat-error>
-      <mat-error style="font-size: 14px;" *ngIf="this.errorMessage">
-        {{this.errorMessage}}
-      </mat-error>
       <mat-error style="font-size: 14px;" *ngIf="registrationForm.controls['email'].hasError('email')">
         The email is not valid
       </mat-error>
-
+      <mat-error style="font-size: 14px;" *ngIf="this.errorMessage">
+        {{this.errorMessage}} <a routerLink="/login">Login</a>
+      </mat-error>
       <!-- firstName input -->
       <div class="form-outline mt-4 ">
         <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
@@ -56,16 +55,13 @@
         </mat-form-field>
       </div>
 
-
-
-
       <div class="row mb-4">
         <!-- Submit button -->
         <button value="Submit" class="btn btn-block" id="registerBtn">Register</button>
       </div>
     </form>
     <div class="text-center mb-4">
-      <a href="#!">Forgot password?</a>
+      <a href="forgot-password">Forgot password?</a>
     </div>
 
     <div class="text-center">

@@ -27,7 +27,7 @@
         <a href="#">My profile</a>
 
         <div *ngIf="showCompanyDropdown">
-          <h6 style="margin-left: 15px; color: #5959e3; font-size: 12px;">Choose another company:</h6>
+          <h6 *ngIf="this.companies.length > 1" style="margin-left: 15px; color: #5959e3; font-size: 12px;">Choose another company:</h6>
           <a *ngFor="let company of companies" (click)="selectCompany(company.companyId)" href="/dashboard">
             <img src="../../../assets/img/building.png" style="width: 20px; height: 20px; margin-left: 10px;"> 
             {{ company.companyName }}</a>
@@ -44,17 +44,20 @@
   
 <div class="add-company-dialog">
   <div class="centered">
-    <h4 class="mb-4" mat-dialog-title>Add New Company</h4>
+    <h4 class="mb-4" mat-dialog-title>Add Company</h4>
     
     <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['email'].hasError('email')">
       Email must be in the format 'example@email.com'.
     </mat-error>
+    <mat-error *ngIf="addCompanyForm.controls['email'].hasError('emailExists')">Email already exists.</mat-error>
     <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['fiscalCode'].hasError('pattern')">
       Fiscal Code must be in the format 'RO123456'.
     </mat-error>
+    <mat-error *ngIf="addCompanyForm.controls['fiscalCode'].hasError('fiscalCodeExists')">Fiscal code already exists.</mat-error>
     <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['tradeRegister'].hasError('pattern')">
       Trade register must be in the format 'J01/123/4567'.
-    </mat-error>
+    </mat-error>  
+    <mat-error *ngIf="addCompanyForm.controls['tradeRegister'].hasError('tradeRegisterExists')">Trade register already exists.</mat-error>
     <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['phoneNumber'].hasError('pattern')">
       Phone Number must begin with '07' prefix.
     </mat-error>
@@ -62,7 +65,7 @@
       Social Capital value must be at least 200 lei.
     </mat-error>
 
-    <form [formGroup]="addCompanyForm" (ngSubmit)="onAddCompanySubmit()">
+    <form [formGroup]="addCompanyForm" (ngSubmit)="onAddCompanySubmit()" class="mt-4">
       <mat-dialog-content>
         <div class="row">
           <div class="col-md-6">
@@ -82,7 +85,7 @@
           <div class="col-md-6">
             <mat-form-field appearance="fill">
               <mat-label>Fiscal Code</mat-label>
-              <input matInput type="text" placeholder="RO123456" formControlName="fiscalCode" name="fiscalCode" required>
+              <input matInput type="text" placeholder="RO123456" formControlName="fiscalCode" name="fiscalCode">
             </mat-form-field>
           </div>
           <div class="col-md-6">
@@ -122,7 +125,7 @@
             <mat-dialog-actions>
               <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;"
                 type="submit">Add Company</button>
-              <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
+              <button *ngIf="showCancelButton" mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
             </mat-dialog-actions>
           </div>
         </div>

@@ -22,6 +22,8 @@ import { SideBarComponent } from './components/navigation/side-bar/side-bar.comp
 import { TopNavBarComponent } from './components/navigation/top-nav-bar/top-nav-bar.component';
 import { BsModalService, BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
 import { ComponentLoaderFactory } from 'ngx-bootstrap/component-loader';
+import { ForgotPasswordComponent } from './components/pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
 
 export function tokenGetter()
 {
@@ -36,6 +38,8 @@ export function tokenGetter()
     DashboardComponent,
     SideBarComponent,
     TopNavBarComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
     
 
   ],

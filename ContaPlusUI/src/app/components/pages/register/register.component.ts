@@ -38,26 +38,25 @@ registrationForm!: FormGroup;
 
   registrationFormMethod() {
     this.registrationForm = new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-      lastName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+      firstName: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z]+$/)]),
+      lastName: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z]+$/)]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required,  Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')]),
+      password: new FormControl('', [Validators.required,  Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)]),
     });
   }
 
-  submitData() {
+  onRegisterSubmit() {
     if (this.registrationForm.invalid) {
       return;
     }
     this.authService.register(this.registrationForm.value).subscribe({
       next: response => {
         console.log(response);
-        this.registered = true;
         this.router.navigateByUrl("dashboard");
       },
       error: err => {
         if (err.status == 400) {
-          this.errorMessage = "Email is already used";
+          this.errorMessage = "Email is already used. ";
         }
         console.log(err);
       }

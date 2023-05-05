@@ -1,29 +1,17 @@
 using ContaPlusAPI.Context;
-using ContaPlusAPI.Helpers;
-using ContaPlusAPI.Services.Interface;
-using ContaPlusAPI.Services.Repository;
+using ContaPlusAPI.Interfaces.IRepository;
+using ContaPlusAPI.Interfaces.IService;
+using ContaPlusAPI.Repositories;
+using ContaPlusAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Build.Framework;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.Swagger;
-using System.Reflection;
-using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-//Remove reference looping exception 
-//builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
-//    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-//);
 
 builder.Services.AddMvc();
 builder.Services.AddControllers().AddJsonOptions(x =>
@@ -99,10 +87,31 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
-builder.Services.AddScoped<IGenerateToken, TokenRepository>();
-builder.Services.AddScoped<IPasswordHash, PasswordHashRepository>();
-builder.Services.AddScoped<IAuthentication, AuthenticationRepository>();
+//Services
+builder.Services.AddScoped<IAuthentificationService, AuthentificationService>();
+builder.Services.AddScoped<ContaPlusAPI.Interfaces.IService.IAuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+builder.Services.AddScoped<IGenerateTokenService, GenerateTokenService>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
+//Repositories
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ISaveChangesRepository, SaveChangesRepository>();
+builder.Services.AddScoped<IUserCompanyRoleRepository, UserCompanyRoleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 
 var app = builder.Build();

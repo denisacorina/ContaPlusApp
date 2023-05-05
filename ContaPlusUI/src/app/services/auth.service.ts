@@ -10,7 +10,7 @@ export class AuthService {
 
   private isAuthenticated: boolean = false;
 
-  baseUrl = "https://localhost:7121/api/Auth/";
+  baseUrl = "https://localhost:7121/api/Authentification/";
  
 
 
@@ -18,7 +18,13 @@ export class AuthService {
 
   register(model:any)
   {
-    return this.http.post(`${this.baseUrl}register`, model);
+    return this.http.post<any>(`${this.baseUrl}register`, model)
+    .pipe(
+      map(response => {
+         response.userId;
+        return response;
+      })
+    );
   }
 
   login(model: any, rememberMe: boolean) {

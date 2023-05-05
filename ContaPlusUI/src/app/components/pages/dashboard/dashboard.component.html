@@ -55,8 +55,6 @@
 
 </div>
 
-
-
 <div *ngIf="isUpdateCompanyDialogOpen" class="update-company-dialog">
   <div class="centered">
   <h4 class="mb-4" mat-dialog-title>Update Company</h4>
@@ -81,19 +79,19 @@
       <div class="row">
         <div class="col-md-6">
           <mat-form-field>
-            <input matInput type="text" placeholder="Fiscal Code" formControlName="fiscalCode" name="fiscalCode">
+            <input matInput type="text" placeholder="Fiscal Code" formControlName="fiscalCode" name="fiscalCode" required>
           </mat-form-field>
         </div>
         <div class="col-md-6">
           <mat-form-field>
-            <input matInput type="text" placeholder="Trade Register" formControlName="tradeRegister" name="tradeRegister">
+            <input matInput type="text" placeholder="Trade Register" formControlName="tradeRegister" name="tradeRegister" required>
           </mat-form-field>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
           <mat-form-field>
-            <input matInput type="tel" placeholder="Phone Number" formControlName="phoneNumber" name="phoneNumber">
+            <input matInput type="tel" placeholder="Phone Number" formControlName="phoneNumber" name="phoneNumber" required>
           </mat-form-field>
         </div>
         <div class="col-md-6">

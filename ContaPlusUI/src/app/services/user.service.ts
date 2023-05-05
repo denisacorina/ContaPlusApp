@@ -15,10 +15,7 @@ export class UserService {
     return this.http.get<any>(`${this.baseUserUrl}/getUserById`, { params: { userId } });
   }
 
-
   updateUser(model: any, userId: string) {
     return this.http.put<any>(`${this.baseUserUrl}/updateUser/${userId}`, model);
   }
-
-
 }

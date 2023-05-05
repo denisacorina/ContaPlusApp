@@ -10,15 +10,16 @@ export class CompanyService {
 
   baseCompanyUrl = "https://localhost:7121/api/Companies";
 
+
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private router: Router) { }
 
 
   getCompaniesForUser(userId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseCompanyUrl}/getCompaniesForCurrentUser`, { params: { userId } });
+    return this.http.get<any[]>(`${this.baseCompanyUrl}/getCompaniesForCurrentUser`,{ params: { userId } });
   }
 
   getCompanyById(companyId: string): Observable<any[]> {
-    return this.http.get<any>(`${this.baseCompanyUrl}/getCompanyById`, { params: { companyId } });
+    return this.http.get<any>(`${this.baseCompanyUrl}/getCompanyById`,{ params: { companyId } });
   }
 
   addCompanyToUser(model: any, userId: string) {
@@ -27,6 +28,18 @@ export class CompanyService {
 
   updateCompany(model:any, companyId: string) {
     return this.http.put<any>(`${this.baseCompanyUrl}/updateCompany/${companyId}`, model);
+  }
+
+  checkEmailExists(email: any) {
+    return this.http.get<boolean>(`${this.baseCompanyUrl}/emailExists`, { params: { email } });
+  }
+
+  checkFiscalCodeExists(fiscalCode: any) {
+    return this.http.get<boolean>(`${this.baseCompanyUrl}/fiscalCodeExists`, { params: { fiscalCode } });
+  }
+
+  checkTradeRegisterExists(tradeRegister: any) {
+    return this.http.get<boolean>(`${this.baseCompanyUrl}/tradeRegisterExists`, { params: { tradeRegister } });
   }
 
 

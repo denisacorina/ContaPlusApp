@@ -1,123 +1,70 @@
 ﻿using ContaPlusAPI.Context;
-using ContaPlusAPI.Models;
-using Microsoft.AspNetCore.Http;
+using ContaPlusAPI.Interfaces.IService;
+using ContaPlusAPI.Models.CompanyModule;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace ContaPlusAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CompaniesController : ControllerBase { 
+    [Authorize]
+    public class CompaniesController : BaseApiController
+    {
         private readonly AppDbContext _context;
-        public CompaniesController(AppDbContext context)
+        private readonly ICompanyService _companyService;
+        public CompaniesController(AppDbContext context, ICompanyService companyService)
         {
             _context = context;
+            _companyService = companyService;
         }
 
         [HttpGet("getCompaniesForCurrentUser")]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompanies(Guid userId)
+        public async Task<ActionResult<IEnumerable<Company>>> GetCompaniesCurrentUser(Guid userId)
         {
-            var companies = await _context.Companies
-                .Where(c => c.Users.Any(u => u.UserId == userId))
-                .ToListAsync();
-            return companies;
+            var companies = await _companyService.GetCompaniesCurrentUser(userId);
+            return Ok(companies);
         }
 
         [HttpGet("getCompanyById")]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompanyIdData(Guid companyId)
         {
-            var data = await _context.Companies
-                .Where(c => c.CompanyId == companyId)
-                .ToListAsync();
-            return data;
+            var data = await _companyService.GetCompanyById(companyId);
+            return Ok(data);
+        }
+
+        [HttpGet("emailExists")]
+        public async Task<ActionResult<bool>> EmailExists(string email)
+        {
+            var emailExists = await _context.Companies.AnyAsync(c => c.Email == email);
+            return emailExists;
+        }
+
+        [HttpGet("fiscalCodeExists")]
+        public async Task<ActionResult<bool>> FiscalCodeExists(string fiscalCode)
+        {
+            var fiscalCodeExists = await _context.Companies.AnyAsync(c => c.FiscalCode == fiscalCode);
+            return fiscalCodeExists;
+        }
+
+        [HttpGet("tradeRegisterExists")]
+        public async Task<ActionResult<bool>> TradeRegisterExists(string tradeRegister)
+        {
+            var tradeRegisterExists = await _context.Companies.AnyAsync(c => c.TradeRegister == tradeRegister);
+            return tradeRegisterExists;
         }
 
         [HttpPost("{userId}/addCompany")]
-        public async Task<IActionResult> AddCompanyToUser(Guid userId, [FromBody] Company company)
+        public async Task<IActionResult> AddCompanyToUser([FromBody] Company company)
         {
-            var existingUser = await _context.Users
-                .Include(u => u.Companies)
-                .FirstOrDefaultAsync(u => u.UserId == userId);
-
-            if (existingUser == null)
-            {
-                return NotFound("User not found.");
-            }
-
-            Role adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == 1);
-            if (adminRole != null)
-            {
-                UserCompanyRole userCompanyRole = existingUser.UserCompanyRoles.FirstOrDefault(u => u.Company.CompanyId == company.CompanyId);
-                if (userCompanyRole == null)
-                {
-                    userCompanyRole = new UserCompanyRole
-                    {
-                        User = existingUser,
-                        Company = company
-                    };
-                    existingUser.UserCompanyRoles.Add(userCompanyRole);
-                    company.UserCompanyRoles.Add(userCompanyRole);
-                }
-                userCompanyRole.Roles.Add(adminRole);
-            }
-
-            company.Users = new List<User> { existingUser };
-            company.CreatedAt = DateTime.UtcNow;
-            existingUser.Companies.Add(company);
-
-            await _context.SaveChangesAsync();
-
+            await _companyService.AddCompanyToUser(company);
             return Ok();
         }
 
         [HttpPut("updateCompany/{companyId}")]
         public async Task<IActionResult> UpdateCompany([FromBody] Company updatedCompany, Guid companyId)
         {
-            var currentCompanyInfo = await _context.Companies
-                .FirstOrDefaultAsync(c => c.CompanyId == companyId);
-
-            if (currentCompanyInfo == null)
-            {
-                return NotFound();
-            }
-
-            if (updatedCompany.CompanyName != null)
-                currentCompanyInfo.CompanyName = updatedCompany.CompanyName ?? currentCompanyInfo.CompanyName;
-
-            if (updatedCompany.Email != null)
-                currentCompanyInfo.Email = updatedCompany.Email ?? currentCompanyInfo.Email;
-
-            if (updatedCompany.FiscalCode != null)
-                currentCompanyInfo.FiscalCode = updatedCompany.FiscalCode ?? currentCompanyInfo.FiscalCode;
-
-            if (updatedCompany.TradeRegister != null)
-                currentCompanyInfo.TradeRegister = updatedCompany.TradeRegister ?? currentCompanyInfo.TradeRegister;
-
-            if (updatedCompany.PhoneNumber != null)
-                currentCompanyInfo.PhoneNumber = updatedCompany.PhoneNumber ?? currentCompanyInfo.PhoneNumber;
-
-            if (updatedCompany.Address != null)
-                currentCompanyInfo.Address = updatedCompany.Address ?? currentCompanyInfo.Address;
-        
-            if (updatedCompany.SocialCapital >= 200)
-                currentCompanyInfo.SocialCapital = updatedCompany.SocialCapital;
-            else updatedCompany.SocialCapital = currentCompanyInfo.SocialCapital;
-
-            if (updatedCompany.Logo != null)
-                currentCompanyInfo.Logo = updatedCompany.Logo ?? currentCompanyInfo.Logo;
-
-            if (updatedCompany.Signature != null)
-                currentCompanyInfo.Signature = updatedCompany.Signature ?? currentCompanyInfo.Signature;
-
-            currentCompanyInfo.TvaPayer = updatedCompany.TvaPayer ? updatedCompany.TvaPayer : currentCompanyInfo.TvaPayer;
-
-            currentCompanyInfo.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(currentCompanyInfo);
+            await _companyService.UpdateCompany(updatedCompany, companyId);
+            return Ok("Company has been updated succesfully.");
         }
     }
 }
