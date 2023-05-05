@@ -96,12 +96,12 @@ namespace ContaPlusAPI.Services
             await _emailSenderService.SendEmailToNewAddedUserWithoutAccount(user, company.CompanyName, role, password);
         }
 
-        public async Task<ActionResult<User>> GetUserById(Guid userId)
+        public async Task<User> GetUserById(Guid userId)
         {
             return await _userRepository.GetUserById(userId);
         }
 
-        public async Task<ActionResult<User>> GetUserByIdRoles(Guid userId)
+        public async Task<User> GetUserByIdRoles(Guid userId)
         {
             return await _userRepository.GetUserByIdRoles(userId);
         }

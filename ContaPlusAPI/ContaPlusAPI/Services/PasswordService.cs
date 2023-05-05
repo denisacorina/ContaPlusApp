@@ -11,16 +11,14 @@ namespace ContaPlusAPI.Services
         private readonly IUserRepository _userRepository;
         private readonly IGenerateTokenService _generateTokenService;
         private readonly IEmailSenderService _emailSenderService;
-        private readonly IPasswordService _passwordService;
         private readonly ISaveChangesRepository _saveChangesRepository;
 
         public PasswordService(IUserRepository userRepository, IGenerateTokenService generateTokenService,
-            IEmailSenderService emailSenderService, IPasswordService passwordService, ISaveChangesRepository saveChangesRepository)
+            IEmailSenderService emailSenderService, ISaveChangesRepository saveChangesRepository)
         {
             _userRepository = userRepository;
             _generateTokenService = generateTokenService;
             _emailSenderService = emailSenderService;
-            _passwordService = passwordService;
             _saveChangesRepository = saveChangesRepository;
         }
 
@@ -74,7 +72,7 @@ namespace ContaPlusAPI.Services
                 return false;
             }
 
-            _passwordService.HashPassword(resetPassword.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            HashPassword(resetPassword.Password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.ResetPasswordToken = null;

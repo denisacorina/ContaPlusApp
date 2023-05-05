@@ -42,19 +42,17 @@ namespace ContaPlusAPI.Context
                 MissingFieldFound = null
             };
 
-            using (var reader = new StreamReader(@"C:\Users\DENI\Desktop\PlanConturi.csv"))
-            using (var csv = new CsvReader(reader, configuration))
+            using var reader = new StreamReader(@"C:\Users\DENI\Desktop\PlanConturi.csv");
+            using var csv = new CsvReader(reader, configuration);
+            var records = csv.GetRecords<ChartOfAccounts>();
+
+            foreach (var record in records)
             {
-                var records = csv.GetRecords<ChartOfAccounts>();
+                var existingRecord = modelBuilder.Entity<ChartOfAccounts>().HasData(record);
 
-                foreach (var record in records)
+                if (existingRecord == null)
                 {
-                    var existingRecord = modelBuilder.Entity<ChartOfAccounts>().HasData(record);
-
-                    if (existingRecord == null)
-                    {
-                        modelBuilder.Entity<ChartOfAccounts>().HasData(record);
-                    }
+                    modelBuilder.Entity<ChartOfAccounts>().HasData(record);
                 }
             }
         }

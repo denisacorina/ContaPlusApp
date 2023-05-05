@@ -7,8 +7,8 @@ namespace ContaPlusAPI.Interfaces.IService
 {
     public interface IUserService
     {
-        Task<ActionResult<User>> GetUserById(Guid userId);
-        Task<ActionResult<User>> GetUserByIdRoles(Guid userId);
+        Task <User> GetUserById(Guid userId);
+        Task <User> GetUserByIdRoles(Guid userId);
         Task<User> GetCurrentUser();
         Task<User> GetUserByEmail(string email);
         Task AddExistingUserToCompany(Company company, User user, int roleId);

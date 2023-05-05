@@ -10,16 +10,16 @@ namespace ContaPlusAPI.Services
     public class AuthentificationService : IAuthentificationService
     {
         private readonly IMapper _mapper;
-        private readonly IPasswordService _passwordHash;
+        private readonly IPasswordService _passwordService;
         private readonly IGenerateTokenService _token;
-        private readonly IEmailSenderService _emailSender;
+        private readonly IEmailSenderService _emailSenderService;
         private readonly IUserRepository _userRepository;
-        public AuthentificationService(IMapper mapper, IPasswordService passwordHash, IGenerateTokenService token, IEmailSenderService emailSender, IUserRepository userRepository)
+        public AuthentificationService(IMapper mapper, IPasswordService passwordService, IGenerateTokenService token, IEmailSenderService emailSenderService, IUserRepository userRepository)
         {
             _mapper = mapper;
-            _passwordHash = passwordHash;
+            _passwordService = passwordService;
             _token = token;
-            _emailSender = emailSender;
+            _emailSenderService = emailSenderService;
             _userRepository = userRepository;  
         }
 
@@ -31,7 +31,7 @@ namespace ContaPlusAPI.Services
 
             if (user == null)
             {
-                _passwordHash.HashPassword(registerUser.Password!, out byte[] passwordHash, out byte[] passwordSalt);
+                _passwordService.HashPassword(registerUser.Password!, out byte[] passwordHash, out byte[] passwordSalt);
                 mappedUser.FirstName = registerUser.FirstName;
                 mappedUser.LastName = registerUser.LastName;
                 mappedUser.Email = registerUser.Email;
@@ -43,7 +43,7 @@ namespace ContaPlusAPI.Services
 
                 try
                 {
-                    await _emailSender.AfterRegistrationEmail(mappedUser);
+                    await _emailSenderService.AfterRegistrationEmail(mappedUser);
                     return new OkObjectResult(mappedUser);
                 }
                 catch (Exception)
@@ -64,7 +64,7 @@ namespace ContaPlusAPI.Services
                 return new BadRequestObjectResult("User not found");
             }
 
-            if (!_passwordHash.VerifyPassword(loginUser.Password, user.PasswordHash, user.PasswordSalt))
+            if (!_passwordService.VerifyPassword(loginUser.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return new BadRequestObjectResult("Incorrect password");
             }
