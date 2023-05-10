@@ -24,6 +24,7 @@ import { BsModalService, BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
 import { ComponentLoaderFactory } from 'ngx-bootstrap/component-loader';
 import { ForgotPasswordComponent } from './components/pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
+import { UserProfileComponent } from './components/pages/user-profile/user-profile.component';
 
 export function tokenGetter()
 {
@@ -40,6 +41,7 @@ export function tokenGetter()
     TopNavBarComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    UserProfileComponent,
     
 
   ],

@@ -27,15 +27,14 @@
 
 
 .dropdown {
-    background-color: #f5f2ff;
-    padding: 5px 30px 5px 30px;
+    padding: 5px 100px 5px 100px;
     border-radius: 10px;
     margin-top: 7px;
     position: absolute;
     right: 0;
     display: flex;
     align-items: center;
-    margin-right: 20px;
+
 }
 
 .dropdown:hover {
@@ -43,11 +42,12 @@
 }
 
 .dropdown img {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     margin-right: 15px;
 }
+
 
 .dropdown .username {
     font-size: 14px;

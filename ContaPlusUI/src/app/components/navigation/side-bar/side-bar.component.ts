@@ -9,6 +9,16 @@ export class SideBarComponent {
 
   mini = true;
 
+  dropdownIncomeVisible = false;
+  dropdownExpenseVisible = false;
+
+  toggleDropdownIncome() {
+    this.dropdownIncomeVisible = !this.dropdownIncomeVisible;
+  }
+
+  toggleDropdownExpense() {
+    this.dropdownExpenseVisible = !this.dropdownExpenseVisible;
+  }
 
   toggleSidebar() {
     if (this.mini) {
@@ -27,6 +37,8 @@ export class SideBarComponent {
       const sidebar = document.getElementById("mySidebar");
       const main = document.getElementById("main");
       const logo = document.getElementById("logo");
+      this.dropdownIncomeVisible = false;
+      this.dropdownExpenseVisible = false;
       console.log("closing sidebar");
       if (sidebar != null && main != null && logo != null) {
         sidebar.style.width = "85px";

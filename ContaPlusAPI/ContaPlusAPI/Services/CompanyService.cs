@@ -14,11 +14,14 @@ namespace ContaPlusAPI.Services
         private readonly ISaveChangesRepository _saveChangesRepository;
 
         public CompanyService(ICompanyRepository companyRepository,
-            IUserService userService, IUserCompanyRoleRepository userCompanyRoleRepository)
+            IUserService userService, 
+            IUserCompanyRoleRepository userCompanyRoleRepository,
+            ISaveChangesRepository saveChangesRepository)
         {
             _companyRepository = companyRepository;
             _userService = userService;
             _userCompanyRoleRepository = userCompanyRoleRepository;
+            _saveChangesRepository = saveChangesRepository;
         }
 
         public async Task<Company> GetCompanyByEmail(string email)

@@ -1,28 +1,29 @@
 
-<!--Side Nav Bar-->
 <app-side-bar></app-side-bar>
-<!-- Main Content -->
 <div id="main">
-    <!-- Top Nav Bar -->
 <app-top-nav-bar></app-top-nav-bar>
 
 <div class="custom-scrollbar scrollable">
   <h3>Dashboard</h3>
   <!-- Cards for displaying data -->
-  <div class="">
-    <div class="">
+  <div class="cards row">
+    <div class="card col-md-3">
       <!-- Card content goes here -->
       Card 1
     </div>
-    <div class="">
+    <div class="card col-md-3">
       <!-- Card content goes here -->
       Card 2
     </div>
-    <div class="">
+    <div class="card col-md-3">
       <!-- Card content goes here -->
       Card 3
     </div>
   </div>
+  <!-- <img class="profilePic" [src]="imageUrl" alt="Profile Picture">
+
+  <input type="file" (change)="onFileSelected($event)">
+  <button type="button" (click)="onUpload()">Upload</button> -->
 
   <div>
     <p>User ID: {{ user?.userId }}</p>
@@ -30,14 +31,14 @@
     <p>First name: {{ user?.firstName }}</p>
     <p>Last name: {{ user?.lastName }}</p>
     <p>Created at: {{ user?.createdAt }}</p>
-    <h4>Roles:</h4>
+    <!-- <h4>Roles:</h4>
     <ul>
       <div *ngFor="let userCompanyRole of user?.userCompanyRoles">
           <li *ngFor="let role of userCompanyRole?.roles">
             {{ role?.roleName }}
           </li>
         </div>
-    </ul>
+    </ul> -->
     
     </div> 
     <h4>Companies:</h4>
@@ -48,9 +49,9 @@
 <div *ngIf="companyData">
 
   <h3>Company Info</h3>
-<p>Company ID: {{ companyData[0]?.companyId }}</p>
-<p>Company Name: {{ companyData[0]?.companyName }}</p>
-<p>Fiscal Code: {{ companyData[0]?.fiscalCode }}</p>
+<p>Company ID: {{ companyData?.companyId }}</p>
+<p>Company Name: {{ companyData?.companyName }}</p>
+<p>Fiscal Code: {{ companyData?.fiscalCode }}</p>
 </div>
 
 </div>
@@ -61,7 +62,7 @@
   <mat-error style="font-size: 14px;" *ngIf="updateCompanyForm.controls['tradeRegister'].hasError('pattern')">
     Trade register must be in the format 'J01/123/4567'.
   </mat-error>
-
+<!-- 
   <form [formGroup]="updateCompanyForm" (ngSubmit)="onUpdateCompanySubmit()">
     <mat-dialog-content>
       <div class="row">
@@ -123,7 +124,7 @@
   </form>
 </div>
 </div>
-
+ -->
 
 
 

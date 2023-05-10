@@ -18,7 +18,7 @@ namespace ContaPlusAPI.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserService(IUserRepository userRepository, IUserCompanyRoleRepository userCompanyRoleRepository,
-            ICompanyRepository companyRepository, IEmailSenderService emailSenderService, IPasswordService passwordService,
+            IEmailSenderService emailSenderService, IPasswordService passwordService,
             ISaveChangesRepository saveChangesRepository, IHttpContextAccessor httpContextAccessor)
         {
             _userRepository = userRepository;
@@ -122,14 +122,14 @@ namespace ContaPlusAPI.Services
 
             if (userCompanyRole == null)
             {
-                return new NotFoundResult();
+                return new BadRequestObjectResult("Doesn't exist");
             }
 
             var role = await _userCompanyRoleRepository.GetRoleById(roleId);
 
             if (role == null)
             {
-                return new NotFoundResult();
+                return new BadRequestObjectResult("Role doesn't exist.");
             }
 
             if (userCompanyRole.Roles.Any(r => r.RoleId == roleId))
@@ -138,6 +138,7 @@ namespace ContaPlusAPI.Services
             }
 
             userCompanyRole.Roles.Add(role);
+            
             await _saveChangesRepository.SaveChanges();
 
             return new OkResult();
@@ -153,12 +154,25 @@ namespace ContaPlusAPI.Services
             if (updatedUser.LastName != null)
                 currentUserInfo.LastName = updatedUser.LastName ?? currentUserInfo.LastName;
 
-            if (updatedUser.ProfilePicture != null)
-                currentUserInfo.ProfilePicture = updatedUser.ProfilePicture ?? currentUserInfo.ProfilePicture;
+            if (updatedUser.Email != null)
+                currentUserInfo.Email = updatedUser.Email ?? currentUserInfo.Email;
+
+            if (updatedUser.PhoneNumber != null)
+                currentUserInfo.PhoneNumber = updatedUser.PhoneNumber ?? currentUserInfo.PhoneNumber;
 
             currentUserInfo.UpdatedAt = DateTime.UtcNow;
 
             await _saveChangesRepository.SaveChanges();
+        }
+
+        public async Task<UserCompanyRole> GetUserCompanyRole(Guid userId, Guid companyId)
+        {
+            return await _userCompanyRoleRepository.GetUserCompanyRole(userId, companyId);
+        }
+
+        public async Task<List<UserCompanyRole>> GetListCompanyUserRoles(Guid companyId)
+        {
+            return await _userCompanyRoleRepository.GetListCompanyUserRoles(companyId);
         }
     }
 }

@@ -39,6 +39,16 @@ namespace ContaPlusAPI.Repositories
           .FirstOrDefaultAsync(u => u.User.UserId == userId && u.Company.CompanyId == companyId);
         }
 
+        public async Task<List<UserCompanyRole>> GetListCompanyUserRoles(Guid companyId)
+        {
+            return await _context.UserCompanyRoles
+         .Include(u => u.User)
+         .Include(u => u.Company)
+         .Include(u => u.Roles)
+         .Where(u => u.Company.CompanyId == companyId)
+         .ToListAsync();
+        }
+
         public async Task<bool> UserIsAssignedToCompany(User user, Company company)
         {
             return await _context.UserCompanyRoles.AnyAsync(u => u.User == user && u.Company == company);

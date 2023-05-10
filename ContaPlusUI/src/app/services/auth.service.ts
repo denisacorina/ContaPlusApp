@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, map, of } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
+import { environment } from 'environments/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,7 +11,7 @@ export class AuthService {
 
   private isAuthenticated: boolean = false;
 
-  baseUrl = "https://localhost:7121/api/Authentification/";
+  private readonly baseAuthUrl = environment.baseAuthUrl;
  
 
 
@@ -18,7 +19,7 @@ export class AuthService {
 
   register(model:any)
   {
-    return this.http.post<any>(`${this.baseUrl}register`, model)
+    return this.http.post<any>(`${this.baseAuthUrl}register`, model)
     .pipe(
       map(response => {
          response.userId;
@@ -28,7 +29,7 @@ export class AuthService {
   }
 
   login(model: any, rememberMe: boolean) {
-    return this.http.post<any>(`${this.baseUrl}login`, { ...model, rememberMe })
+    return this.http.post<any>(`${this.baseAuthUrl}login`, { ...model, rememberMe })
       .pipe(
         map(response => {
            response.userId;

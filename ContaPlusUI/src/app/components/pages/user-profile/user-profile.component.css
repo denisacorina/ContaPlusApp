@@ -1,0 +1,66 @@
+.profilePic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+   
+}
+
+#uploadBtn {
+    width: 100px;
+    border-radius: 30px;
+    background-color:  #3838df;
+    box-shadow: 0 0px 7px 0 rgba(92, 96, 228, 0.75);
+    color: #fff !important;
+    font-size: 10px;
+}
+
+.btnSave{
+    border-radius: 30px;
+    border: none;
+    background-color:  #3838df;
+    color: #fff !important;
+    font-size: 10px;
+}
+
+input[type=file] {
+    display: inline !important;
+    border-radius: 30px;
+    box-shadow: 0 0px 7px 0 rgba(92, 97, 228, 0.274);
+    width: 300px;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.user {
+    width: 450px;
+    height: 585px;
+    border-radius: 30px;
+    padding: 10px 100px 40px 100px;
+    box-shadow: 0 0px 20px 0 rgba(231, 231, 231, 0.638);
+}
+
+.companyUsers {
+    width: 600px;
+    border-radius: 30px;
+    padding: 20px 10px 0px 30px;
+    box-shadow: 0 0px 20px 0 rgba(231, 231, 231, 0.638);
+    margin-left: 5%;
+    height: auto;
+}
+
+.companyUsers td {
+    padding: 4px;
+    font-size: 12px;
+    line-height: 1.2;
+    border: none;
+}
+
+ul {
+    padding-left: 0rem;
+}
+
+input:disabled {
+    background-color: #ffffff;
+    color: grey;
+  }
+

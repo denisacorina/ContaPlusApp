@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContaPlusAPI.Controllers
 {
-    [Authorize]
     public class CompaniesController : BaseApiController
     {
         private readonly AppDbContext _context;
@@ -29,6 +28,10 @@ namespace ContaPlusAPI.Controllers
         public async Task<ActionResult<IEnumerable<Company>>> GetCompanyIdData(Guid companyId)
         {
             var data = await _companyService.GetCompanyById(companyId);
+            if (data == null)
+            {
+                return NotFound();
+            }
             return Ok(data);
         }
 

@@ -3,28 +3,27 @@
     <div *ngIf="companyData">
       <h4 class="companyName">
         Current company:
-        <span class="companyNameValue">{{ companyData[0]?.companyName | uppercase }}</span>
+        <span class="companyNameValue">{{ companyData?.companyName | uppercase }}</span>
       </h4>
     </div>
 
 
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="dashboard">
       <img src="../../../assets/img/contaplus.png" alt="Logo" style="width: 150px; padding-top: 10px;">
     </a>
 
     <div class="dropdown">
-      <img src="../../../assets/img/user.png" alt="User Photo">
-      <span class="username">{{ user?.firstName.split(' ')[0] | uppercase }} {{ user?.lastName.charAt(0) | uppercase
-        }}.</span>
-      <img src="../../../assets/img/dropdown.png" style="width: 15px; height: 15px; margin-left: 10px;">
+      <img class="profilePic" [src]=" getUserService().imageUrl" alt="Profile Picture">
+      <img src="../../../assets/img/dropdown.png" style="width: 15px; height: 15px;">
       <div class="dropdown-content">
 
         <div class="userInfo mt-4" style="text-align: center;">
-          <h6 style="color: #5959e3;">{{user?.firstName}} {{user?.lastName}}</h6>
-          <p style="font-size: 10px;">{{user?.email}}</p>
+          <h6 style="color: #5959e3;">{{getUserService().user?.firstName | uppercase}} {{getUserService().user?.lastName | uppercase}}</h6>
+          <p style="font-size: 10px;">{{getUserService().user?.email}}</p>
         </div>
 
-        <a href="#">My profile</a>
+        <a href="myProfile">My profile</a>
+
 
         <div *ngIf="showCompanyDropdown">
           <h6 *ngIf="this.companies.length > 1" style="margin-left: 15px; color: #5959e3; font-size: 12px;">Choose another company:</h6>

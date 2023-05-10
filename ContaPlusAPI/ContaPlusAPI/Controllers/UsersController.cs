@@ -12,32 +12,26 @@ namespace ContaPlusAPI.Controllers
 {
     public class UsersController : BaseApiController
     {
-        private readonly AppDbContext _context;
         private readonly IPasswordService _passwordService;
         private readonly IUserService _userService;
         private readonly ICompanyService _companyService;
         private readonly Interfaces.IService.IAuthorizationService _authorizationService;
-        private readonly IGenerateTokenService _generateTokenService;
 
-        public UsersController(AppDbContext context,
-            IPasswordService passwordService,
+        public UsersController(IPasswordService passwordService,
             Interfaces.IService.IAuthorizationService authorizationService,
-            IGenerateTokenService generateTokenService,
             IUserService userService,
             ICompanyService companyService)
         {
-            _context = context;
             _passwordService = passwordService;
             _authorizationService = authorizationService;
-            _generateTokenService = generateTokenService;
             _userService = userService;
             _companyService = companyService;
         }
 
         [HttpGet("getUserById")]
-        public ActionResult<User> GetUserByIdRoles(Guid userId)
+        public async Task<ActionResult<IEnumerable<User>>> GetUserById(Guid userId)
         {
-            var user = _userService.GetUserByIdRoles(userId);
+            var user = await _userService.GetUserById(userId);
 
             if (user == null)
                 return NotFound();
@@ -45,7 +39,6 @@ namespace ContaPlusAPI.Controllers
             return Ok(user);
         }
 
-        [Authorize]
         [HttpPost("addUserRoleToCompany")]
         public async Task<IActionResult> AddUserRoleToCompany(Guid userId, int roleId, Guid companyId)
         {
@@ -64,7 +57,6 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPut("updateUser/{userId}")]
-        [Authorize]
         public async Task<IActionResult> UpdateUser([FromBody] UserProfileUpdateDTO updatedUser, Guid userId)
         {
             await _userService.UpdateUser(updatedUser, userId);
@@ -95,7 +87,6 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("addExistingUserToCompany")]
-        [Authorize]
         public async Task<IActionResult> AddExistingUserToCompany(Guid companyId, string email, int roleId)
         {
             bool isUserAdmin = await _authorizationService.IsUserAdmin(companyId);
@@ -132,6 +123,18 @@ namespace ContaPlusAPI.Controllers
                 await _userService.AddNewUserToCompany(company, firstName, lastName, email, roleId);
 
             return Ok("User added to company successfully.");
+        }
+
+        [HttpGet("getUserCompanyRoles/{userId}/{companyId}")]
+        public async Task<ActionResult<UserCompanyRole>> GetUserCompanyRole(Guid userId, Guid companyId)
+        {
+            return await _userService.GetUserCompanyRole(userId, companyId);
+        }
+
+        [HttpGet("getUsersAndRolesFromCompany")]
+        public async Task<List<UserCompanyRole>> GetListCompanyUserRoles(Guid companyId)
+        {
+            return await _userService.GetListCompanyUserRoles(companyId);
         }
     }
 

@@ -46,7 +46,6 @@ export class ResetPasswordComponent {
     console.log(resetPassword)
     this.http.post('https://localhost:7121/api/Users/resetPassword', resetPassword).subscribe(
       () => {
-        alert('Password has been changed successfully!');
         console.log('Password has been changed successfully!')
         console.log(resetPassword)
       },
@@ -54,6 +53,7 @@ export class ResetPasswordComponent {
         console.log(error);
       }
     );
+    alert('Password has been changed successfully!');
   }
 
   passwordMatchValidator(control: AbstractControl): { mismatch: boolean } | null {

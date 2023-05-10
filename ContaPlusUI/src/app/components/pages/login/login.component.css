@@ -35,23 +35,6 @@
   box-shadow: 0 4px 15px 0 rgba(92, 96, 228, 0.75);
 }
 
-
-/* 
-#loginBtn{
-    background-color: #4f4feb;
-    color: white;
-    border-radius: 30px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    width: 99%;
-    font-weight: 500;
-    font-size: 14px;
-}
-
-#loginBtn:hover{
-    background-color: #3939cc;
-} */
-
 .loginText {
   color: rgb(61, 61, 61);
   font-size: 36px;

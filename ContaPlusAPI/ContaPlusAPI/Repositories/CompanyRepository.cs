@@ -18,7 +18,7 @@ namespace ContaPlusAPI.Repositories
 
         public async Task<Company> GetCompanyById(Guid id)
         {
-            return await _context.Companies.FirstOrDefaultAsync(u => u.CompanyId == id);
+            return await _context.Companies.FindAsync(id);
         }
 
         public async Task<Company> GetCompanyByEmail(string email)

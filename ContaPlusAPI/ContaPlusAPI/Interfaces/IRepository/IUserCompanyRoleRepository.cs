@@ -10,5 +10,6 @@ namespace ContaPlusAPI.Interfaces.IRepository
         Task<bool> UserIsAssignedToCompany(User user, Company company);
         Task AddRoleToUserCompany(UserCompanyRole userCompanyRole);
         Task<UserCompanyRole> GetUserCompanyRole(Guid userId, Guid companyId);
+        Task<List<UserCompanyRole>> GetListCompanyUserRoles(Guid companyId);
     }
 }

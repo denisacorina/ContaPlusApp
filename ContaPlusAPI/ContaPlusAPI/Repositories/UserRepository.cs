@@ -44,7 +44,11 @@ namespace ContaPlusAPI.Repositories
 
         public async Task<User> GetUserById(Guid userId)
         {
-            return await _context.Users.FindAsync(userId);
+            return await _context.Users
+              .Include(u => u.UserCompanyRoles)
+              .ThenInclude(u => u.Roles)
+              .Include(u => u.Companies)
+              .FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
         public async Task<User> GetUserByIdRoles(Guid userId)

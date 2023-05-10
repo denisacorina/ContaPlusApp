@@ -29,31 +29,24 @@ export class TopNavBarComponent implements OnInit {
   emailExists!: any;
   fiscalCodeExists!: Observable<boolean>;
   tradeRegisterExists!:  Observable<boolean>;
+  imageUrl: any;
 
 
   constructor(private companyService: CompanyService,
-    private userService: UserService,
-    private jwtHelper: JwtHelperService,
-    private router: Router) { }
+    private userService: UserService) { }
+
+    public getUserService(): UserService {
+      return this.userService;
+    }
 
   ngOnInit(): void {
-    this.getLoggedInUser();
+    this.userService.getLoggedInUser();
     this.fetchListOfCompaniesForUser();
     this.addCompanyToUser();
+    this.userService.getUserProfilePicture();
+    this.imageUrl = this.userService.imageUrl;
   }
-  getLoggedInUser() {
-    const userId = this.getLoggedInUserId();
-    if (userId) {
-      this.userService.getUserInfo(userId).subscribe(
-        (response: any) => {
-          this.user = response;
-        },
-        (error: any) => {
-          console.error('Failed to retrieve user information:', error);
-        }
-      );
-    }
-  }
+
 
   addCompanyToUser() {
     this.addCompanyForm = new FormGroup({
@@ -77,9 +70,12 @@ export class TopNavBarComponent implements OnInit {
    this.setErrorCheckFiscalCodeExists();
    this.setErrorCheckTradeRegisterExists();
 
-    this.userId = this.getLoggedInUserId();
+    this.userId = this.userService.getLoggedInUserId();
     this.companyService.addCompanyToUser(this.addCompanyForm.value, this.userId).subscribe(
-      () => location.reload(),
+      (response: any) => {
+        sessionStorage.setItem('selectedCompanyId', response.companyId);
+        location.reload();
+      }, 
       error => console.error(error)
     );
 
@@ -158,7 +154,7 @@ export class TopNavBarComponent implements OnInit {
   }
 
   fetchListOfCompaniesForUser() {
-    const userId = this.getLoggedInUserId();
+    const userId = this.userService.getLoggedInUserId();
 
     if (userId) {
       this.companyService.getCompaniesForUser(userId).subscribe(companies => {
@@ -173,7 +169,7 @@ export class TopNavBarComponent implements OnInit {
         if (this.companies.length === 1 || !sessionStorage.getItem('selectedCompanyId')) {
           this.selectedCompanyId = this.companies[0]?.companyId;
           sessionStorage.setItem('selectedCompanyId', this.selectedCompanyId);
-          this.showCompanyDropdown = true;
+          this.showCompanyDropdown = false;
           this.showCancelButton = true;
         } else {
           this.showCompanyDropdown = true;
@@ -198,23 +194,6 @@ export class TopNavBarComponent implements OnInit {
   }
 
 
-
-  getLoggedInUserId(): string | null {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      const isTokenExpired = this.jwtHelper.isTokenExpired(token);
-      if (isTokenExpired) {
-      this.logout();
-      this.router.navigateByUrl("/login");
-      return null;
-      }
-      const decodedToken = this.jwtHelper.decodeToken(token);
-      if (decodedToken && decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']) {
-        return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-      }
-    }
-    return null;
-  }
 
 
   logout(): void {

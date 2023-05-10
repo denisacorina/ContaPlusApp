@@ -1,16 +1,38 @@
 <!-- Side Bar -->
-<div id="mySidebar" class="sidebar" (mouseover)="toggleSidebar()" (mouseout)="toggleSidebar()">
-    <div class="logo">
-     <img src="../../../assets/img/whitelogo.png" id="logo"></div>
-     <a href="#"><i class="material-icons">info</i><span class="sideBarText">Dropdown</span></a><br>
-    
-       <div class="w3-dropdown-hover">
-         <a class=""><i class="material-icons">info</i> <span class="sideBarText">Dropdown</span></a>
-         <div class="w3-dropdown-content">
-           <a href="#" class="w3-bar-item">Link</a>
-           <a href="#" class="w3-bar-item">Link</a>
-         </div>
-       </div> 
-   </div>
+<div id="mySidebar" class="sidebar" (mouseenter)="toggleSidebar()" (mouseleave)="toggleSidebar()">
+  <div class="logo">
+    <img src="../../../assets/img/whitelogo.png" id="logo">
+  </div>
+
+  <div class="sidenav">
+    <a href="dashboard">
+      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon>
+      <span class="sideBarText">Dashboard</span>
+    </a>
+
+    <a (mouseenter)="toggleDropdownIncome()">
+      <mat-icon>input</mat-icon>
+      <span class="sideBarText">Income </span><mat-icon>arrow_drop_down</mat-icon>
+    </a>
+    <div class="dropdown-container" *ngIf="dropdownIncomeVisible" (mouseleave)="toggleDropdownIncome()">
+      <a href="#">Inregistrare factura</a>
+      <a href="#">Inregistrare factura</a>
+    </div>
+
+    <a (mouseenter)="toggleDropdownExpense()">
+      <mat-icon>transit_enterexit</mat-icon>
+      <span class="sideBarText">Expense </span><mat-icon>arrow_drop_down</mat-icon>
+    </a>
+    <div class="dropdown-container" *ngIf="dropdownExpenseVisible" (mouseleave)="toggleDropdownExpense()">
+      <a href="#">Inregistrare factura</a>
+      <a href="#">Inregistrare factura</a>
+    </div>
+  </div>
+  <a href="#">
+    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon>
+    <span class="sideBarText">Dashboard</span>
+  </a>
+</div>
+
    
    

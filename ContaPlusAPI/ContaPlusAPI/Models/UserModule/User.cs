@@ -19,6 +19,9 @@ namespace ContaPlusAPI.Models.UserModule
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
+
+        [RegularExpression(@"^07\d{8}$", ErrorMessage = "Phone number must be in the format '0712345678'.")]
+        public string? PhoneNumber { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public DateTime CreatedAt { get; set; }

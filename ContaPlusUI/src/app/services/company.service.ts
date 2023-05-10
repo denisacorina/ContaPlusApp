@@ -3,15 +3,22 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, map, of } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
+import { environment } from 'environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyService {
 
-  baseCompanyUrl = "https://localhost:7121/api/Companies";
+  private readonly baseCompanyUrl = environment.baseCompanyUrl;
+  private readonly baseImageUploadUrl = environment.baseImageUploadUrl;
+  
+  companies!: any;
+  companyData!: any;
+  selectedCompanyId!: any;
+  showCompanyDropdown: boolean = false;
 
-
-  constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private router: Router) { }
+  constructor(private http: HttpClient) { }
 
 
   getCompaniesForUser(userId: string): Observable<any[]> {
@@ -42,7 +49,16 @@ export class CompanyService {
     return this.http.get<boolean>(`${this.baseCompanyUrl}/tradeRegisterExists`, { params: { tradeRegister } });
   }
 
+  uploadCompanyLogo(companyId: string, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${this.baseImageUploadUrl}/company_logo/${companyId}`, formData);
+}
 
-
+uploadCompanySignature(companyId: string, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${this.baseImageUploadUrl}/company_signature/${companyId}`, formData);
+}
 
 }

@@ -11,6 +11,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   email!: string;
   forgotPasswordForm!: FormGroup;
+  successAlert: boolean = false;
 
   constructor(private http: HttpClient) {
 
@@ -30,14 +31,13 @@ export class ForgotPasswordComponent implements OnInit {
     this.email = this.forgotPasswordForm.get('email')?.value;
 
     this.http.post(`https://localhost:7121/api/Users/forgotPassword/${this.email}`, null).subscribe(
-      () => {
-        alert('Forgot password link has been sent to the email you provided.');
-      },
+      () => {console.log('Forgot password link has been sent to the email you provided.')},
       (error) => {
         if (error.status === 404) {
           console.log('Email not found');
         }
       }
     );
+    alert('Forgot password link has been sent to the email you provided.');
   }
 }

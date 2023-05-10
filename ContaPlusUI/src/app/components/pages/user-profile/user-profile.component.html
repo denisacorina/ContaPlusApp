@@ -1,0 +1,109 @@
+<app-side-bar></app-side-bar>
+<div id="main">
+    <app-top-nav-bar></app-top-nav-bar>
+    <div class="user-company-container" style="display: flex; flex-wrap: wrap;">
+        <div class="userInfo" style="flex-basis: 30%;">
+            <div class="user" style="display: flex; flex-direction: column;  align-items: center;">
+                <div><img class="profilePic" [src]=" getUserService().imageUrl" alt="Profile Picture"></div>
+                <div style="display: flex;">
+                    <p class="btn" style="margin-right: 5px; margin-bottom: 10px; font-size: 10px;"
+                        (click)="onChoosePhotoClicked()"><mat-icon
+                            style="margin-right: 5px; margin-bottom: -10px; font-size: 16px;"> cloud_upload</mat-icon>
+                        Choose another photo</p>
+                    <div *ngIf="showChoosePhoto">
+                        <p class="btn" (click)="onExit()"> <mat-icon
+                                style="margin-bottom: -10px; font-size: 16px;">close</mat-icon></p>
+                    </div>
+                </div>
+                <div style="display: flex;" *ngIf="showChoosePhoto">
+                    <input class="form-control form-control-sm" type="file" id="formFile"
+                        (change)="onFileSelected($event)">
+                    <button class="btn btn-sm btn-block" id="uploadBtn" (click)="onUpload()">Upload</button>
+                </div>
+                <h4 style="font-weight: 700;">{{ getUserService().user?.firstName }} {{ getUserService().user?.lastName
+                    }}</h4>
+                <div>
+
+                    <ul>
+                        <li id="roles" *ngFor="let role of currentUserRoles" class="{{ role.roleName }}">{{
+                            role.roleName }}</li>
+                    </ul>
+                </div>
+                <h6 class="mb-4 mt-4">My Information</h6>
+                <div class="form">
+                    <form (ngSubmit)="onUserUpdateSubmit()" [formGroup]="updateUserForm" autocomplete="off">
+                        <div class="form-group" style="margin-bottom: -5px; width: 400px!important;">
+                            <label style="font-size: 10px; margin-bottom: -15px;">First Name</label>
+                            <input class="form-control" formControlName="firstName" type="text">
+                        </div>
+                        <div class="form-group" style="margin-bottom: -5px;">
+                            <label style="font-size: 10px; margin-bottom: -15px;">Last Name</label>
+                            <input class="form-control" formControlName="lastName" type="text">
+                        </div>
+                        <div class="form-group" style="margin-bottom: -5px;">
+                            <label style="font-size: 10px; margin-bottom: -15px;">Email</label>
+                            <input class="form-control" formControlName="email" type="email" [disabled]="true"
+                                readonly="true">
+                        </div>
+                        <div class="form-group" style="margin-bottom: -5px;">
+                            <label style="font-size: 10px; margin-bottom: -15px;">Phone Number</label>
+                            <input class="form-control" formControlName="phoneNumber" type="text">
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col">
+                                <p class="btn" *ngIf="!isEditMode" (click)="toggleEditMode()">Edit</p>
+                            </div>
+                            <div class="col">
+                                <div *ngIf="isEditMode">
+                                    <p class="btn" (click)="onExitEdit()"> <mat-icon
+                                            style="margin-bottom: -5px;">close</mat-icon></p>
+                                    <button class="btnSave" type="submit"
+                                        [disabled]="!updateUserForm.valid">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <div style="flex-basis: 50%;">
+            <h6 style="margin-left: 10%; font-weight: 700;">TEAM</h6>
+            <div class="companyUsers" style="font-size: 10px;">
+
+
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let user of companyUsers">
+                            <td>
+                                <img style="border-radius: 50%; margin-top: -7px;" [src]="user.profilePictureUrl"
+                                    alt="Profile Picture" width="30" height="30">
+                            </td>
+                            <td>{{ user.user.firstName }} {{ user.user.lastName }}</td>
+                            <td>{{ user.user.email }}</td>
+                            <td>
+                                <ul>
+                                    <li id="roles" *ngFor="let role of user.roles" class="{{ role.roleName }}">{{
+                                        role.roleName }}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- <div>
+    <h3>Current User Roles:</h3>
+    <ul>
+      <li id="roles" *ngFor="let role of currentUserRoles" class="{{ role.roleName }}">{{ role.roleName }}</li>
+    </ul>
+  </div> -->

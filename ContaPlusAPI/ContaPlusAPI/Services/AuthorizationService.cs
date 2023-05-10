@@ -6,12 +6,10 @@ namespace ContaPlusAPI.Services
     public class AuthorizationService : IAuthorizationService
     {
         private readonly IUserService _userService;
-        private readonly IUserRepository _userRepository;
 
-        public AuthorizationService(IUserService userService, IUserRepository userRepository)
+        public AuthorizationService(IUserService userService)
         {
             _userService = userService;
-            _userRepository = userRepository;
         }
         public async Task<bool> IsUserAccountat(Guid companyId)
         {
