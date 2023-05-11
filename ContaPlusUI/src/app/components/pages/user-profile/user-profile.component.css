@@ -33,16 +33,16 @@ input[type=file] {
 
 .user {
     width: 450px;
-    height: 585px;
+    height: auto;
     border-radius: 30px;
-    padding: 10px 100px 40px 100px;
+    padding: 10px 100px 10px 100px;
     box-shadow: 0 0px 20px 0 rgba(231, 231, 231, 0.638);
 }
 
 .companyUsers {
-    width: 600px;
+    width: auto;
     border-radius: 30px;
-    padding: 20px 10px 0px 30px;
+    padding: 20px 0px 0px 30px;
     box-shadow: 0 0px 20px 0 rgba(231, 231, 231, 0.638);
     margin-left: 5%;
     height: auto;

@@ -20,12 +20,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from 'src/app/shared/jwt.incerceptor';
 import { SideBarComponent } from './components/navigation/side-bar/side-bar.component';
 import { TopNavBarComponent } from './components/navigation/top-nav-bar/top-nav-bar.component';
-import { BsModalService, BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
-import { ComponentLoaderFactory } from 'ngx-bootstrap/component-loader';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import {  NgApexchartsModule } from 'ng-apexcharts';
 import { ForgotPasswordComponent } from './components/pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
 import { UserProfileComponent } from './components/pages/user-profile/user-profile.component';
-
+import { CommonModule } from '@angular/common';
 export function tokenGetter()
 {
   return localStorage.getItem("token");
@@ -56,7 +56,9 @@ export function tokenGetter()
     MaterialModule,
     HttpClientModule,
     FormsModule,
+    NgApexchartsModule,
     ReactiveFormsModule,
+    CommonModule,
     ModalModule.forRoot(),
     JwtModule.forRoot({
       config: {

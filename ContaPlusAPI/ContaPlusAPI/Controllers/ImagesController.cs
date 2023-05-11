@@ -24,7 +24,7 @@ namespace ContaPlusAPI.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound("Picture not found.");
             }
         }
 

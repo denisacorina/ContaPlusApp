@@ -56,14 +56,16 @@ export class UserService {
     if (token) {
       const decodedToken = this.jwtHelper.decodeToken(token);
       if (decodedToken && decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']) {
-        return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+        const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+        sessionStorage.setItem('userId', userId); 
+        return userId;
       }
     }
     return null;
   }
 
   public async getLoggedInUser() {
-    const userId = this.getLoggedInUserId();
+    const userId =  sessionStorage.getItem('userId'); 
     if (userId) {
       this.getUserInfo(userId).subscribe(
         response => {
@@ -86,7 +88,7 @@ export class UserService {
   }
   
   async onUpload() {
-    var userId = this.getLoggedInUserId();
+    const userId =  sessionStorage.getItem('userId'); 
     if (userId) {
       await this.uploadProfilePicture(userId, this.selectedFile).toPromise();
       console.log('Profile picture uploaded successfully');
@@ -96,7 +98,7 @@ export class UserService {
   }
   
  public async getUserProfilePicture() {
-    var userId = this.getLoggedInUserId();
+  const userId =  sessionStorage.getItem('userId'); 
     if (userId) {
       try {
         const response = await this.getProfilePicture(userId).toPromise();

@@ -26,7 +26,7 @@ export class UserProfileComponent {
   }
 
   ngOnInit(): void {
-    this.userService.getLoggedInUser();
+   
     this.userService.getUserProfilePicture();
     this.imageUrl = this.userService.imageUrl;
 
@@ -44,7 +44,7 @@ export class UserProfileComponent {
 
 
   getCurrentUserRoleToCompany() {
-    const userId = this.userService.getLoggedInUserId();
+    const userId =  sessionStorage.getItem('userId'); 
     const companyId = sessionStorage.getItem('selectedCompanyId');
     if (userId && companyId)
       this.userService.getUserCompanyRole(userId, companyId).subscribe(
@@ -58,16 +58,14 @@ export class UserProfileComponent {
   }
 
   getAllUsersToCurrentCompany() {
-    const userId = this.userService.getLoggedInUserId();
+    const userId =  sessionStorage.getItem('userId'); 
     const companyId = sessionStorage.getItem('selectedCompanyId');
   
     if (userId && companyId) {
       this.userService.getUsersAndRolesFromCompany(companyId).subscribe(
         (response) => {
-          response.find(user => user.userId === userId);
-          this.companyUsers = response.filter(user => user.userId !== userId);
-  
-          
+          this.companyUsers = response.filter(user => user.user.userId !== userId);
+
           for (const user of this.companyUsers) {
             this.userService.getProfilePicture(user.user.userId).subscribe(
               (res) => {
@@ -78,7 +76,7 @@ export class UserProfileComponent {
                 }
               },
               (error) => {
-                console.log(error);
+                console.log("User doesn't have profile picture set");
                 user.profilePictureUrl = 'https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png';
               }
             );
@@ -133,7 +131,7 @@ export class UserProfileComponent {
 
   onUserUpdateSubmit() {
     const formData = this.updateUserForm.value;
-    const userId = this.userService.getLoggedInUserId();
+    const userId =  sessionStorage.getItem('userId'); 
     if (userId) {
       this.userService.updateUser(userId, formData).subscribe(
         (response) => {
@@ -145,7 +143,7 @@ export class UserProfileComponent {
   }
 
   onUserShow() {
-    const userId = this.userService.getLoggedInUserId();
+    const userId =  sessionStorage.getItem('userId'); 
     if (userId) {
       this.userService.getUserInfo(userId).subscribe(user => {
         this.updateUserForm.setValue({

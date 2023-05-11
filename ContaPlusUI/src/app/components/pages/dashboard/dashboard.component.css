@@ -22,7 +22,7 @@
 .right {
   right: 0;
   background-color: #4f4feb;
-  background-image: url("../../../assets/img/cover3.jpg");
+  background-image: url("../../../../assets/img/cover3.jpg");
   box-shadow: 0px 6px 15px 0px rgba(67, 67, 231, 0.57);
   background-repeat: no-repeat;
   background-size: cover;
@@ -45,41 +45,39 @@
 
 
 .card {
-  width: 300px;
-  height: 200px;
+  padding: 20px 10px 20px 15px;
+  width: 100px;
+  height: 150px;
   background-color: rgb(255, 255, 255);
   border: none;
-  box-shadow: 0px 0px 20px -4px rgba(102,102,102,0.74);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Top Nav Bar */
-
-/* Cards Container */
-.card-container {
-  /* Add margin or padding for spacing between cards */
-  margin-top: 20px;
-  display: flex;
-  /* Use flexbox to align cards in a row, adjust flex properties as needed */
-}
-
-.card {
-  /* Set width, height, and margin for cards */
-  width: 200px;
-  height: 150px;
+  border-radius: 10px;
   margin-right: 20px;
-  /* Add any other styles for cards as needed */
+  box-shadow: 0px 0px 10px -4px rgba(102,102,102,0.74);
+}
+
+.small-card {
+  padding: 20px 10px 20px 15px;
+  width: 100px;
+  height: 150px;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 10px;
+  margin-right: 20px;
+  box-shadow: 0px 0px 10px -4px rgba(102,102,102,0.74);
+}
+
+.chart {
+  width: 715px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px -4px rgba(102,102,102,0.74);
+}
+
+
+
+.card-container {
+  margin-top: 100px;
+  display: flex;
 }
 
 

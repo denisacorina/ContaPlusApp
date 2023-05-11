@@ -1,47 +1,87 @@
-
 <app-side-bar></app-side-bar>
 <div id="main">
-<app-top-nav-bar></app-top-nav-bar>
+  <app-top-nav-bar></app-top-nav-bar>
 
-<div class="custom-scrollbar scrollable">
-  <h3>Dashboard</h3>
-  <!-- Cards for displaying data -->
-  <div class="cards row">
-    <div class="card col-md-3">
-      <!-- Card content goes here -->
-      Card 1
-    </div>
-    <div class="card col-md-3">
-      <!-- Card content goes here -->
-      Card 2
-    </div>
-    <div class="card col-md-3">
-      <!-- Card content goes here -->
-      Card 3
-    </div>
-  </div>
-  <!-- <img class="profilePic" [src]="imageUrl" alt="Profile Picture">
+  <div class="custom-scrollbar scrollable">
+    <h3 class="mb-4">Dashboard</h3>
+    <!-- Cards for displaying data -->
+    <div class="cards row" style="margin-left: 1px;">
+      <div class="col-3">
+        <div class="row">
+          <div class="card col">
+            <div class="row">
+              <div class="col mb-4">
+                <img width="40" height="40" src="../../../../assets/img/client.png">
+              </div>
+              <div class="col-8">
+                <h5>Clients</h5>
+              </div>
+              <h1>777</h1>
 
-  <input type="file" (change)="onFileSelected($event)">
-  <button type="button" (click)="onUpload()">Upload</button> -->
+            </div>
+          </div>
+          <div class="card col">
+            <div class="row">
+              <div class="col mb-4">
+                <img width="40" height="40" src="../../../../assets/img/vendor.png">
+              </div>
+              <div class="col-8">
+                <h5>Vendors</h5>
+              </div>
+              <h1>56</h1>
 
-  <div>
-    <p>User ID: {{ user?.userId }}</p>
-    <p>Email: {{ user?.email }}</p>
-    <p>First name: {{ user?.firstName }}</p>
-    <p>Last name: {{ user?.lastName }}</p>
-    <p>Created at: {{ user?.createdAt }}</p>
-    <!-- <h4>Roles:</h4>
-    <ul>
-      <div *ngFor="let userCompanyRole of user?.userCompanyRoles">
-          <li *ngFor="let role of userCompanyRole?.roles">
-            {{ role?.roleName }}
-          </li>
+            </div>
+          </div>
         </div>
-    </ul> -->
-    
-    </div> 
-    <h4>Companies:</h4>
+      </div>
+      <div class="col">
+        <div class="row">
+          <div class="card col">
+            <div class="row">
+              <div class="col-3 mb-4">
+                <img width="35" height="35" src="../../../../assets/img/earning.png">
+              </div>
+              <div class="col-8">
+                <h4>Total Revenues</h4>
+              </div>
+              <h1>23456,56 lei</h1>
+
+            </div>
+          </div>
+          <div class="card col">
+            <div class="row">
+              <div class="col-3 mb-4">
+                <img width="40" height="40" src="../../../../assets/img/expense.png">
+              </div>
+              <div class="col-8">
+                <h4>Total Expenses</h4>
+              </div>
+              <h1>456 lei</h1>
+
+            </div>
+          </div>
+          <div class="card col">
+            <div class="row">
+              <div class="col-3 mb-4">
+                <img width="35" height="35" src="../../../../assets/img/wallet.png">
+              </div>
+              <div class="col-8">
+                <h4>Cash Balance</h4>
+              </div>
+              <h1>2456777 lei</h1>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart mt-4">
+      <div style="width: 700px;">
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
+    <!-- <h4>Companies:</h4>
     <ul>
     <li *ngFor="let company of companies">{{ company.companyId}}, {{ company.companyName }}</li>
   </ul>
@@ -52,17 +92,18 @@
 <p>Company ID: {{ companyData?.companyId }}</p>
 <p>Company Name: {{ companyData?.companyName }}</p>
 <p>Fiscal Code: {{ companyData?.fiscalCode }}</p>
-</div>
+</div> -->
 
-</div>
 
+
+    <!-- 
 <div *ngIf="isUpdateCompanyDialogOpen" class="update-company-dialog">
   <div class="centered">
   <h4 class="mb-4" mat-dialog-title>Update Company</h4>
   <mat-error style="font-size: 14px;" *ngIf="updateCompanyForm.controls['tradeRegister'].hasError('pattern')">
     Trade register must be in the format 'J01/123/4567'.
-  </mat-error>
-<!-- 
+  </mat-error> -->
+    <!-- 
   <form [formGroup]="updateCompanyForm" (ngSubmit)="onUpdateCompanySubmit()">
     <mat-dialog-content>
       <div class="row">
@@ -125,13 +166,3 @@
 </div>
 </div>
  -->
-
-
-
-
-
-
-
-
-
-
