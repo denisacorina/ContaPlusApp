@@ -1,4 +1,4 @@
-﻿namespace ContaPlusAPI.Models.Authentication
+﻿namespace ContaPlusAPI.Models.Authentification
 {
     public class RefreshToken
     {

@@ -32,7 +32,7 @@ namespace ContaPlusAPI.Repositories
 
         public async Task<UserCompanyRole> GetUserCompanyRole(Guid userId, Guid companyId)
         {
-            return await _context.UserCompanyRoles
+           return await _context.UserCompanyRoles
           .Include(u => u.User)
           .Include(u => u.Company)
           .Include(u => u.Roles)

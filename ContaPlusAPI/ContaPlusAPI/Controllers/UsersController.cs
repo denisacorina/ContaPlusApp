@@ -7,6 +7,7 @@ using ContaPlusAPI.Models.UserModule;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace ContaPlusAPI.Controllers
 {
@@ -45,16 +46,6 @@ namespace ContaPlusAPI.Controllers
             return await _userService.AddUserRoleToCompany(userId, roleId, companyId);
         }
 
-        [HttpGet("currentUser")]
-        [Authorize]
-        public async Task<ActionResult<User>> GetCurrentUser()
-        {
-            var user = await _userService.GetCurrentUser();
-            if (user == null)
-                return NotFound();
-
-            return user;
-        }
 
         [HttpPut("updateUser/{userId}")]
         public async Task<IActionResult> UpdateUser([FromBody] UserProfileUpdateDTO updatedUser, Guid userId)
@@ -87,9 +78,9 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("addExistingUserToCompany")]
-        public async Task<IActionResult> AddExistingUserToCompany(Guid companyId, string email, int roleId)
+        public async Task<IActionResult> AddExistingUserToCompany(Guid companyId, string email, int roleId, Guid userId)
         {
-            bool isUserAdmin = await _authorizationService.IsUserAdmin(companyId);
+            bool isUserAdmin = await _authorizationService.IsUserAdmin(companyId, userId);
 
             if (!isUserAdmin) return Forbid("You are not authorized to perform this action.");
 
@@ -106,21 +97,18 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("addNewUserToCompany")]
-        [Authorize]
-        public async Task<IActionResult> AddNewUserToCompany([FromBody] Test test)
+        public async Task<IActionResult> AddNewUserToCompany(Guid companyId, string firstName, string lastName, string email, int roleId)
         {
-            bool isUserAdmin = await _authorizationService.IsUserAdmin(test.CompanyId);
+            Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.Name).Value);
 
-            if (!isUserAdmin) return Forbid("You are not authorized to perform this action.");
+            //bool isUserAdmin = await _authorizationService.IsUserAdmin(companyId, userId);
 
-            User user = await _userService.GetUserByEmail(test.Email);
+            //if (!isUserAdmin) return BadRequest("You are not authorized to perform this action.");
 
-            Company company = await _companyService.GetCompanyById(test.CompanyId);
-
-            if (company == null) return BadRequest("Company doesn't exist.");
+            User user = await _userService.GetUserByEmail(email);
 
             if (user == null)
-                await _userService.AddNewUserToCompany(company, test.FirstName, test.LastName, test.Email, test.RoleId);
+                await _userService.AddNewUserToCompany(companyId, firstName, lastName, email, roleId);
 
             return Ok("User added to company successfully.");
         }
@@ -136,15 +124,16 @@ namespace ContaPlusAPI.Controllers
         {
             return await _userService.GetListCompanyUserRoles(companyId);
         }
-    }
 
-    public class Test
-    {
-        public Guid CompanyId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public int RoleId { get; set; }
-    }
+        [HttpGet("getUserByEmail")]
+        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        {
+            var user = await _userService.GetUserByEmail(email);
 
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+    }
 }

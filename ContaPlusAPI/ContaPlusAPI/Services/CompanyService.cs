@@ -52,9 +52,9 @@ namespace ContaPlusAPI.Services
         {
             return await _companyRepository.TradeRegisterExists(tradeRegister);
         }
-        public async Task AddCompanyToUser(Company company)
+        public async Task AddCompanyToUser(Company company, Guid userId)
         {
-            var existingUser = await _userService.GetCurrentUser();
+            var existingUser = await _userService.GetUserById(userId);
             if (existingUser == null)
                 throw new Exception("User not found.");
 
@@ -130,6 +130,11 @@ namespace ContaPlusAPI.Services
             }
 
             await _saveChangesRepository.SaveChanges();
+        }
+
+        public async Task<List<Company>> GetAdminCompanies(Guid userId)
+        {
+            return await _companyRepository.GetAdminCompanies(userId);
         }
     }
 }

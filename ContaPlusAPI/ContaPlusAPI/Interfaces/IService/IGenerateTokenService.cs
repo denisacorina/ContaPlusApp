@@ -1,4 +1,4 @@
-﻿using ContaPlusAPI.Models.Authentication;
+﻿using ContaPlusAPI.Models.Authentification;
 using ContaPlusAPI.Models.UserModule;
 
 namespace ContaPlusAPI.Interfaces.IService

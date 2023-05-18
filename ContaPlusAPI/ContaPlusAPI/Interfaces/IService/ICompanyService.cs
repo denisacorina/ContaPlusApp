@@ -11,8 +11,9 @@ namespace ContaPlusAPI.Interfaces.IService
         Task<bool> EmailExists(string email);
         Task<bool> FiscalCodeExists(string fiscalCode);
         Task<bool> TradeRegisterExists(string tradeRegister);
-        Task AddCompanyToUser(Company company);
+        Task AddCompanyToUser(Company company, Guid userId);
         Task UpdateCompany(Company updatedCompany, Guid companyId);
         Task<IEnumerable<Company>> GetCompaniesCurrentUser(Guid userId);
+        Task<List<Company>> GetAdminCompanies(Guid userId);
     }
 }

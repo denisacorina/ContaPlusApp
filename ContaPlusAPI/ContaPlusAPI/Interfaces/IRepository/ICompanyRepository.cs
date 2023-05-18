@@ -8,6 +8,7 @@ namespace ContaPlusAPI.Interfaces.IRepository
     {
         Task<Company> GetCompanyById(Guid id);
         Task<Company> GetCompanyByEmail(string email);
+        Task<List<Company>> GetAdminCompanies(Guid userId);
         Task AddCompany(Company company);
         Task UpdateCompany(Company company);
         Task<IEnumerable<Company>> GetCompaniesCurrentUser(Guid userId);

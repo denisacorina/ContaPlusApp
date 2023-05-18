@@ -3,6 +3,7 @@ using ContaPlusAPI.Interfaces.IRepository;
 using ContaPlusAPI.Interfaces.IService;
 using ContaPlusAPI.Models.CompanyModule;
 using ContaPlusAPI.Models.UserModule;
+using ContaPlusAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -16,10 +17,12 @@ namespace ContaPlusAPI.Services
         private readonly IPasswordService _passwordService;
         private readonly ISaveChangesRepository _saveChangesRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICompanyRepository _companyRepository;
 
         public UserService(IUserRepository userRepository, IUserCompanyRoleRepository userCompanyRoleRepository,
             IEmailSenderService emailSenderService, IPasswordService passwordService,
-            ISaveChangesRepository saveChangesRepository, IHttpContextAccessor httpContextAccessor)
+            ISaveChangesRepository saveChangesRepository, IHttpContextAccessor httpContextAccessor,
+            ICompanyRepository companyRepository)
         {
             _userRepository = userRepository;
             _userCompanyRoleRepository = userCompanyRoleRepository;
@@ -27,6 +30,7 @@ namespace ContaPlusAPI.Services
             _passwordService = passwordService;
             _saveChangesRepository = saveChangesRepository;
             _httpContextAccessor = httpContextAccessor;
+            _companyRepository = companyRepository;
         }
 
         public async Task AddExistingUserToCompany(Company company, User user, int roleId)
@@ -56,7 +60,7 @@ namespace ContaPlusAPI.Services
             await _emailSenderService.SendEmailToNewAddedUserWithAccount(user, company.CompanyName, role);
         }
 
-        public async Task AddNewUserToCompany(Company company, string firstName, string lastName, string email, int roleId)
+        public async Task AddNewUserToCompany(Guid companyId, string firstName, string lastName, string email, int roleId)
         {
             string password = _passwordService.GeneratePassword();
 
@@ -74,6 +78,10 @@ namespace ContaPlusAPI.Services
             };
 
             await _userRepository.AddUser(user);
+
+            var company = await _companyRepository.GetCompanyById(companyId);
+
+            if (company == null) throw new Exception("Company doesn't exist.");
 
             var companyRoleNewUser = new UserCompanyRole
             {
@@ -96,6 +104,7 @@ namespace ContaPlusAPI.Services
             await _emailSenderService.SendEmailToNewAddedUserWithoutAccount(user, company.CompanyName, role, password);
         }
 
+
         public async Task<User> GetUserById(Guid userId)
         {
             return await _userRepository.GetUserById(userId);
@@ -106,11 +115,6 @@ namespace ContaPlusAPI.Services
             return await _userRepository.GetUserByIdRoles(userId);
         }
 
-        public async Task<User> GetCurrentUser()
-        {
-            var userId = Guid.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value);
-            return await _userRepository.GetUserById(userId);
-        }
         public async Task<User> GetUserByEmail(string email)
         {
             return await _userRepository.GetUserByEmail(email);

@@ -16,9 +16,9 @@ namespace ContaPlusAPI.Repositories
             _context = context;
         }
 
-        public async Task<Company> GetCompanyById(Guid id)
+        public async Task<Company> GetCompanyById(Guid companyId)
         {
-            return await _context.Companies.FindAsync(id);
+            return await _context.Companies.FirstOrDefaultAsync(c => c.CompanyId == companyId);
         }
 
         public async Task<Company> GetCompanyByEmail(string email)
@@ -58,6 +58,15 @@ namespace ContaPlusAPI.Repositories
             return await _context.Companies
                 .Where(u => u.Users.Any(u => u.UserId == userId))
                 .ToListAsync();
+        }
+
+        public async Task<List<Company>> GetAdminCompanies(Guid userId)
+        {
+             return await _context.UserCompanyRoles
+                 .Include(u => u.Company)
+                 .Where(u => u.User.UserId == userId && u.Roles.Any(r => r.RoleName == "admin"))
+                 .Select(u => u.Company)
+                 .ToListAsync();
         }
     }
 }

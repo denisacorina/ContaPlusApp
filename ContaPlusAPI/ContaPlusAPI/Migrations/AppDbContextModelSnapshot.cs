@@ -37,7 +37,37 @@ namespace ContaPlusAPI.Migrations
                     b.ToTable("CompanyUser");
                 });
 
-            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.ChartOfAccounts", b =>
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.CompanyChartOfAccounts", b =>
+                {
+                    b.Property<int>("CompanyChartOfAccountsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyChartOfAccountsId"));
+
+                    b.Property<int>("AccountCode")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CurrentBalance")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("InitialBalance")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CompanyChartOfAccountsId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("CompanyChartOfAccounts");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.GeneralChartOfAccounts", b =>
                 {
                     b.Property<int>("AccountCode")
                         .ValueGeneratedOnAdd()
@@ -58,21 +88,12 @@ namespace ContaPlusAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<bool>("IsCredit")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDebit")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Product_Service")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AccountCode");
 
-                    b.ToTable("ChartOfAccounts");
+                    b.ToTable("GeneralChartOfAccounts");
 
                     b.HasData(
                         new
@@ -82,9 +103,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -94,9 +112,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -106,9 +121,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -118,9 +130,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -130,9 +139,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -142,9 +148,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -154,9 +157,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -166,9 +166,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -178,9 +175,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -190,9 +184,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -202,9 +193,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -214,9 +202,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -226,9 +211,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -238,9 +220,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -250,9 +229,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -262,9 +238,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -274,9 +247,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -286,9 +256,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -298,9 +265,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -310,9 +274,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -322,9 +283,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -334,9 +292,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -346,9 +301,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -358,9 +310,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -370,9 +319,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -382,9 +328,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -394,9 +337,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -406,9 +346,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -418,9 +355,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -430,9 +364,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -442,9 +373,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -454,9 +382,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -466,9 +391,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -478,9 +400,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -490,9 +409,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -502,9 +418,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -514,9 +427,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -526,9 +436,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -538,9 +445,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -550,9 +454,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -562,9 +463,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -574,9 +472,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -586,9 +481,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -598,9 +490,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -610,9 +499,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -622,9 +508,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -634,9 +517,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -646,9 +526,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -658,9 +535,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -670,9 +544,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -682,9 +553,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -694,9 +562,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -706,9 +571,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -718,9 +580,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -730,9 +589,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -742,9 +598,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -754,9 +607,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -766,9 +616,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -778,9 +625,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -790,9 +634,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -802,9 +643,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -814,9 +652,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -826,9 +661,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -838,9 +670,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -850,9 +679,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de capitaluri, provizioane, imprumuturi si datorii asimilate",
                             AccountNumber = 1,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -862,9 +688,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -874,9 +697,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -886,9 +706,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -898,9 +715,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -910,9 +724,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -922,9 +733,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -934,9 +742,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -946,9 +751,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -958,9 +760,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -970,9 +769,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -982,9 +778,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -994,9 +787,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1006,9 +796,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1018,9 +805,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1030,9 +814,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1042,9 +823,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1054,9 +832,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1066,9 +841,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1078,9 +850,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1090,9 +859,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1102,9 +868,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1114,9 +877,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1126,9 +886,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1138,9 +895,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1150,9 +904,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1162,9 +913,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1174,9 +922,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1186,9 +931,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1198,9 +940,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1210,9 +949,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1222,9 +958,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1234,9 +967,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1246,9 +976,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1258,9 +985,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1270,9 +994,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1282,9 +1003,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1294,9 +1012,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1306,9 +1021,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1318,9 +1030,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1330,9 +1039,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1342,9 +1048,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1354,9 +1057,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1366,9 +1066,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1378,9 +1075,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1390,9 +1084,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1402,9 +1093,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1414,9 +1102,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1426,9 +1111,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1438,9 +1120,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1450,9 +1129,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1462,9 +1138,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1474,9 +1147,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1486,9 +1156,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1498,9 +1165,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1510,9 +1174,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1522,9 +1183,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1534,9 +1192,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1546,9 +1201,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1558,9 +1210,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1570,9 +1219,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1582,9 +1228,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1594,9 +1237,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1606,9 +1246,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1618,9 +1255,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1630,9 +1264,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1642,9 +1273,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1654,9 +1282,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1666,9 +1291,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1678,9 +1300,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1690,9 +1309,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1702,9 +1318,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1714,9 +1327,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1726,9 +1336,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1738,9 +1345,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1750,9 +1354,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de imobilizari",
                             AccountNumber = 2,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1762,9 +1363,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1774,9 +1372,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1786,9 +1381,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1798,9 +1390,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1810,9 +1399,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1822,9 +1408,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1834,9 +1417,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1846,9 +1426,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1858,9 +1435,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1870,9 +1444,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1882,9 +1453,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1894,9 +1462,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1906,9 +1471,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1918,9 +1480,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1930,9 +1489,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1942,9 +1498,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1954,9 +1507,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1966,9 +1516,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -1978,9 +1525,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -1990,9 +1534,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2002,9 +1543,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2014,9 +1552,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2026,9 +1561,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2038,9 +1570,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2050,9 +1579,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2062,9 +1588,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2074,9 +1597,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2086,9 +1606,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2098,9 +1615,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2110,9 +1624,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2122,9 +1633,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2134,9 +1642,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2146,9 +1651,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2158,9 +1660,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2170,9 +1669,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2182,9 +1678,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2194,9 +1687,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2206,9 +1696,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2218,9 +1705,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2230,9 +1714,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2242,9 +1723,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2254,9 +1732,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2266,9 +1741,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2278,9 +1750,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2290,9 +1759,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2302,9 +1768,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2314,9 +1777,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2326,9 +1786,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2338,9 +1795,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2350,9 +1804,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2362,9 +1813,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2374,9 +1822,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2386,9 +1831,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de stocuri si productie in curs de executie",
                             AccountNumber = 3,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2398,9 +1840,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2410,9 +1849,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2422,9 +1858,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2434,9 +1867,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2446,9 +1876,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2458,9 +1885,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2470,9 +1894,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -2482,9 +1903,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2494,9 +1912,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2506,9 +1921,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2518,9 +1930,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2530,9 +1939,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2542,9 +1948,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2554,9 +1957,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -2566,9 +1966,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2578,9 +1975,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2590,9 +1984,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2602,9 +1993,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2614,9 +2002,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2626,9 +2011,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2638,9 +2020,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2650,9 +2029,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2662,9 +2038,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2674,9 +2047,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2686,9 +2056,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2698,9 +2065,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2710,9 +2074,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2722,9 +2083,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2734,9 +2092,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2746,9 +2101,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2758,9 +2110,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2770,9 +2119,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2782,9 +2128,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2794,9 +2137,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2806,9 +2146,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2818,9 +2155,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2830,9 +2164,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2842,9 +2173,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2854,9 +2182,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2866,9 +2191,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2878,9 +2200,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2890,9 +2209,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2902,9 +2218,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2914,9 +2227,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2926,9 +2236,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2938,9 +2245,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2950,9 +2254,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2962,9 +2263,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2974,9 +2272,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2986,9 +2281,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -2998,9 +2290,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3010,9 +2299,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3022,9 +2308,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3034,9 +2317,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3046,9 +2326,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3058,9 +2335,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3070,9 +2344,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3082,9 +2353,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3094,9 +2362,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3106,9 +2371,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3118,9 +2380,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3130,9 +2389,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3142,9 +2398,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3154,9 +2407,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3166,9 +2416,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3178,9 +2425,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3190,9 +2434,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3202,9 +2443,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3214,9 +2452,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -3226,9 +2461,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -3238,9 +2470,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3250,9 +2479,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3262,9 +2488,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3274,9 +2497,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3286,9 +2506,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3298,9 +2515,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3310,9 +2524,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3322,9 +2533,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3334,9 +2542,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3346,9 +2551,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3358,9 +2560,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3370,9 +2569,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3382,9 +2578,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3394,9 +2587,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3406,9 +2596,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3418,9 +2605,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3430,9 +2614,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de terti",
                             AccountNumber = 4,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3442,9 +2623,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3454,9 +2632,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3466,9 +2641,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3478,9 +2650,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3490,9 +2659,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3502,9 +2668,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3514,9 +2677,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3526,9 +2686,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3538,9 +2695,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3550,9 +2704,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3562,9 +2713,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3574,9 +2722,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3586,9 +2731,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3598,9 +2740,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3610,9 +2749,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3622,9 +2758,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3634,9 +2767,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3646,9 +2776,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3658,9 +2785,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3670,9 +2794,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3682,9 +2803,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3694,9 +2812,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3706,9 +2821,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3718,9 +2830,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3730,9 +2839,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3742,9 +2848,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3754,9 +2857,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3766,9 +2866,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3778,9 +2875,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3790,9 +2884,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3802,9 +2893,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3814,9 +2902,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3826,9 +2911,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3838,9 +2920,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3850,9 +2929,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3862,9 +2938,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3874,9 +2947,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3886,9 +2956,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3898,9 +2965,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3910,9 +2974,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de trezorerie",
                             AccountNumber = 5,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -3922,9 +2983,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -3934,9 +2992,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -3946,9 +3001,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -3958,9 +3010,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -3970,9 +3019,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -3982,9 +3028,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -3994,9 +3037,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4006,9 +3046,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4018,9 +3055,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4030,9 +3064,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4042,9 +3073,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4054,9 +3082,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4066,9 +3091,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4078,9 +3100,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4090,9 +3109,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4102,9 +3118,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4114,9 +3127,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4126,9 +3136,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4138,9 +3145,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4150,9 +3154,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -4162,9 +3163,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4174,9 +3172,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4186,9 +3181,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4198,9 +3190,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4210,9 +3199,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4222,9 +3208,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4234,9 +3217,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4246,9 +3226,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4258,9 +3235,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4270,9 +3244,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4282,9 +3253,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4294,9 +3262,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4306,9 +3271,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4318,9 +3280,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4330,9 +3289,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4342,9 +3298,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -4354,9 +3307,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4366,9 +3316,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4378,9 +3325,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4390,9 +3334,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4402,9 +3343,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4414,9 +3352,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4426,9 +3361,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4438,9 +3370,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4450,9 +3379,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4462,9 +3388,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4474,9 +3397,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4486,9 +3406,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4498,9 +3415,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4510,9 +3424,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4522,9 +3433,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4534,9 +3442,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4546,9 +3451,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4558,9 +3460,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4570,9 +3469,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4582,9 +3478,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4594,9 +3487,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4606,9 +3496,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4618,9 +3505,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4630,9 +3514,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4642,9 +3523,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4654,9 +3532,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4666,9 +3541,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4678,9 +3550,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4690,9 +3559,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4702,9 +3568,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4714,9 +3577,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4726,9 +3586,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4738,9 +3595,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4750,9 +3604,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4762,9 +3613,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4774,9 +3622,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4786,9 +3631,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4798,9 +3640,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4810,9 +3649,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4822,9 +3658,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4834,9 +3667,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4846,9 +3676,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4858,9 +3685,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4870,9 +3694,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4882,9 +3703,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4894,9 +3712,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4906,9 +3721,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4918,9 +3730,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4930,9 +3739,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4942,9 +3748,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4954,9 +3757,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4966,9 +3766,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4978,9 +3775,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -4990,9 +3784,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5002,9 +3793,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5014,9 +3802,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5026,9 +3811,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5038,9 +3820,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5050,9 +3829,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5062,9 +3838,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de cheltuieli",
                             AccountNumber = 6,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5074,9 +3847,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5086,9 +3856,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5098,9 +3865,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5110,9 +3874,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5122,9 +3883,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5134,9 +3892,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5146,9 +3901,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -5158,9 +3910,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -5170,9 +3919,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -5182,9 +3928,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5194,9 +3937,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5206,9 +3946,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "A",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Serviciu"
                         },
                         new
@@ -5218,9 +3955,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5230,9 +3964,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5242,9 +3973,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5254,9 +3982,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5266,9 +3991,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5278,9 +4000,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5290,9 +4009,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5302,9 +4018,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5314,9 +4027,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5326,9 +4036,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5338,9 +4045,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5350,9 +4054,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5362,9 +4063,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5374,9 +4072,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5386,9 +4081,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5398,9 +4090,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5410,9 +4099,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5422,9 +4108,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5434,9 +4117,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5446,9 +4126,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5458,9 +4135,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5470,9 +4144,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5482,9 +4153,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5494,9 +4162,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5506,9 +4171,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5518,9 +4180,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5530,9 +4189,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5542,9 +4198,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = "Bun"
                         },
                         new
@@ -5554,9 +4207,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5566,9 +4216,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5578,9 +4225,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5590,9 +4234,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5602,9 +4243,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5614,9 +4252,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5626,9 +4261,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5638,9 +4270,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5650,9 +4279,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5662,9 +4288,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5674,9 +4297,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5686,9 +4306,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5698,9 +4315,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5710,9 +4324,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5722,9 +4333,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5734,9 +4342,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5746,9 +4351,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5758,9 +4360,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5770,9 +4369,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5782,9 +4378,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5794,9 +4387,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5806,9 +4396,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5818,9 +4405,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5830,9 +4414,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5842,9 +4423,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5854,9 +4432,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5866,9 +4441,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi de venituri",
                             AccountNumber = 7,
                             AccountType = "P",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5878,9 +4450,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5890,9 +4459,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5902,9 +4468,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5914,9 +4477,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5926,9 +4486,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5938,9 +4495,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5950,9 +4504,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5962,9 +4513,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5974,9 +4522,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5986,9 +4531,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -5998,9 +4540,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6010,9 +4549,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6022,9 +4558,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6034,9 +4567,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6046,9 +4576,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6058,9 +4585,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6070,9 +4594,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6082,9 +4603,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6094,9 +4612,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6106,9 +4621,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6118,9 +4630,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6130,9 +4639,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6142,9 +4648,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6154,9 +4657,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6166,9 +4666,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6178,9 +4675,6 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         },
                         new
@@ -6190,11 +4684,125 @@ namespace ContaPlusAPI.Migrations
                             AccountName = "Conturi speciale",
                             AccountNumber = 8,
                             AccountType = "B",
-                            Amount = 0.00m,
-                            IsCredit = false,
-                            IsDebit = false,
                             ProductService = ""
                         });
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Supplier", b =>
+                {
+                    b.Property<int>("SupplierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierId"));
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FiscalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SupplierId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Supplier");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Transaction", b =>
+                {
+                    b.Property<int>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CreditAccountCode")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DebitAccountCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("InventoryId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PaidAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TransactionAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.HasKey("TransactionId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CreditAccountCode");
+
+                    b.HasIndex("DebitAccountCode");
+
+                    b.HasIndex("InventoryId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.Client", b =>
+                {
+                    b.Property<int>("ClientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientId"));
+
+                    b.Property<string>("ClientName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FiscalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ClientId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Client");
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.CompanyModule.Company", b =>
@@ -6268,6 +4876,71 @@ namespace ContaPlusAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserCompanyRoles");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Inventory", b =>
+                {
+                    b.Property<int>("InventoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InventoryId"));
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("InventoryId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Inventory");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Product", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GeneralChartOfAccountsAccountCode")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("InventoryId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsService")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ProductId");
+
+                    b.HasIndex("GeneralChartOfAccountsAccountCode");
+
+                    b.HasIndex("InventoryId");
+
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.UserModule.Role", b =>
@@ -6392,6 +5065,84 @@ namespace ContaPlusAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.CompanyChartOfAccounts", b =>
+                {
+                    b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Supplier", b =>
+                {
+                    b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Transaction", b =>
+                {
+                    b.HasOne("ContaPlusAPI.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
+                        .WithMany("Transactions")
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("ContaPlusAPI.Models.AccountingModule.GeneralChartOfAccounts", "CreditAccount")
+                        .WithMany()
+                        .HasForeignKey("CreditAccountCode")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ContaPlusAPI.Models.AccountingModule.GeneralChartOfAccounts", "DebitAccount")
+                        .WithMany()
+                        .HasForeignKey("DebitAccountCode")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ContaPlusAPI.Models.InventoryModule.Inventory", "Inventory")
+                        .WithMany()
+                        .HasForeignKey("InventoryId");
+
+                    b.HasOne("ContaPlusAPI.Models.InventoryModule.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("ContaPlusAPI.Models.AccountingModule.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("CreditAccount");
+
+                    b.Navigation("DebitAccount");
+
+                    b.Navigation("Inventory");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.Client", b =>
+                {
+                    b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("ContaPlusAPI.Models.CompanyModule.UserCompanyRole", b =>
                 {
                     b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
@@ -6405,6 +5156,30 @@ namespace ContaPlusAPI.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Inventory", b =>
+                {
+                    b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Product", b =>
+                {
+                    b.HasOne("ContaPlusAPI.Models.AccountingModule.GeneralChartOfAccounts", "GeneralChartOfAccounts")
+                        .WithMany()
+                        .HasForeignKey("GeneralChartOfAccountsAccountCode");
+
+                    b.HasOne("ContaPlusAPI.Models.InventoryModule.Inventory", "Inventory")
+                        .WithMany("Product")
+                        .HasForeignKey("InventoryId");
+
+                    b.Navigation("GeneralChartOfAccounts");
+
+                    b.Navigation("Inventory");
                 });
 
             modelBuilder.Entity("RoleUserCompanyRole", b =>
@@ -6424,7 +5199,14 @@ namespace ContaPlusAPI.Migrations
 
             modelBuilder.Entity("ContaPlusAPI.Models.CompanyModule.Company", b =>
                 {
+                    b.Navigation("Transactions");
+
                     b.Navigation("UserCompanyRoles");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Inventory", b =>
+                {
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.UserModule.User", b =>

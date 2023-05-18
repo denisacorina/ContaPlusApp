@@ -57,9 +57,9 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("{userId}/addCompany")]
-        public async Task<IActionResult> AddCompanyToUser([FromBody] Company company)
+        public async Task<IActionResult> AddCompanyToUser([FromBody] Company company, Guid userId)
         {
-            await _companyService.AddCompanyToUser(company);
+            await _companyService.AddCompanyToUser(company, userId);
             return Ok();
         }
 
@@ -68,6 +68,13 @@ namespace ContaPlusAPI.Controllers
         {
             await _companyService.UpdateCompany(updatedCompany, companyId);
             return Ok("Company has been updated succesfully.");
+        }
+
+        [HttpGet("adminCompanies/{userId}")]
+        public async Task<IActionResult> GetAdminCompanies(Guid userId)
+        {
+            var companies = await _companyService.GetAdminCompanies(userId);
+            return Ok(companies);
         }
     }
 }

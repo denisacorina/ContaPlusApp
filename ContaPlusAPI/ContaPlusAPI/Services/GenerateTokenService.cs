@@ -1,6 +1,6 @@
 ﻿using ContaPlusAPI.Interfaces.IRepository;
 using ContaPlusAPI.Interfaces.IService;
-using ContaPlusAPI.Models.Authentication;
+using ContaPlusAPI.Models.Authentification;
 using ContaPlusAPI.Models.UserModule;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

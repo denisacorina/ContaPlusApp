@@ -2,8 +2,8 @@
 {
     public interface IAuthorizationService
     {
-        Task<bool> IsUserAdmin(Guid companyId);
-        Task<bool> IsUserAccountat(Guid companyId);
-        Task<bool> IsUserManager(Guid companyId);
+        Task<bool> IsUserAdmin(Guid companyId, Guid userId);
+        Task<bool> IsUserAccountat(Guid companyId, Guid userId);
+        Task<bool> IsUserManager(Guid companyId, Guid userId);
     }
 }

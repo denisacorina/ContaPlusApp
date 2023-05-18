@@ -33,7 +33,7 @@ namespace ContaPlusAPI.Repositories
         public async Task AddUser(User user)
         {
             await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
 
         public async Task UpdateUser(User user)
@@ -45,9 +45,7 @@ namespace ContaPlusAPI.Repositories
         public async Task<User> GetUserById(Guid userId)
         {
             return await _context.Users
-              .Include(u => u.UserCompanyRoles)
-              .ThenInclude(u => u.Roles)
-              .Include(u => u.Companies)
+            
               .FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
