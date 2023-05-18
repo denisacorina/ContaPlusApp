@@ -5,7 +5,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CompanyService } from 'src/app/services/company.service';
 import { UserService } from 'src/app/services/user.service';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
-import { Chart, registerables } from 'chart.js';
+import { Chart, Colors, registerables } from 'chart.js';
+import * as ApexCharts from 'apexcharts';
 Chart.register(...registerables);
 
 @Component({
@@ -30,15 +31,87 @@ export class DashboardComponent implements OnInit {
   counties!: any[];
   selectedFile: any;
   imageUrl!: any;
+  isEarningDropdownOpen: boolean = false;
+  isExpenseDropdownOpen: boolean = false;
 
   constructor(private companyService: CompanyService,
     private userService: UserService,
     private jwtHelper: JwtHelperService) { }
   ngOnInit() {
     this.chart();
-
+    this.barChart();
+    this.getCompaniesForUser();
+   
   }
 
+  options = document.getElementsByClassName('option');
+
+ toggleOption(selectedIndex: number) {
+      for (var i = 0; i < this.options.length; i++) {
+          if (i === selectedIndex) {
+              this.options[i].classList.add('selected');
+          } else {
+              this.options[i].classList.remove('selected');
+          }
+      }
+  }
+
+
+ toggleEarningDropdown(): void {
+      this.isEarningDropdownOpen = !this.isEarningDropdownOpen;
+    }
+
+    closeEarningDropdown(): void {
+      this.isEarningDropdownOpen = false;
+    }
+
+    toggleExpenseDropdown(): void {
+      this.isExpenseDropdownOpen = !this.isExpenseDropdownOpen;
+    }
+
+ closeExpenseDropdown(): void {
+      this.isExpenseDropdownOpen = false;
+    }
+  barChart() {
+    var options = {
+      chart: {
+        type: 'bar',
+        toolbar: {
+          show: false
+        },
+        animations: {
+          enabled: true
+        },
+        dropShadow: {
+          enabled: true,
+          blur: 1,
+          opacity: 0.6
+        },
+        sparkline: {
+          enabled: false
+        }
+      },
+      series: [{
+        name: 'Expenses',
+        data: [30,40,45,50,49,60,70,91,125],
+      },
+      {
+        name: 'Sales',
+        data: [3,40,45,5,49,60,7,91,15],
+      }],
+      xaxis: {
+        categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
+      },
+      colors: ['rgba(000, 000, 000, 0.700)', 'rgba(87, 87, 243, 0.600)'],
+      dataLabels: {
+        enabled: false 
+      }
+    };
+    
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    
+    chart.render();
+  }
 
   chart() {
     var myChart = new Chart("myChart", {
@@ -46,19 +119,20 @@ export class DashboardComponent implements OnInit {
       data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
-          label: 'Data1',
+          
+            label: 'Expenses',
+            data: [19, 12, 5, 3, 1, 6],
+            backgroundColor: 'rgba(000, 000, 000, 0.730)',
+            borderColor: "#000",
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+          },
+          {
+          label: 'Revenues',
           data: [12, 19, 3, 5, 2, 3],
           backgroundColor: 'rgba(87, 87, 243, 0.675)',
           borderColor: "#5757f3",
-          borderWidth: 2,
-          fill: true,
-          tension: 0.4
-        },
-        {
-          label: 'Data2',
-          data: [19, 12, 5, 3, 1, 6],
-          backgroundColor: 'rgba(225, 125, 208, 0.675)',
-          borderColor: "#ad449c",
           borderWidth: 2,
           fill: true,
           tension: 0.4
@@ -72,7 +146,7 @@ export class DashboardComponent implements OnInit {
         },
         plugins: {
           legend: {
-            position: 'top'
+            position: 'bottom'
           },
           tooltip: {
             intersect: false
@@ -100,6 +174,17 @@ export class DashboardComponent implements OnInit {
       socialCapital: new FormControl('', Validators.min(200)),
       tvaPayer: new FormControl(false)
     });
+  }
+
+  getCompaniesForUser() {
+    const userId = sessionStorage.getItem('userId');
+    if (userId) {
+      this.companyService.getCompaniesForUser(userId).subscribe(
+        (response) => {
+          this.companies = response;
+        }
+      )
+    }
   }
 
   // onUpdateCompanySubmit(): void {

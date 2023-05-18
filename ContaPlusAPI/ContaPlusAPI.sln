@@ -3,7 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaPlusAPI", "ContaPlusAPI\ContaPlusAPI.csproj", "{E91ACEC1-1FAE-4EC0-AA55-C13FE9978A19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContaPlusAPI", "ContaPlusAPI\ContaPlusAPI.csproj", "{E91ACEC1-1FAE-4EC0-AA55-C13FE9978A19}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1B17CBFF-DF35-4FD1-8B17-7AFACED589E2} = {1B17CBFF-DF35-4FD1-8B17-7AFACED589E2}
+		{359062A3-2662-484E-B9DF-867CC19BEEFE} = {359062A3-2662-484E-B9DF-867CC19BEEFE}
+		{C0185A69-294B-4D72-9130-498DF4FF5F75} = {C0185A69-294B-4D72-9130-498DF4FF5F75}
+		{E3386FC8-A65D-4ED6-8819-24E908D8720A} = {E3386FC8-A65D-4ED6-8819-24E908D8720A}
+		{F26885FA-B617-4581-B881-F77006FD0C36} = {F26885FA-B617-4581-B881-F77006FD0C36}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaPlus.Core", "ContaPlus.Core\ContaPlus.Core.csproj", "{C0185A69-294B-4D72-9130-498DF4FF5F75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaPlus.API", "ContaPlus.API\ContaPlus.API.csproj", "{359062A3-2662-484E-B9DF-867CC19BEEFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaPlus.Infrastructure", "ContaPlus.Infrastructure\ContaPlus.Infrastructure.csproj", "{F26885FA-B617-4581-B881-F77006FD0C36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaPlus.Application", "ContaPlus.Application\ContaPlus.Application.csproj", "{E3386FC8-A65D-4ED6-8819-24E908D8720A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaPlus.Helpers", "ContaPlus.Helpers\ContaPlus.Helpers.csproj", "{1B17CBFF-DF35-4FD1-8B17-7AFACED589E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +32,26 @@ Global
 		{E91ACEC1-1FAE-4EC0-AA55-C13FE9978A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E91ACEC1-1FAE-4EC0-AA55-C13FE9978A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E91ACEC1-1FAE-4EC0-AA55-C13FE9978A19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0185A69-294B-4D72-9130-498DF4FF5F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0185A69-294B-4D72-9130-498DF4FF5F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0185A69-294B-4D72-9130-498DF4FF5F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0185A69-294B-4D72-9130-498DF4FF5F75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{359062A3-2662-484E-B9DF-867CC19BEEFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{359062A3-2662-484E-B9DF-867CC19BEEFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{359062A3-2662-484E-B9DF-867CC19BEEFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{359062A3-2662-484E-B9DF-867CC19BEEFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F26885FA-B617-4581-B881-F77006FD0C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F26885FA-B617-4581-B881-F77006FD0C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F26885FA-B617-4581-B881-F77006FD0C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F26885FA-B617-4581-B881-F77006FD0C36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3386FC8-A65D-4ED6-8819-24E908D8720A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3386FC8-A65D-4ED6-8819-24E908D8720A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3386FC8-A65D-4ED6-8819-24E908D8720A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3386FC8-A65D-4ED6-8819-24E908D8720A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B17CBFF-DF35-4FD1-8B17-7AFACED589E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B17CBFF-DF35-4FD1-8B17-7AFACED589E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B17CBFF-DF35-4FD1-8B17-7AFACED589E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B17CBFF-DF35-4FD1-8B17-7AFACED589E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

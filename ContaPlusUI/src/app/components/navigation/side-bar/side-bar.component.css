@@ -29,11 +29,15 @@
     display: block;
     width: 70px;
   }
+
+  a {
+    margin-top: 15px;
+  }
   
   .sidebar a:hover {
     background-color:#5757f3;
     width: 100%;
-    color: rgb(236, 236, 236);
+  color: rgb(236, 236, 236);
   }
 
 
@@ -91,3 +95,5 @@
       font-size: 18px;
     }
   }
+
+  

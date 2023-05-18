@@ -2,7 +2,7 @@
 <div id="main">
     <app-top-nav-bar></app-top-nav-bar>
     <div class="user-company-container" style="display: flex; flex-wrap: wrap;">
-        <div class="userInfo" style="flex-basis: 26%;">
+        <div class="userInfo" style="flex-basis: 30%;">
             <div class="user" style="display: flex; flex-direction: column;  align-items: center;">
                 <div><img class="profilePic" [src]=" getUserService().imageUrl" alt="Profile Picture"></div>
                 <div style="display: flex;">
@@ -25,8 +25,7 @@
                 <div>
 
                     <ul>
-                        <li id="roles" *ngFor="let role of currentUserRoles" class="{{ role.roleName }}">{{
-                            role.roleName }}</li>
+                        <li id="roles" *ngFor="let role of currentUserRoles" class="{{ role }}">{{ role }}</li>
                     </ul>
                 </div>
                 <h6 class="mb-4 mt-4">My Information</h6>
@@ -72,10 +71,13 @@
 
 
         </div>
-        <div style="flex-basis: 62%;">
+
+    
+        <div style="flex-basis: 60%;">
             <h6 style="margin-left: 10%; font-weight: 700;">TEAM</h6>
             <div class="companyUsers" style="font-size: 10px;">
-
+            
+             
 
                 <table class="table">
                     <tbody>
@@ -86,6 +88,7 @@
                             </td>
                             <td>{{ user.user.firstName }} {{ user.user.lastName }}</td>
                             <td>{{ user.user.email }}</td>
+                           
                             <td>
                                 <ul>
                                     <li id="roles" *ngFor="let role of user.roles" class="{{ role.roleName }}">{{
@@ -98,6 +101,99 @@
 
             </div>
 
+            <a *ngIf="currentUserRoles.includes('admin')" style="display: flex; align-items: center; margin-left: 50px; font-size: 12px; cursor: pointer;" (click)="openAddUserToCompanyDialog()">
+                <span class="material-icons" style="margin-top: -15px; font-size: 16px;">add</span>
+                <p>Add New Employee</p>
+            </a>
+              <br>
+              
+              <div *ngIf="isAddUserToCompanyDialogOpen" class="add-user-to-company-dialog">
+                <div class="centered">
+                  <h4 class="mb-4" mat-dialog-title>Add User to Company</h4>
+                  <form [formGroup]="addUserToCompanyForm" (ngSubmit)="onAddUserToCompanySubmit()">
+                    <div class="row">
+                      <div class="col">
+                        <mat-form-field>
+                          <input matInput type="email" placeholder="Email" formControlName="email" required (input)="checkIfUserExists(this.addUserToCompanyForm.value.email)">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="isExistingUser == false">
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <input matInput type="text" placeholder="First Name" formControlName="firstName" required>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <input matInput type="text" placeholder="Last Name" formControlName="lastName" required>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                          <mat-form-field>
+                            <mat-select placeholder="Company" formControlName="companyId" required>
+                              <mat-option *ngFor="let company of companies" [value]="company.companyId">{{ company.companyName }}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    <div class="row">
+                      <div class="col">
+                        <mat-form-field>
+                          <mat-select placeholder="Role" formControlName="roleId" required>
+                            <mat-option *ngFor="let role of roles" [value]="role.roleId">{{ role.roleName }}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <mat-dialog-actions>
+                          <button mat-raised-button 
+                            style="background-color: #4f4feb; color: white; margin-right: 10px;" 
+                            type="submit">Add User to Company</button>
+                          <button mat-button mat-dialog-close (click)="closeAddUserToCompanyDialog()">Cancel</button>
+                        </mat-dialog-actions>
+                      </div>
+                    </div>
+                  </form>
+                  
+                </div>
+              </div>
+              
+
+            <br><br>
+            <h6 style="margin-left: 10%; font-weight: 700;">MY COMPANIES</h6>
+            <div class="companies" style="font-size: 10px;">
+
+
+                <table class="table" id="#company">
+                    <thead class="thead">
+                         <tr>
+                         <th style="border-top-left-radius: 30px;" scope="col">Company Name</th>
+                         <th scope="col">Fiscal Code</th>
+                         <th scope="col">Trade Register</th>
+                         <th scope="col">Social Capital</th>
+                         <th scope="col">Address</th>
+                         <th style="border-top-right-radius: 30px;" scope="col">TVA Payer</th>
+                     </tr> </thead><tbody>
+                         <tr *ngFor="let company of companies">
+                             
+                             <td>{{ company.companyName }}</td>
+                             <td>{{ company.fiscalCode }}</td>
+                             <td>{{ company.tradeRegister }}</td>
+                             <td>{{ company.socialCapital }}</td>
+                             <td>{{ company.address }}</td>
+                             <td><input type="checkbox" [(ngModel)]="company.tvaPayer" disabled></td>
+                            
+                         </tr>
+                     </tbody>
+                 </table>
+
+
         </div>
+    </div>
     </div>
 </div>

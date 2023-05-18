@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="collapse navbar-collapse">
     <div *ngIf="companyData">
-      <h4 class="companyName">
+      <h4 class="companyName" style="font-weight: 300;">
         Current company:
-        <span class="companyNameValue">{{ companyData?.companyName | uppercase }}</span>
+        <span style="font-weight: 500;" class="companyNameValue">{{ companyData?.companyName | uppercase }}</span>
       </h4>
     </div>
 
@@ -13,12 +13,18 @@
     </a>
 
     <div class="dropdown">
+      <p class="mt-3 mr-4">
+        {{getUserService().user?.firstName | uppercase}} {{getUserService().user?.lastName.charAt(0) 
+          | uppercase}}.</p>
       <img class="profilePic" [src]=" getUserService().imageUrl" alt="Profile Picture">
-      <img src="../../../assets/img/dropdown.png" style="width: 15px; height: 15px;">
+      <span class="material-icons">
+        arrow_drop_down
+        </span>
       <div class="dropdown-content">
 
         <div class="userInfo mt-4" style="text-align: center;">
-          <h6 style="color: #5959e3;">{{getUserService().user?.firstName | uppercase}} {{getUserService().user?.lastName | uppercase}}</h6>
+          <h6 style="color: #5959e3;">{{getUserService().user?.firstName | uppercase}} {{getUserService().user?.lastName
+            | uppercase}}</h6>
           <p style="font-size: 10px;">{{getUserService().user?.email}}</p>
         </div>
 
@@ -26,10 +32,19 @@
 
 
         <div *ngIf="showCompanyDropdown">
-          <h6 *ngIf="this.companies.length > 1" style="margin-left: 15px; color: #5959e3; font-size: 12px;">Choose another company:</h6>
+          <h6 *ngIf="this.companies.length > 1" style="margin-left: 15px; color: #5959e3; font-size: 12px;">Choose
+            another company:</h6>
           <a *ngFor="let company of companies" (click)="selectCompany(company.companyId)" href="/dashboard">
-            <img src="../../../assets/img/building.png" style="width: 20px; height: 20px; margin-left: 10px;"> 
-            {{ company.companyName }}</a>
+            <div class="row">
+              <div class="col-2">
+                <span class="material-icons" style="width: 20px; height: 20px; margin-left: 10px; color: #5959e3;">
+                  apartment
+                </span>
+              </div>
+              <div class="col">
+                {{ company.companyName }}</div>
+            </div>
+          </a>
         </div>
         <a (click)="isAddCompanyDialogOpen = true">Add new company</a>
         <a [href]="'/dashboard'" (click)="logout()" class="logoutBtn">Logout</a>
@@ -40,96 +55,104 @@
 </nav>
 
 <div *ngIf="isAddCompanyDialogOpen">
-  
-<div class="add-company-dialog">
-  <div class="centered">
-    <h4 class="mb-4" mat-dialog-title>Add Company</h4>
-    
-    <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['email'].hasError('email')">
-      Email must be in the format 'example@email.com'.
-    </mat-error>
-    <mat-error *ngIf="addCompanyForm.controls['email'].hasError('emailExists')">Email already exists.</mat-error>
-    <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['fiscalCode'].hasError('pattern')">
-      Fiscal Code must be in the format 'RO123456'.
-    </mat-error>
-    <mat-error *ngIf="addCompanyForm.controls['fiscalCode'].hasError('fiscalCodeExists')">Fiscal code already exists.</mat-error>
-    <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['tradeRegister'].hasError('pattern')">
-      Trade register must be in the format 'J01/123/4567'.
-    </mat-error>  
-    <mat-error *ngIf="addCompanyForm.controls['tradeRegister'].hasError('tradeRegisterExists')">Trade register already exists.</mat-error>
-    <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['phoneNumber'].hasError('pattern')">
-      Phone Number must begin with '07' prefix.
-    </mat-error>
-    <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['socialCapital'].hasError('min')">
-      Social Capital value must be at least 200 lei.
-    </mat-error>
 
-    <form [formGroup]="addCompanyForm" (ngSubmit)="onAddCompanySubmit()" class="mt-4">
-      <mat-dialog-content>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Company Name</mat-label>
-              <input matInput  placeholder="Black SRL" type="text" formControlName="companyName" name="companyName" required>
-            </mat-form-field>
+  <div class="add-company-dialog">
+    <div class="centered">
+      <h4 class="mb-4" mat-dialog-title>Add Company</h4>
+
+      <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['email'].hasError('email')">
+        Email must be in the format 'example@email.com'.
+      </mat-error>
+      <mat-error *ngIf="addCompanyForm.controls['email'].hasError('emailExists')">Email already exists.</mat-error>
+      <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['fiscalCode'].hasError('pattern')">
+        Fiscal Code must be in the format 'RO123456'.
+      </mat-error>
+      <mat-error *ngIf="addCompanyForm.controls['fiscalCode'].hasError('fiscalCodeExists')">Fiscal code already
+        exists.</mat-error>
+      <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['tradeRegister'].hasError('pattern')">
+        Trade register must be in the format 'J01/123/4567'.
+      </mat-error>
+      <mat-error *ngIf="addCompanyForm.controls['tradeRegister'].hasError('tradeRegisterExists')">Trade register already
+        exists.</mat-error>
+      <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['phoneNumber'].hasError('pattern')">
+        Phone Number must begin with '07' prefix.
+      </mat-error>
+      <mat-error style="font-size: 14px;" *ngIf="addCompanyForm.controls['socialCapital'].hasError('min')">
+        Social Capital value must be at least 200 lei.
+      </mat-error>
+
+      <form [formGroup]="addCompanyForm" (ngSubmit)="onAddCompanySubmit()" class="mt-4">
+        <mat-dialog-content>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Company Name</mat-label>
+                <input matInput placeholder="Black SRL" type="text" formControlName="companyName" name="companyName"
+                  required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" placeholder="example@email.com" formControlName="email" name="email"
+                  required>
+              </mat-form-field>
+            </div>
           </div>
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Email</mat-label>
-              <input matInput type="email" placeholder="example@email.com" formControlName="email" name="email" required>
-            </mat-form-field>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Fiscal Code</mat-label>
+                <input matInput type="text" placeholder="RO123456" formControlName="fiscalCode" name="fiscalCode">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Trade Register</mat-label>
+                <input matInput type="text" placeholder="J12/345/678" formControlName="tradeRegister"
+                  name="tradeRegister" required>
+              </mat-form-field>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Fiscal Code</mat-label>
-              <input matInput type="text" placeholder="RO123456" formControlName="fiscalCode" name="fiscalCode">
-            </mat-form-field>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Phone Number</mat-label>
+                <input matInput type="tel" placeholder="0712345678" formControlName="phoneNumber" name="phoneNumber"
+                  required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Address</mat-label>
+                <input matInput type="text" placeholder="Str. X, Brasov" formControlName="address" name="address"
+                  required>
+              </mat-form-field>
+            </div>
           </div>
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Trade Register</mat-label>
-              <input matInput type="text" placeholder="J12/345/678" formControlName="tradeRegister"name="tradeRegister" required>
-            </mat-form-field>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Social Capital</mat-label>
+                <input matInput type="text" placeholder="200" formControlName="socialCapital" name="socialCapital"
+                  required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-checkbox formControlName="tvaPayer" name="tvaPayer">TVA Payer</mat-checkbox>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Phone Number</mat-label>
-              <input matInput type="tel" placeholder="0712345678" formControlName="phoneNumber" name="phoneNumber" required>
-            </mat-form-field>
+          <div class="row">
+            <div class="col-md-12">
+              <mat-dialog-actions>
+                <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;"
+                  type="submit">Add Company</button>
+                <button *ngIf="showCancelButton" mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
+              </mat-dialog-actions>
+            </div>
           </div>
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Address</mat-label>
-              <input matInput type="text" placeholder="Str. X, Brasov" formControlName="address" name="address" required>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Social Capital</mat-label>
-              <input matInput type="text" placeholder="200" formControlName="socialCapital" name="socialCapital" required>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-checkbox formControlName="tvaPayer" name="tvaPayer">TVA Payer</mat-checkbox>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <mat-dialog-actions>
-              <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;"
-                type="submit">Add Company</button>
-              <button *ngIf="showCancelButton" mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
-            </mat-dialog-actions>
-          </div>
-        </div>
-      </mat-dialog-content>
-    </form>
+        </mat-dialog-content>
+      </form>
+    </div>
   </div>
-</div>
 </div>

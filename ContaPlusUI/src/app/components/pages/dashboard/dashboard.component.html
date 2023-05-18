@@ -3,30 +3,43 @@
   <app-top-nav-bar></app-top-nav-bar>
 
   <div class="custom-scrollbar scrollable">
-    <h3 class="mb-4">Dashboard</h3>
+    <div class="row">
+      <h3 class="mb-4 col" style="font-weight: 700; color: #525252;">Dashboard</h3>
+      <div class="options-bar col">
+        <div class="option" (click)="toggleOption(0)">This Month</div>
+        <div class="option" (click)="toggleOption(1)">This Week</div>
+        <div class="option selected" (click)="toggleOption(2)" style="border-right: 0.5px solid #8e8e8e;">Today</div>
+      </div>
+    </div>
     <!-- Cards for displaying data -->
     <div class="cards row" style="margin-left: 1px;">
       <div class="col-3">
         <div class="row">
           <div class="card col">
-            <div class="row">
+            <div class="row" style="margin-top: -5px;">
               <div class="col mb-4">
-                <img width="40" height="40" src="../../../../assets/img/client.png">
+                <span class="material-icons"
+                  style="font-size: 35px; padding: 3px; background-color: #e4e4e4; width: 42px; border-radius: 10px;">
+                  person
+                </span>
+
               </div>
-              <div class="col-8">
-                <h5>Clients</h5>
+              <div class="col-8" style="margin-top: 10px; color: #747474;">
+                <h6>Clients</h6>
               </div>
               <h1>777</h1>
-
             </div>
           </div>
           <div class="card col">
-            <div class="row">
+            <div class="row" style="margin-top: -5px;">
               <div class="col mb-4">
-                <img width="40" height="40" src="../../../../assets/img/vendor.png">
+                <span class="material-icons"
+                  style="font-size: 35px; padding: 3px; background-color: #e4e4e4; width: 42px; border-radius: 10px;">
+                  local_shipping
+                </span>
               </div>
-              <div class="col-8">
-                <h5>Vendors</h5>
+              <div class="col-8" style="margin-top: 10px; color: #747474;">
+                <h6>Supppliers</h6>
               </div>
               <h1>56</h1>
 
@@ -37,73 +50,158 @@
       <div class="col">
         <div class="row">
           <div class="card col">
-            <div class="row">
-              <div class="col-3 mb-4">
-                <img width="35" height="35" src="../../../../assets/img/earning.png">
+            <div class="row" style="margin-top: -5px;">
+              <span class="material-icons"
+                style="margin-left: 10px; font-size: 35px; padding: 3px; background-color: #d8c2c2; width: 42px; border-radius: 10px;">
+                paid
+              </span>
+
+              <div class="col text-right">
+                <div class="dropdown" [class.show]="isEarningDropdownOpen">
+                  <button class="btn" type="button" (click)="toggleEarningDropdown()" aria-haspopup="true"
+                    aria-expanded="false">
+                    <span class="material-icons">more_vert</span>
+                  </button>
+                  <div class="dropdown-menu" [class.show]="isEarningDropdownOpen" aria-labelledby="dropdownMenuButton"
+                    (mouseleave)="closeEarningDropdown()">
+                    <a class="dropdown-item" href="#">
+                      <div class="row">
+
+                        <div class="col-2">
+                          <span class="material-icons">
+                            add
+                          </span>
+                        </div>
+                        <div class="col">Add New Earning </div>
+                      </div>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                      <div class="row">
+
+                        <div class="col-2"><span class="material-icons">
+                            list_alt
+                          </span></div>
+                        <div class="col">
+                          Earnings List</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div class="col-8">
-                <h4>Total Revenues</h4>
+            </div>
+            <h2>23456,56 lei</h2>
+            <h6 style="color: #747474; margin-top: 5px;">Total Revenues</h6>
+
+          </div>
+          <div class="card col">
+            <div class="row" style="margin-top: -5px;">
+
+              <span class="material-icons"
+                style="margin-left: 10px; font-size: 35px; padding: 3px; background-color: #e3e6ff; width: 42px; border-radius: 10px;">
+                payments
+              </span>
+              <div class="col text-right">
+                <div class="dropdown" [class.show]="isExpenseDropdownOpen">
+                  <button class="btn" type="button" (click)="toggleExpenseDropdown()" aria-haspopup="true"
+                    aria-expanded="false">
+                    <span class="material-icons">more_vert</span>
+                  </button>
+                  <div class="dropdown-menu" [class.show]="isExpenseDropdownOpen" aria-labelledby="dropdownMenuButton"
+                    (mouseleave)="closeExpenseDropdown()">
+                    <a class="dropdown-item" href="#">
+                      <div class="row">
+
+                        <div class="col-2">
+                          <span class="material-icons">
+                            add
+                          </span>
+                        </div>
+                        <div class="col">Add New Expense </div>
+                      </div>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                      <div class="row">
+
+                        <div class="col-2"><span class="material-icons">
+                            list_alt
+                          </span></div>
+                        <div class="col">
+                          Expense List</div>
+                      </div>
+                    </a>
+                  </div>
+
+                </div>
               </div>
-              <h1>23456,56 lei</h1>
+            </div>
+            <h2>456 lei</h2>
+            <h6 style="color: rgb(116, 116, 116); margin-top: 5px;">Total Expenses</h6>
+
+          </div>
+
+          <div class="card col" style="background-color: #5757f3;">
+            <div class="row" style="margin-top: -5px;">
+              <span class="material-icons"
+                style="margin-left: 10px; font-size: 35px; color: #fff; padding: 3px; background-color: #8383f4; width: 42px; border-radius: 10px;">
+                wallet
+              </span>
+
+              <h2 style="color: rgb(255, 255, 255);">2456777 lei</h2>
+              <h6 style="color: rgb(239, 239, 239); margin-top: 5px;">Cash Balance</h6>
+
 
             </div>
           </div>
-          <div class="card col">
-            <div class="row">
-              <div class="col-3 mb-4">
-                <img width="40" height="40" src="../../../../assets/img/expense.png">
-              </div>
-              <div class="col-8">
-                <h4>Total Expenses</h4>
-              </div>
-              <h1>456 lei</h1>
 
-            </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="chart mt-4 mr-4 col d-flex justify-content-center">
+          <div style="width: 550px;">
+            <canvas id="myChart"></canvas>
           </div>
-          <div class="card col">
-            <div class="row">
-              <div class="col-3 mb-4">
-                <img width="35" height="35" src="../../../../assets/img/wallet.png">
-              </div>
-              <div class="col-8">
-                <h4>Cash Balance</h4>
-              </div>
-              <h1>2456777 lei</h1>
-
-            </div>
+        </div>
+        <div class="chart mt-4 col d-flex justify-content-center">
+          <div style="width: 450px;">
+            <div id="chart"></div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="chart mt-4">
-      <div style="width: 700px;">
-        <canvas id="myChart"></canvas>
-      </div>
-    </div>
-    <!-- <h4>Companies:</h4>
-    <ul>
-    <li *ngFor="let company of companies">{{ company.companyId}}, {{ company.companyName }}</li>
-  </ul>
+      <div class="companies mt-4">
+        <table class="table" id="#company">
+          <thead class="thead">
+            <tr>
+              <th style="border-top-left-radius: 10px;" scope="col">Company Name</th>
+              <th scope="col">Fiscal Code</th>
+              <th scope="col">Trade Register</th>
+              <th scope="col">Social Capital</th>
+              <th scope="col">Address</th>
+              <th style="border-top-right-radius: 10px;" scope="col">TVA Payer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let company of companies">
 
-<div *ngIf="companyData">
+              <td>{{ company.companyName }}</td>
+              <td>{{ company.fiscalCode }}</td>
+              <td>{{ company.tradeRegister }}</td>
+              <td>{{ company.socialCapital }}</td>
+              <td>{{ company.address }}</td>
+              <td><input type="checkbox" [(ngModel)]="company.tvaPayer" disabled></td>
 
-  <h3>Company Info</h3>
-<p>Company ID: {{ companyData?.companyId }}</p>
-<p>Company Name: {{ companyData?.companyName }}</p>
-<p>Fiscal Code: {{ companyData?.fiscalCode }}</p>
-</div> -->
-
-
-
-    <!-- 
+            </tr>
+          </tbody>
+        </table>
+        <!-- 
 <div *ngIf="isUpdateCompanyDialogOpen" class="update-company-dialog">
   <div class="centered">
   <h4 class="mb-4" mat-dialog-title>Update Company</h4>
   <mat-error style="font-size: 14px;" *ngIf="updateCompanyForm.controls['tradeRegister'].hasError('pattern')">
     Trade register must be in the format 'J01/123/4567'.
   </mat-error> -->
-    <!-- 
+        <!-- 
   <form [formGroup]="updateCompanyForm" (ngSubmit)="onUpdateCompanySubmit()">
     <mat-dialog-content>
       <div class="row">

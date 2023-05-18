@@ -11,6 +11,7 @@ export class SideBarComponent {
 
   dropdownIncomeVisible = false;
   dropdownExpenseVisible = false;
+  dropdownCompanyVisible = false;
 
   toggleDropdownIncome() {
     this.dropdownIncomeVisible = !this.dropdownIncomeVisible;
@@ -18,6 +19,10 @@ export class SideBarComponent {
 
   toggleDropdownExpense() {
     this.dropdownExpenseVisible = !this.dropdownExpenseVisible;
+  }
+
+  toggleDropdownCompany() {
+    this.dropdownCompanyVisible = !this.dropdownCompanyVisible;
   }
 
   toggleSidebar() {

@@ -12,10 +12,10 @@ export class CompanyService {
 
   private readonly baseCompanyUrl = environment.baseCompanyUrl;
   private readonly baseImageUploadUrl = environment.baseImageUploadUrl;
-  
+
   companies!: any;
   companyData!: any;
-  selectedCompanyId!: any;
+
   showCompanyDropdown: boolean = false;
 
   constructor(private http: HttpClient) { }
@@ -27,6 +27,10 @@ export class CompanyService {
 
   getCompanyById(companyId: string): Observable<any[]> {
     return this.http.get<any>(`${this.baseCompanyUrl}/getCompanyById`,{ params: { companyId } });
+  }
+
+  getAdminCompanies(userId: string): Observable<any> {
+  return this.http.get<any>(`${this.baseCompanyUrl}/adminCompanies/${userId}`);
   }
 
   addCompanyToUser(model: any, userId: string) {
@@ -60,5 +64,6 @@ uploadCompanySignature(companyId: string, file: File) {
     formData.append('file', file);
     return this.http.post<any>(`${this.baseImageUploadUrl}/company_signature/${companyId}`, formData);
 }
+
 
 }

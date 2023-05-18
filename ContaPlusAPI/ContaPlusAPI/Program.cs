@@ -103,10 +103,10 @@ builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IUserCompanyRoleService, UserCompanyRoleService>();
 
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
 
 //Repositories
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
@@ -123,12 +123,6 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        // Enable support for file uploads
-        c.ConfigObject.AdditionalItems["supportedSubmitMethods"] = new[] { "get", "post", "put", "delete", "patch", "head" };
-        c.InjectJavascript("/swagger-ui/custom.js");
-    });
 }
 
 app.UseHttpsRedirection();
