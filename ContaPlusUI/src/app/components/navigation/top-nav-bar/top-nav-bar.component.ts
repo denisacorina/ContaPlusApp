@@ -48,6 +48,20 @@ export class TopNavBarComponent implements OnInit {
   }
 
 
+ showUserData() {
+  const userId = this.userService.getLoggedInUserId();
+    if (userId) {
+      this.userService.getUserInfo(userId).subscribe(
+        response => {
+          this.user = response;
+        },
+        error => {
+          console.error('Failed to retrieve user information:', error);
+        }
+      );
+    }
+ }
+
   addCompanyToUser() {
     this.addCompanyForm = new FormGroup({
       companyName: new FormControl('', Validators.required),
@@ -81,6 +95,7 @@ export class TopNavBarComponent implements OnInit {
 
     this.isAddCompanyDialogOpen = false;
     alert("company created")
+    //window.location.reload();
   }
 
   checkEmailExists(control: AbstractControl): Observable<ValidationErrors | null> {
@@ -198,7 +213,7 @@ export class TopNavBarComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('selectedCompanyId');
+    sessionStorage.removeItem('selectedCompanyId');
   }
 }
 

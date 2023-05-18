@@ -107,20 +107,20 @@ namespace ContaPlusAPI.Controllers
 
         [HttpPost("addNewUserToCompany")]
         [Authorize]
-        public async Task<IActionResult> AddNewUserToCompany(Guid companyId, string firstName, string lastName, string email, int roleId)
+        public async Task<IActionResult> AddNewUserToCompany([FromBody] Test test)
         {
-            bool isUserAdmin = await _authorizationService.IsUserAdmin(companyId);
+            bool isUserAdmin = await _authorizationService.IsUserAdmin(test.CompanyId);
 
             if (!isUserAdmin) return Forbid("You are not authorized to perform this action.");
 
-            User user = await _userService.GetUserByEmail(email);
+            User user = await _userService.GetUserByEmail(test.Email);
 
-            Company company = await _companyService.GetCompanyById(companyId);
+            Company company = await _companyService.GetCompanyById(test.CompanyId);
 
             if (company == null) return BadRequest("Company doesn't exist.");
 
             if (user == null)
-                await _userService.AddNewUserToCompany(company, firstName, lastName, email, roleId);
+                await _userService.AddNewUserToCompany(company, test.FirstName, test.LastName, test.Email, test.RoleId);
 
             return Ok("User added to company successfully.");
         }
@@ -136,6 +136,15 @@ namespace ContaPlusAPI.Controllers
         {
             return await _userService.GetListCompanyUserRoles(companyId);
         }
+    }
+
+    public class Test
+    {
+        public Guid CompanyId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public int RoleId { get; set; }
     }
 
 }

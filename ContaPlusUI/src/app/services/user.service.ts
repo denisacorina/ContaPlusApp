@@ -5,6 +5,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { CompanyService } from './company.service';
 import { environment } from 'environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,6 +27,10 @@ export class UserService {
 
   getUserInfo(userId: string): Observable<any> {
     return this.http.get<any>(`${this.baseUserUrl}/getUserById`, { params: { userId } });
+  }
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUserUrl}/getUserByEmail`, { params: { email } });
   }
 
   updateUser(userId: string, updatedUser: any) {
@@ -108,14 +113,22 @@ export class UserService {
           this.imageUrl = reader.result as string;
         };
       } catch (error) {
-        console.log('Error fetching profile picture:', error);
+        this.imageUrl = 'https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png';
       }
     }
   }
 
 
+  addExistingUserToCompany(companyId: string, email: string, roleId: number): Observable<any> {
+    const url = `${this.baseUserUrl}/addExistingUserToCompany`;
+    const body = { companyId, email, roleId };
+    return this.http.post(url, body);
+  }
 
-
-
-
+  addNewUserToCompany(companyId: string, firstName: string, lastName: string, email: string, roleId: number): Observable<any> {
+    const url = `${this.baseUserUrl}/addNewUserToCompany`;
+    const body = { companyId, firstName, lastName, email, roleId };
+    return this.http.post(url, body);
+  }
+  
 }
