@@ -60,7 +60,7 @@ namespace ContaPlusAPI.Services
             await _emailSenderService.SendEmailToNewAddedUserWithAccount(user, company.CompanyName, role);
         }
 
-        public async Task AddNewUserToCompany(Guid companyId, string firstName, string lastName, string email, int roleId)
+        public async Task AddNewUserToCompany(Company company, string firstName, string lastName, string email, int roleId)
         {
             string password = _passwordService.GeneratePassword();
 
@@ -78,8 +78,6 @@ namespace ContaPlusAPI.Services
             };
 
             await _userRepository.AddUser(user);
-
-            var company = await _companyRepository.GetCompanyById(companyId);
 
             if (company == null) throw new Exception("Company doesn't exist.");
 

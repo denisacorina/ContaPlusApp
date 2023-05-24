@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ContaPlusAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class RolesController : BaseApiController
     {
         private readonly IUserCompanyRoleService _userCompanyRoleService;

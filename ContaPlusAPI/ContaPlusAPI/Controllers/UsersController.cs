@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ContaPlusAPI.Controllers
 {
@@ -78,40 +79,47 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("addExistingUserToCompany")]
-        public async Task<IActionResult> AddExistingUserToCompany(Guid companyId, string email, int roleId, Guid userId)
+        public async Task<IActionResult> AddExistingUserToCompany([FromBody] AddUserToCompanyDTO test)
         {
-            bool isUserAdmin = await _authorizationService.IsUserAdmin(companyId, userId);
+            Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.Name).Value);
+            bool isUserAdmin = await _authorizationService.IsUserAdmin(test.CompanyId, userId);
 
             if (!isUserAdmin) return Forbid("You are not authorized to perform this action.");
 
-            User user = await _userService.GetUserByEmail(email);
+            User user = await _userService.GetUserByEmail(test.Email);
 
-            Company company = await _companyService.GetCompanyById(companyId);
+            Company company = await _companyService.GetCompanyById(test.CompanyId);
 
             if (company == null) return BadRequest("Company doesn't exist.");
 
             if (user != null)
-                await _userService.AddExistingUserToCompany(company, user, roleId);
+                await _userService.AddExistingUserToCompany(company, user, test.RoleId);
 
             return Ok("User added to company successfully.");
         }
 
         [HttpPost("addNewUserToCompany")]
-        public async Task<IActionResult> AddNewUserToCompany(Guid companyId, string firstName, string lastName, string email, int roleId)
+        [Authorize]
+        public async Task<IActionResult> AddNewUserToCompany([FromBody] AddUserToCompanyDTO test)
         {
             Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.Name).Value);
 
-            //bool isUserAdmin = await _authorizationService.IsUserAdmin(companyId, userId);
+            bool isUserAdmin = await _authorizationService.IsUserAdmin(test.CompanyId, userId);
 
-            //if (!isUserAdmin) return BadRequest("You are not authorized to perform this action.");
+            if (!isUserAdmin) return Forbid("You are not authorized to perform this action.");
 
-            User user = await _userService.GetUserByEmail(email);
+            User user = await _userService.GetUserByEmail(test.Email);
+
+            Company company = await _companyService.GetCompanyById(test.CompanyId);
+
+            if (company == null) return BadRequest("Company doesn't exist.");
 
             if (user == null)
-                await _userService.AddNewUserToCompany(companyId, firstName, lastName, email, roleId);
+                await _userService.AddNewUserToCompany(company, test.FirstName, test.LastName, test.Email, test.RoleId);
 
             return Ok("User added to company successfully.");
         }
+
 
         [HttpGet("getUserCompanyRoles/{userId}/{companyId}")]
         public async Task<ActionResult<UserCompanyRole>> GetUserCompanyRole(Guid userId, Guid companyId)

@@ -42,6 +42,16 @@ namespace ContaPlusAPI.Services.AccountingService
             return await _clientSupplierRepository.GetAllSuppliersForCompany(companyId);
         }
 
+        public async Task<Client> GetClientByIdForCompany(int clientId, Guid companyId)
+        {
+            return await _clientSupplierRepository.GetClientByIdForCompany(clientId, companyId);
+        }
+
+        public async Task<Supplier> GetSupplierByIdForCompany(int supplierId, Guid companyId)
+        {
+            return await _clientSupplierRepository.GetSupplierByIdForCompany(supplierId, companyId);
+        }
+
         public async Task UpdateClientForCompany(Client client, Guid companyId)
         {
             await _clientSupplierRepository.UpdateClientForCompany(client, companyId);

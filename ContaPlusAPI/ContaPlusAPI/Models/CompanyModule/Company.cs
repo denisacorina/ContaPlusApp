@@ -1,5 +1,4 @@
 ﻿using ContaPlusAPI.Models.AccountingModule;
-using ContaPlusAPI.Models.InventoryModule;
 using ContaPlusAPI.Models.UserModule;
 using System.ComponentModel.DataAnnotations;
 
@@ -42,5 +41,7 @@ namespace ContaPlusAPI.Models.CompanyModule
         public virtual ICollection<User>? Users { get; set; } = new List<User>();
         public virtual ICollection<UserCompanyRole>? UserCompanyRoles { get; set; } = new List<UserCompanyRole>();
         public virtual ICollection<Transaction>? Transactions { get; set; } = new List<Transaction>();
+        public virtual ICollection<CompanyChartOfAccounts> ChartOfAccounts { get; set; } = new List<CompanyChartOfAccounts>();
+
     }
 }

@@ -9,6 +9,6 @@ namespace ContaPlusAPI.Models.InventoryModule
         public int InventoryId { get; set; }
         public DateTime UpdatedAt { get; set; }
         public virtual Company Company { get; set; }
-        public virtual ICollection<Product> Product { get; set; } = new List<Product>();
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

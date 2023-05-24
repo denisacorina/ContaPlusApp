@@ -1,8 +1,16 @@
 using ContaPlusAPI.Context;
 using ContaPlusAPI.Interfaces.IRepository;
+using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
+using ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface;
 using ContaPlusAPI.Interfaces.IService;
+using ContaPlusAPI.Interfaces.IService.AccountingServiceInterface;
+using ContaPlusAPI.Interfaces.IService.InventoryServiceInterface;
 using ContaPlusAPI.Repositories;
+using ContaPlusAPI.Repositories.AccountingRepository;
+using ContaPlusAPI.Repositories.InventoryRepository;
 using ContaPlusAPI.Services;
+using ContaPlusAPI.Services.AccountingService;
+using ContaPlusAPI.Services.InventoryModuleService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -103,6 +111,11 @@ builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IUserCompanyRoleService, UserCompanyRoleService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IClientSupplierService, ClientSupplierService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IPaymentStatusVerifier, PaymentVerifierService>();
 
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -114,6 +127,9 @@ builder.Services.AddScoped<ISaveChangesRepository, SaveChangesRepository>();
 builder.Services.AddScoped<IUserCompanyRoleRepository, UserCompanyRoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPhotosRepository, PhotoRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IClientSupplierRepository, ClientSupplierRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 
 

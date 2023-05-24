@@ -26,6 +26,10 @@ import { ForgotPasswordComponent } from './components/pages/forgot-password/forg
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
 import { UserProfileComponent } from './components/pages/user-profile/user-profile.component';
 import { CommonModule } from '@angular/common';
+import { IncomeComponent } from './components/accounting/income/income.component';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+
 export function tokenGetter()
 {
   return localStorage.getItem("token");
@@ -42,6 +46,7 @@ export function tokenGetter()
     ForgotPasswordComponent,
     ResetPasswordComponent,
     UserProfileComponent,
+    IncomeComponent,
     
 
   ],
@@ -58,6 +63,8 @@ export function tokenGetter()
     FormsModule,
     NgApexchartsModule,
     ReactiveFormsModule,
+    MatDatepickerModule, 
+    MatNativeDateModule,
     CommonModule,
     ModalModule.forRoot(),
     JwtModule.forRoot({

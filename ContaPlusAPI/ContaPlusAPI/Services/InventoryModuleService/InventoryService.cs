@@ -25,5 +25,30 @@ namespace ContaPlusAPI.Services.InventoryModuleService
         {
            await _inventoryRepository.UpdateInventoryForCompany(inventory, companyId);
         }
+
+        public async Task AddProductForCompany(Product product, Guid companyId)
+        {
+            await _inventoryRepository.AddProductForCompany(product, companyId);
+        }
+
+        public async Task DeleteProductForCompany(int productId, Guid companyId)
+        {
+            await _inventoryRepository.DeleteProductForCompany(productId, companyId);
+        }
+
+        public async Task<Product> GetProductByIdForCompany(int productId, Guid companyId)
+        {
+            return await _inventoryRepository.GetProductByIdForCompany(productId, companyId);
+        }
+
+        public async Task<ICollection<Product>> GetProductsByCompanyId(Guid companyId)
+        {
+            return await _inventoryRepository.GetProductsByCompanyId(companyId);
+        }
+
+        public async Task UpdateProductForCompany(Product product, Guid companyId)
+        {
+            await _inventoryRepository.UpdateProductForCompany(product, companyId);
+        }
     }
 }

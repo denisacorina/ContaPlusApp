@@ -5,4 +5,7 @@ export const environment = {
     baseImageUploadUrl: 'https://localhost:7121/api/Images',
     baseCompanyUrl: 'https://localhost:7121/api/Companies',
     baseRoleUrl: 'https://localhost:7121/api/Roles',
+    baseTransactionUrl: 'https://localhost:7121/api/Transactions',
+    baseClientUrl: 'https://localhost:7121/api/Clients',
+    baseSupplierUrl: 'https://localhost:7121/api/Suppliers',
   };

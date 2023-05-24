@@ -9,7 +9,6 @@ namespace ContaPlusAPI.Models.AccountingModule
     {
         [Key]
         public int CompanyChartOfAccountsId { get; set; }
-        public Guid CompanyId { get; set; }
         public int AccountCode { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal InitialBalance { get; set; }
@@ -17,5 +16,6 @@ namespace ContaPlusAPI.Models.AccountingModule
         public decimal CurrentBalance { get; set; }
         public DateTime LastUpdatedDate { get; set; }
         public virtual Company Company { get; set; }
+        public virtual GeneralChartOfAccounts GeneralChartOfAccounts { get; set; }
     }
 }

@@ -7,6 +7,8 @@ import { UserService } from 'src/app/services/user.service';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 import { Chart, Colors, registerables } from 'chart.js';
 import * as ApexCharts from 'apexcharts';
+import { ClientService } from 'src/app/services/client.service';
+import { TransactionService } from 'src/app/services/transaction.service';
 Chart.register(...registerables);
 
 @Component({
@@ -28,50 +30,59 @@ export class DashboardComponent implements OnInit {
   updateCompanyForm!: FormGroup;
   companyNeverUpdated: any;
   selectedCounty: any;
-  counties!: any[];
   selectedFile: any;
   imageUrl!: any;
   isEarningDropdownOpen: boolean = false;
   isExpenseDropdownOpen: boolean = false;
 
+  totalClients: number = 0;
+  clients: [] = [];
+  client!: any;
+
+  totalIncome: number = 0;
+
+
   constructor(private companyService: CompanyService,
-    private userService: UserService,
-    private jwtHelper: JwtHelperService) { }
+    private clientService: ClientService,
+    private transactionService: TransactionService) { }
+
   ngOnInit() {
     this.chart();
     this.barChart();
     this.getCompaniesForUser();
-   
+    this.getClients();
+    this.getIncomeTransactions();
+
   }
 
   options = document.getElementsByClassName('option');
 
- toggleOption(selectedIndex: number) {
-      for (var i = 0; i < this.options.length; i++) {
-          if (i === selectedIndex) {
-              this.options[i].classList.add('selected');
-          } else {
-              this.options[i].classList.remove('selected');
-          }
+  toggleOption(selectedIndex: number) {
+    for (var i = 0; i < this.options.length; i++) {
+      if (i === selectedIndex) {
+        this.options[i].classList.add('selected');
+      } else {
+        this.options[i].classList.remove('selected');
       }
+    }
   }
 
 
- toggleEarningDropdown(): void {
-      this.isEarningDropdownOpen = !this.isEarningDropdownOpen;
-    }
+  toggleEarningDropdown(): void {
+    this.isEarningDropdownOpen = !this.isEarningDropdownOpen;
+  }
 
-    closeEarningDropdown(): void {
-      this.isEarningDropdownOpen = false;
-    }
+  closeEarningDropdown(): void {
+    this.isEarningDropdownOpen = false;
+  }
 
-    toggleExpenseDropdown(): void {
-      this.isExpenseDropdownOpen = !this.isExpenseDropdownOpen;
-    }
+  toggleExpenseDropdown(): void {
+    this.isExpenseDropdownOpen = !this.isExpenseDropdownOpen;
+  }
 
- closeExpenseDropdown(): void {
-      this.isExpenseDropdownOpen = false;
-    }
+  closeExpenseDropdown(): void {
+    this.isExpenseDropdownOpen = false;
+  }
   barChart() {
     var options = {
       chart: {
@@ -93,23 +104,23 @@ export class DashboardComponent implements OnInit {
       },
       series: [{
         name: 'Expenses',
-        data: [30,40,45,50,49,60,70,91,125],
+        data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
       },
       {
         name: 'Sales',
-        data: [3,40,45,5,49,60,7,91,15],
+        data: [3, 40, 45, 5, 49, 60, 7, 91, 15],
       }],
       xaxis: {
-        categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
+        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
       },
       colors: ['rgba(000, 000, 000, 0.700)', 'rgba(87, 87, 243, 0.600)'],
       dataLabels: {
-        enabled: false 
+        enabled: false
       }
     };
-    
+
     var chart = new ApexCharts(document.querySelector("#chart"), options);
-    
+
     chart.render();
   }
 
@@ -119,16 +130,16 @@ export class DashboardComponent implements OnInit {
       data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
-          
-            label: 'Expenses',
-            data: [19, 12, 5, 3, 1, 6],
-            backgroundColor: 'rgba(000, 000, 000, 0.730)',
-            borderColor: "#000",
-            borderWidth: 2,
-            fill: true,
-            tension: 0.4
-          },
-          {
+
+          label: 'Expenses',
+          data: [19, 12, 5, 3, 1, 6],
+          backgroundColor: 'rgba(000, 000, 000, 0.730)',
+          borderColor: "#000",
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        },
+        {
           label: 'Revenues',
           data: [12, 19, 3, 5, 2, 3],
           backgroundColor: 'rgba(87, 87, 243, 0.675)',
@@ -185,6 +196,38 @@ export class DashboardComponent implements OnInit {
         }
       )
     }
+  }
+
+  getClients() {
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
+      this.clientService.getClients(companyId).subscribe(
+        (response: any[]) => {
+          this.client = response;
+          this.totalClients = this.client.length;
+          console.log(this.totalClients)
+        }
+      )
+    }
+  }
+
+  getIncomeTransactions() {
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
+      this.transactionService.getIncomeTransactions(companyId).subscribe(
+        (transactions: any) => {
+          this.totalIncome = this.calculatePaidAmountSum(transactions);
+        }
+      );
+    }
+  }
+
+  calculatePaidAmountSum(transactions: any[]): number {
+    let sum = 0;
+    for (const transaction of transactions) {
+      sum += transaction.paidAmount;
+    }
+    return sum;
   }
 
   // onUpdateCompanySubmit(): void {

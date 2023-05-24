@@ -131,15 +131,6 @@
                       </div>
                     </div>
                     <div class="row">
-                        <div class="col">
-                          <mat-form-field>
-                            <mat-select placeholder="Company" formControlName="companyId" required>
-                              <mat-option *ngFor="let company of companies" [value]="company.companyId">{{ company.companyName }}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    <div class="row">
                       <div class="col">
                         <mat-form-field>
                           <mat-select placeholder="Role" formControlName="roleId" required>
@@ -197,3 +188,6 @@
     </div>
     </div>
 </div>
+
+
+

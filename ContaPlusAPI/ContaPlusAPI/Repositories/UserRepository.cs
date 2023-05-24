@@ -33,7 +33,7 @@ namespace ContaPlusAPI.Repositories
         public async Task AddUser(User user)
         {
             await _context.Users.AddAsync(user);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateUser(User user)

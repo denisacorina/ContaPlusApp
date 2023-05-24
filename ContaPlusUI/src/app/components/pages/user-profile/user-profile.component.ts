@@ -162,19 +162,15 @@ export class UserProfileComponent {
 
 
   onAddUserToCompanySubmit() {
-    let { companyId, email, roleId } = this.addUserToCompanyForm.value;
-  console.log(companyId)
-  roleId = 1
-  console.log(roleId)
+    let { email, roleId } = this.addUserToCompanyForm.value;
+    const companyId = sessionStorage.getItem('selectedCompanyId');
     
+    if(companyId){
       if (this.isExistingUser) {
         this.userService.addExistingUserToCompany(companyId, email, roleId).subscribe(
           () => {
             alert('User has been added to the company');
             this.closeAddUserToCompanyDialog();
-          },
-          (error) => {
-            console.error('Error adding existing user to company:', error);
           }
         );
       } else {
@@ -183,16 +179,12 @@ export class UserProfileComponent {
           () => {
             alert('User has been added to the company');
             this.closeAddUserToCompanyDialog();
-          },
-          (error) => {
-            console.error('Error adding new user to company:', error);
           }
         );
       }
+      window.location.reload();
+    }
   }
-
-
-
 
   getRoles() {
     this.roleService.getRoles().subscribe((roles) => {

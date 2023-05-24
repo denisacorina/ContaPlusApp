@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/app/shared/guards/auth.guard'
 import { ForgotPasswordComponent } from './components/pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
 import { UserProfileComponent } from './components/pages/user-profile/user-profile.component';
+import { IncomeComponent } from './components/accounting/income/income.component';
 
 export const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -15,7 +16,8 @@ export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'login'},
   {path: 'forgot-password', component: ForgotPasswordComponent},
   {path: 'reset-password/:email/:resetToken', component: ResetPasswordComponent },
-  {path: 'myProfile', component: UserProfileComponent}
+  {path: 'myProfile', component: UserProfileComponent},
+  {path: 'income', component: IncomeComponent},
 
 ];
 

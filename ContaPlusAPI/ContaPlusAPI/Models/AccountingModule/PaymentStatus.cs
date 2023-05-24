@@ -4,7 +4,7 @@
     {
         Unpaid,
         Partial, 
-        PaidInFull,
+        Paid,
         Overdue
     }
 }

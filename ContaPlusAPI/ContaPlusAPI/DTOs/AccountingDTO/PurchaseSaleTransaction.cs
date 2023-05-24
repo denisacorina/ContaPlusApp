@@ -1,37 +1,26 @@
-﻿using ContaPlusAPI.Models.CompanyModule;
+﻿using ContaPlusAPI.Models.AccountingModule;
+using ContaPlusAPI.Models.CompanyModule;
 using ContaPlusAPI.Models.InventoryModule;
-using System.ComponentModel.DataAnnotations;
+using ContaPlusAPI.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ContaPlusAPI.Models.AccountingModule
+namespace ContaPlusAPI.DTOs.AccountingDTO
 {
-    public class Transaction
+    public class PurchaseSaleTransaction
     {
-        [Key]
-        public int TransactionId { get; set; }
         public string DocumentNumber { get; set; }
-        public string DocumentSeries { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
+        public string DocumentSeries { get; set; }  
         public decimal TransactionAmount { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
         public decimal PaidAmount { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal RemainingAmount { get; set; }
-        public DateTime TransactionDate { get; set; }
         public DateTime DueDate { get; set; }
         public TransactionType TransactionType { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public string Description { get; set; }
-
-        [ForeignKey("DebitAccount")]
-        public int DebitAccountCode { get; set; }
-
-        [ForeignKey("CreditAccount")]
-        public int CreditAccountCode { get; set; }
         public virtual GeneralChartOfAccounts DebitAccount { get; set; }
         public virtual GeneralChartOfAccounts CreditAccount { get; set; }
         public virtual Company Company { get; set; }
-        public virtual Inventory? Inventory { get; set; }
+        public virtual Product? Product { get; set; }
         public virtual Supplier? Supplier { get; set; }
         public virtual Client? Client { get; set; }
     }

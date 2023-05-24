@@ -4,8 +4,9 @@
     {
         Sale,
         Purchase,
-        Income,
-        SupplierPayment,
+        Income, 
+        SupplierPayment, 
+        CustomerReceipt, 
         Expense
     }
 }
