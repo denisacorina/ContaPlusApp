@@ -1,4 +1,5 @@
 ﻿using ContaPlusAPI.Models.AccountingModule;
+using ContaPlusAPI.Models.CompanyModule;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,5 +18,6 @@ namespace ContaPlusAPI.Models.InventoryModule
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public bool IsService { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

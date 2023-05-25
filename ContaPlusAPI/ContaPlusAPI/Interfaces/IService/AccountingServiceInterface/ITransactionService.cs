@@ -1,8 +1,5 @@
 ﻿using ContaPlusAPI.DTOs.AccountingDTO;
-using ContaPlusAPI.Models;
 using ContaPlusAPI.Models.AccountingModule;
-using ContaPlusAPI.Models.CompanyModule;
-using ContaPlusAPI.Models.InventoryModule;
 
 namespace ContaPlusAPI.Interfaces.IService.AccountingServiceInterface
 {
@@ -16,6 +13,11 @@ namespace ContaPlusAPI.Interfaces.IService.AccountingServiceInterface
         Task CreateCustomerReceiptTransaction(Transaction model, Guid companyId);
 
         Task<ICollection<Transaction>> GetIncomeTransactions(Guid companyId);
+        Task<ICollection<Transaction>> GetExpenseTransactions(Guid companyId);
+
+        Task UpdateTransaction(Transaction transaction);
+        Task DeleteTransaction(int transactionId, Guid companyId);
+        Task DeletePartialPaymentTransaction(int transactionId, Guid companyId);
     }
 
     public interface IPaymentStatusVerifier

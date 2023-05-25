@@ -55,3 +55,9 @@ body { margin: 0; font-family: 'Raleway'; }
   background-color: #8585ed46;
   color: #3838df;
 }
+
+
+.no-data {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}

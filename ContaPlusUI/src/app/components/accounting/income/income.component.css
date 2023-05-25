@@ -105,3 +105,17 @@ button {
       justify-content: center;
     
     }
+
+    #details {
+      width: 20px;
+      margin-left: 15px;
+    }
+
+    #edit {
+      width: 20px;
+    }
+
+    #delete {
+      width: 20px;
+      margin-left: 15px;
+    }

@@ -3,6 +3,7 @@ using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
 using ContaPlusAPI.Interfaces.IService;
 using ContaPlusAPI.Models;
 using ContaPlusAPI.Models.AccountingModule;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContaPlusAPI.Repositories.AccountingRepository

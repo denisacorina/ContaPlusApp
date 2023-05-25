@@ -24,8 +24,8 @@ namespace ContaPlusAPI.Context
         public DbSet<CompanyChartOfAccounts> CompanyChartOfAccounts { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<Inventory> Inventory { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductSale> ProductSales { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

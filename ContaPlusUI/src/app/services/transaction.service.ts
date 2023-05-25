@@ -1,9 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, map, of } from 'rxjs';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { Router } from '@angular/router';
-import { UserService } from './user.service';
 import { environment } from 'environments/environment';
 @Injectable({
   providedIn: 'root'
@@ -11,7 +8,7 @@ import { environment } from 'environments/environment';
 export class TransactionService {
 
   private readonly baseTransactionUrl = environment.baseTransactionUrl;
-
+  companyId = sessionStorage.getItem('selectedCompanyId');
 
   constructor(private http: HttpClient) { }
 
@@ -21,9 +18,18 @@ export class TransactionService {
   }
 
   createIncomeTransaction(model: any): Observable<any> {
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    const url = `${this.baseTransactionUrl}/createIncomeTransaction?companyId=${companyId}`;
+    const url = `${this.baseTransactionUrl}/createIncomeTransaction?companyId=${this.companyId}`;
     return this.http.post<any>(url, model);
+  }
+
+  deleteTransaction(transactionId: number) {
+    const url = `${this.baseTransactionUrl}/deleteTransaction?transactionId=${transactionId}&companyId=${this.companyId}`;
+    return this.http.delete(url);
+  }
+
+  deletePartialPaymentTransaction(transactionId: number) {
+    const url = `${this.baseTransactionUrl}/deletePartialPaymentTransaction?transactionId=${transactionId}&companyId=${this.companyId}`;
+    return this.http.delete(url);
   }
 }
  

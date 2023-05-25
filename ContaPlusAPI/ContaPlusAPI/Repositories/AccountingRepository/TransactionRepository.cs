@@ -1,12 +1,8 @@
 ﻿using ContaPlusAPI.Context;
 using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
 using ContaPlusAPI.Interfaces.IService.AccountingServiceInterface;
-using ContaPlusAPI.Models;
 using ContaPlusAPI.Models.AccountingModule;
-using ContaPlusAPI.Models.InventoryModule;
 using Microsoft.EntityFrameworkCore;
-
-using EntityState = Microsoft.EntityFrameworkCore.EntityState;
 
 namespace ContaPlusAPI.Repositories.AccountingRepository
 {
@@ -45,21 +41,52 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateTransaction(Transaction transaction)
+        public async Task UpdateTransaction(Transaction updatedTransaction)
         {
-            _context.Transactions.Update(transaction);
-            await _context.SaveChangesAsync();
-        }
+            var existingTransaction = await _context.Transactions.FindAsync(updatedTransaction.TransactionId);
 
-        public async Task UpdateCompanyChartOfAccountsBalance(CompanyChartOfAccounts account)
-        {
-            var existingAccount = await _context.CompanyChartOfAccounts.FirstOrDefaultAsync(a => a.AccountCode == account.AccountCode && a.Company.CompanyId == account.Company.CompanyId);
-
-            if (existingAccount != null)
+            if (existingTransaction != null)
             {
-                existingAccount.CurrentBalance = account.CurrentBalance;
+                if (existingTransaction.DocumentNumber != existingTransaction.DocumentNumber)
+                    existingTransaction.DocumentNumber = updatedTransaction.DocumentNumber;
+
+                if (existingTransaction.DocumentSeries != updatedTransaction.DocumentSeries)
+                    existingTransaction.DocumentSeries = updatedTransaction.DocumentSeries;
+
+                if (existingTransaction.TransactionAmount != updatedTransaction.TransactionAmount)
+                    existingTransaction.TransactionAmount = updatedTransaction.TransactionAmount;
+
+                if (existingTransaction.PaidAmount != updatedTransaction.PaidAmount)
+                    existingTransaction.PaidAmount = updatedTransaction.PaidAmount;
+
+                if (existingTransaction.RemainingAmount != updatedTransaction.RemainingAmount)
+                    existingTransaction.RemainingAmount = updatedTransaction.RemainingAmount;
+
+                if (existingTransaction.TransactionDate != updatedTransaction.TransactionDate)
+                    existingTransaction.TransactionDate = updatedTransaction.TransactionDate;
+
+                if (existingTransaction.DueDate != updatedTransaction.DueDate)
+                    existingTransaction.DueDate = updatedTransaction.DueDate;
+
+                if (existingTransaction.TransactionType != updatedTransaction.TransactionType)
+                    existingTransaction.TransactionType = updatedTransaction.TransactionType;
+
+                if (existingTransaction.PaymentStatus != updatedTransaction.PaymentStatus)
+                    existingTransaction.PaymentStatus = updatedTransaction.PaymentStatus;
+
+                if (existingTransaction.Description != updatedTransaction.Description)
+                    existingTransaction.Description = updatedTransaction.Description;
+
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task UpdateCompanyChartOfAccountsBalance(CompanyChartOfAccounts account, Guid companyId)
+        {
+            var existingAccount = await _context.CompanyChartOfAccounts.FirstOrDefaultAsync(a => a.AccountCode == account.AccountCode && a.Company.CompanyId == companyId);
+
+            existingAccount.CurrentBalance = account.CurrentBalance;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Transaction> GetTransactionByDocumentNumberAndSeries(string documentNumber, string documentSeries)
@@ -92,6 +119,94 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
             return await _context.Transactions
            .Where(t => t.Company.CompanyId == companyId && t.TransactionType == TransactionType.Income)
            .ToListAsync();
+        }
+
+        public async Task<ICollection<Transaction>> GetExpenseTransactions(Guid companyId)
+        {
+            return await _context.Transactions
+           .Where(t => t.Company.CompanyId == companyId && t.TransactionType == TransactionType.Expense)
+           .ToListAsync();
+        }
+
+        public async Task DeleteTransaction(int transactionId, Guid companyId)
+        {
+            var mainTransaction = await _context.Transactions.FindAsync(transactionId);
+
+            if (mainTransaction != null)
+            {
+                if (mainTransaction.PaymentStatus == PaymentStatus.Partial)
+                {
+                    var partialPaymentTransactions = _context.Transactions
+                        .Where(t => t.PaymentStatus == PaymentStatus.Partial &&
+                                    t.DocumentNumber == mainTransaction.DocumentNumber &&
+                                    t.DocumentSeries == mainTransaction.DocumentSeries);
+
+                    _context.Transactions.RemoveRange(partialPaymentTransactions);
+                }
+
+                var debitAccount = mainTransaction.DebitAccountCode;
+                var creditAccount = mainTransaction.CreditAccountCode;
+                var transactionAmount = mainTransaction.TransactionAmount;
+
+
+                _context.Transactions.Remove(mainTransaction);
+
+                await _context.SaveChangesAsync();
+
+                var existingCreditAccountCompany = await GetCompanyChartOfAccountsByAccountCode(creditAccount, companyId);
+                var existingDebitAccountCompany = await GetCompanyChartOfAccountsByAccountCode(debitAccount, companyId);
+
+                if (existingCreditAccountCompany != null && existingDebitAccountCompany != null)
+                {
+
+                    if (mainTransaction.TransactionType == TransactionType.Income || mainTransaction.TransactionType == TransactionType.Sale || mainTransaction.TransactionType == TransactionType.CustomerReceipt)
+                    {
+                        existingCreditAccountCompany.CurrentBalance -= transactionAmount;
+                        existingDebitAccountCompany.CurrentBalance += transactionAmount;
+                        await UpdateCompanyChartOfAccountsBalance(existingCreditAccountCompany, companyId);
+                        await UpdateCompanyChartOfAccountsBalance(existingDebitAccountCompany, companyId);
+                    }
+                    else
+                    {
+                        existingCreditAccountCompany.CurrentBalance += transactionAmount;
+                        existingDebitAccountCompany.CurrentBalance -= transactionAmount;
+                        await UpdateCompanyChartOfAccountsBalance(existingCreditAccountCompany, companyId);
+                        await UpdateCompanyChartOfAccountsBalance(existingDebitAccountCompany, companyId);
+                    }
+                }
+            }
+        }
+
+        public async Task DeletePartialPaymentTransaction(int transactionId, Guid companyId)
+        {
+            var partialPaymentTransaction = await _context.Transactions.FindAsync(transactionId);
+
+            if (partialPaymentTransaction != null && partialPaymentTransaction.PaymentStatus == PaymentStatus.Partial)
+            {
+                var debitAccount = partialPaymentTransaction.DebitAccountCode;
+                var creditAccount = partialPaymentTransaction.CreditAccountCode;
+                var transactionAmount = partialPaymentTransaction.TransactionAmount;
+                _context.Transactions.Remove(partialPaymentTransaction);
+                await _context.SaveChangesAsync();
+
+                var existingCreditAccountCompany = await GetCompanyChartOfAccountsByAccountCode(creditAccount, companyId);
+                var existingDebitAccountCompany = await GetCompanyChartOfAccountsByAccountCode(debitAccount, companyId);
+
+                if (partialPaymentTransaction.TransactionType == TransactionType.Income || partialPaymentTransaction.TransactionType == TransactionType.Sale || partialPaymentTransaction.TransactionType == TransactionType.CustomerReceipt)
+                {
+                    existingCreditAccountCompany.CurrentBalance -= transactionAmount;
+                    existingDebitAccountCompany.CurrentBalance += transactionAmount;
+                    await UpdateCompanyChartOfAccountsBalance(existingCreditAccountCompany, companyId);
+                    await UpdateCompanyChartOfAccountsBalance(existingDebitAccountCompany, companyId);
+                }
+                else
+                {
+                    existingCreditAccountCompany.CurrentBalance += transactionAmount;
+                    existingDebitAccountCompany.CurrentBalance -= transactionAmount;
+                    await UpdateCompanyChartOfAccountsBalance(existingCreditAccountCompany, companyId);
+                    await UpdateCompanyChartOfAccountsBalance(existingDebitAccountCompany, companyId);
+                }
+            }
         }
     }
 }

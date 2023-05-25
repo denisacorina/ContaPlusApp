@@ -3,7 +3,7 @@
     <app-top-nav-bar></app-top-nav-bar>
 
 
-<h6 style="margin-top: 10%; font-weight: 700;">Income Transactions</h6>
+<h6 style="font-weight: 700;">Income Transactions</h6>
 <div class="transactions" style="font-size: 14px; margin-top: 30px;">
 
     <div>
@@ -19,7 +19,7 @@
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
-        <button type="button" (click)="applyFilters()">Show</button>
+       
     </div>
       </div>
     <table class="table" id="#transaction">
@@ -31,13 +31,21 @@
              <th scope="col">Total Amount</th>
              <th scope="col">Paid Amount</th>
              <th scope="col">Remaining Amount</th>
-             <th scope="col">Debited Account</th>
-             <th scope="col">Credited Account</th>
+             <!-- <th scope="col">Debited Account</th>
+             <th scope="col">Credited Account</th> -->
              <th scope="col">Transaction Date</th>
              <th scope="col">Due Date</th>
-             <th scope="col">Description</th>
-             <th style="border-top-right-radius: 30px;" scope="col">Payment Status</th>
+             <!-- <th scope="col">Description</th> -->
+             <th scope="col">Payment Status</th>
+             <th scope="col">Details</th>
+             <th scope="col">Edit</th>
+             <th style="border-top-right-radius: 30px;" scope="col">Delete</th>
          </tr> </thead><tbody>
+
+          <div *ngIf="transactions.length === 0">
+              <h3 class="no-data">No transactions</h3>
+          </div>
+
              <tr *ngFor="let transaction of transactions">
                  
                  <td>{{ transaction.documentNumber }}</td>
@@ -45,84 +53,110 @@
                  <td>{{ transaction.transactionAmount }}</td>
                  <td>{{ transaction.paidAmount }}</td>
                  <td>{{ transaction.remainingAmount  }}</td>
-                 <td>{{ transaction.debitAccountCode  }}</td>
-                 <td>{{ transaction.creditAccountCode  }}</td>
+                 <!-- <td>{{ transaction.debitAccountCode  }}</td>
+                 <td>{{ transaction.creditAccountCode  }}</td> -->
                  <td>{{ transaction.transactionDate | date: 'dd/MM/yyyy' }}</td>
                  <td>{{ transaction.dueDate | date: 'dd/MM/yyyy'  }}</td>
-                 <td>{{ transaction.description ? transaction.description : 'No description' }}</td>
+                 <!-- <td>{{ transaction.description ? transaction.description : 'No description' }}</td> -->
                  <td [ngClass]="getPaymentStatus(transaction.paymentStatus)" id="#paymentStatus">
                     {{ transaction.paymentStatus === 0 ? 'Unpaid' : '' }}
                     {{ transaction.paymentStatus === 1 ? 'Partial' : '' }}
                     {{ transaction.paymentStatus === 2 ? 'Paid' : '' }}
                     {{ transaction.paymentStatus === 3 ? 'Overdue' : '' }}
                   </td>
+                  <td><img src="../../../assets/img/details.png" id="details"></td>
+                  <td><img src="../../../assets/img/edit.png" id="edit"></td>
+                  <td>
+                    <ng-container *ngIf="transaction.paymentStatus === 1">
+                        <img src="../../../assets/img/delete.png" id="delete" (click)="deletePartialPaymentTransaction(transaction.transactionId)" style="cursor: pointer;">
+                    </ng-container>
+                  
+                    <ng-container *ngIf="transaction.paymentStatus !== 1">
+                        <img src="../../../assets/img/delete.png" id="delete" (click)="deleteTransaction(transaction.transactionId)" style="cursor: pointer;">
+                    </ng-container>
+                  </td>
                  
                 
              </tr>
          </tbody>
      </table>
-</div></div> 
+</div>
+
+
+
+
+
+</div> 
 
 
 <div *ngIf="isCreateIncomeTransactionDialogOpen" class="create-income-transaction-dialog">
-    <div class="centered">
-      <h4 class="mb-4" mat-dialog-title>Create Income Transaction</h4>
-      <form [formGroup]="createIncomeTransactionForm" (ngSubmit)="onCreateIncomeTransactionSubmit()">
-        <div class="row">
-          <div class="col">
-            <mat-form-field>
-              <input matInput type="number" placeholder="Total Amount" formControlName="transactionAmount" required>
-            </mat-form-field>
-          </div>
-          <div class="col">
-            <mat-form-field>
-              <input matInput type="text" placeholder="Debit Account" formControlName="debitAccount" required>
-            </mat-form-field>
-          </div>
-          <div class="col">
-            <mat-form-field>
-              <input matInput type="text" placeholder="Credit Account" formControlName="creditAccount" required>
-            </mat-form-field>
-          </div>
+  <div class="centered">
+    <h4 class="mb-4" mat-dialog-title>Create Income Transaction</h4>
+    <form [formGroup]="createIncomeTransactionForm" (ngSubmit)="onCreateIncomeTransactionSubmit()">
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="number" placeholder="Total Amount" formControlName="transactionAmount" required>
+          </mat-form-field>
         </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field>
-              <input matInput type="number" placeholder="Paid Amount" formControlName="paidAmount" required>
-            </mat-form-field>
-          </div>
-          <div class="col">
-            <mat-form-field>
-              <input matInput type="text" placeholder="Document Number" formControlName="documentNumber" required>
-            </mat-form-field>
-          </div>
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Debit Account" formControlName="debitAccount" required>
+          </mat-form-field>
         </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field>
-              <input matInput type="text" placeholder="Document Series" formControlName="documentSeries" required>
-            </mat-form-field>
-          </div>
-          <div class="col">
-            <mat-form-field>
-              <input matInput type="date" placeholder="Due Date" formControlName="dueDate" required>
-            </mat-form-field>
-          </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Credit Account" formControlName="creditAccount" required>
+          </mat-form-field>
         </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field>
-              <input matInput type="text" placeholder="Description" formControlName="description" required>
-            </mat-form-field>
-          </div>
-          <div class="col-md-12">
-            <mat-dialog-actions>
-              <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;" type="submit">Create Income Transaction</button>
-              <button mat-button mat-dialog-close (click)="closeCreateIncomeTransactionDialog()">Cancel</button>
-            </mat-dialog-actions>
-          </div>
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="number" placeholder="Paid Amount" formControlName="paidAmount" required>
+          </mat-form-field>
         </div>
-      </form>
-    </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Document Number" formControlName="documentNumber" required>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Document Series" formControlName="documentSeries" required>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dueDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Description" formControlName="description" required>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-dialog-actions>
+            <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;" type="submit">Create Income Transaction</button>
+            <button mat-button mat-dialog-close (click)="closeCreateIncomeTransactionDialog()">Cancel</button>
+          </mat-dialog-actions>
+        </div>
+      </div>
+    </form>
   </div>
+</div>
+
+    
+
   

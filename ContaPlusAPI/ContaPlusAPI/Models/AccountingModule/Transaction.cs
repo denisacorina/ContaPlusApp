@@ -20,7 +20,7 @@ namespace ContaPlusAPI.Models.AccountingModule
         public DateTime TransactionDate { get; set; }
         public DateTime DueDate { get; set; }
         public TransactionType TransactionType { get; set; }
-        public PaymentStatus PaymentStatus { get; set; }
+        public virtual PaymentStatus PaymentStatus { get; set; }
         public string Description { get; set; }
 
         [ForeignKey("DebitAccount")]
@@ -31,7 +31,7 @@ namespace ContaPlusAPI.Models.AccountingModule
         public virtual GeneralChartOfAccounts DebitAccount { get; set; }
         public virtual GeneralChartOfAccounts CreditAccount { get; set; }
         public virtual Company Company { get; set; }
-        public virtual Inventory? Inventory { get; set; }
+        public virtual ICollection<ProductSale>? ProductSales { get; set; } = new List<ProductSale>();
         public virtual Supplier? Supplier { get; set; }
         public virtual Client? Client { get; set; }
     }

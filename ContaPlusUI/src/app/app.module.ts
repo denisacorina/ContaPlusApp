@@ -29,6 +29,10 @@ import { CommonModule } from '@angular/common';
 import { IncomeComponent } from './components/accounting/income/income.component';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 export function tokenGetter()
 {
@@ -66,6 +70,11 @@ export function tokenGetter()
     MatDatepickerModule, 
     MatNativeDateModule,
     CommonModule,
+    MatInputModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatCheckboxModule,
     ModalModule.forRoot(),
     JwtModule.forRoot({
       config: {

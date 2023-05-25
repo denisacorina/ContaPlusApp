@@ -31,22 +31,28 @@ namespace ContaPlusAPI.Controllers
             await _transactionService.CreateIncomeTransaction(model, companyId);
         }
 
+        [HttpGet("getExpenseTransactions")]
+        public async Task<ICollection<Transaction>> GetExpenseTransactions(Guid companyId)
+        {
+            return await _transactionService.GetExpenseTransactions(companyId);
+        }
+
         [HttpPost("createExpenseTransaction")]
         public async Task CreateExpenseTransaction([FromBody] Transaction model, Guid companyId)
         {
             await _transactionService.CreateExpenseTransaction(model, companyId);
         }
 
+        [HttpPost("createProductSaleTransaction")]
+        public async Task CreateProductSaleTransaction([FromBody] PurchaseSaleTransaction model, Guid companyId)
+        {
+            await _transactionService.CreateProductSaleTransaction(model, companyId);
+        }
+
         //[HttpPost("createProductPurchaseTransaction")]
         //public async Task CreateProductPurchaseTransaction([FromBody] PurchaseSaleTransaction model, Guid companyId)
         //{
         //    await _transactionService.CreateProductPurchaseTransaction(model, companyId);
-        //}
-
-        //[HttpPost("createProductSaleTransaction")]
-        //public async Task CreateProductSaleTransaction([FromBody] PurchaseSaleTransaction model, Guid companyId)
-        //{
-        //    await _transactionService.CreateProductSaleTransaction(model, companyId);
         //}
 
         //[HttpPost("createSupplierPaymentTransaction")]
@@ -60,5 +66,23 @@ namespace ContaPlusAPI.Controllers
         //{
         //    await _transactionService.CreateCustomerReceiptTransaction(model, companyId);
         //}
+
+        [HttpPut("updateTransaction")]
+        public async Task UpdateTransaction(Transaction transaction)
+        {
+            await _transactionService.UpdateTransaction(transaction);
+        }
+
+        [HttpDelete("deleteTransaction")]
+        public async Task DeleteTransaction(int transactionId, Guid companyId)
+        {
+            await _transactionService.DeleteTransaction(transactionId, companyId);
+        }
+
+        [HttpDelete("deletePartialPaymentTransaction")]
+        public async Task DeletePartialPaymentTransaction(int transactionId, Guid companyId)
+        {
+            await _transactionService.DeletePartialPaymentTransaction(transactionId, companyId);
+        }
     }
 }

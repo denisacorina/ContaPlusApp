@@ -96,4 +96,16 @@
     }
   }
 
+  .sidebar a.active {
+    /* Styles for the active menu item */
+    background-color: #74f357;
+    width: 100%;
+    color: rgb(236, 236, 236);
+  }
   
+  .dropdown-container a.active {
+    /* Styles for the active dropdown menu item */
+    background-color: #76f357;
+    width: 100%;
+    color: rgb(236, 236, 236);
+  }

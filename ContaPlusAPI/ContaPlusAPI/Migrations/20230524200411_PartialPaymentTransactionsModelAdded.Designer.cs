@@ -4,6 +4,7 @@ using ContaPlusAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContaPlusAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230524200411_PartialPaymentTransactionsModelAdded")]
+    partial class PartialPaymentTransactionsModelAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4701,12 +4704,6 @@ namespace ContaPlusAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierId"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankAccount")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -4746,6 +4743,10 @@ namespace ContaPlusAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DocumentNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -4754,6 +4755,9 @@ namespace ContaPlusAPI.Migrations
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("InventoryId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("PaidAmount")
                         .HasColumnType("decimal(18, 2)");
@@ -4786,9 +4790,15 @@ namespace ContaPlusAPI.Migrations
 
                     b.HasIndex("DebitAccountCode");
 
+                    b.HasIndex("InventoryId");
+
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Transactions");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Transaction");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.Client", b =>
@@ -4798,12 +4808,6 @@ namespace ContaPlusAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientId"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankAccount")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClientName")
                         .HasColumnType("nvarchar(max)");
@@ -4830,12 +4834,6 @@ namespace ContaPlusAPI.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankAccount")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("CashBalance")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -4900,6 +4898,27 @@ namespace ContaPlusAPI.Migrations
                     b.ToTable("UserCompanyRoles");
                 });
 
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Inventory", b =>
+                {
+                    b.Property<int>("InventoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InventoryId"));
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("InventoryId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Inventory");
+                });
+
             modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -4908,14 +4927,14 @@ namespace ContaPlusAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<Guid?>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("InventoryId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsService")
                         .HasColumnType("bit");
@@ -4934,38 +4953,9 @@ namespace ContaPlusAPI.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("InventoryId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.ProductSale", b =>
-                {
-                    b.Property<int>("SaleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"));
-
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SaleDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SoldQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TransactionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SaleId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("TransactionId");
-
-                    b.ToTable("ProductSales");
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.UserModule.Role", b =>
@@ -5075,6 +5065,18 @@ namespace ContaPlusAPI.Migrations
                     b.ToTable("RoleUserCompanyRole");
                 });
 
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.PartialPaymentTransaction", b =>
+                {
+                    b.HasBaseType("ContaPlusAPI.Models.AccountingModule.Transaction");
+
+                    b.Property<int?>("MainTransactionTransactionId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("MainTransactionTransactionId");
+
+                    b.HasDiscriminator().HasValue("PartialPaymentTransaction");
+                });
+
             modelBuilder.Entity("CompanyUser", b =>
                 {
                     b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", null)
@@ -5136,6 +5138,10 @@ namespace ContaPlusAPI.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("ContaPlusAPI.Models.InventoryModule.Inventory", "Inventory")
+                        .WithMany()
+                        .HasForeignKey("InventoryId");
+
                     b.HasOne("ContaPlusAPI.Models.AccountingModule.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId");
@@ -5147,6 +5153,8 @@ namespace ContaPlusAPI.Migrations
                     b.Navigation("CreditAccount");
 
                     b.Navigation("DebitAccount");
+
+                    b.Navigation("Inventory");
 
                     b.Navigation("Supplier");
                 });
@@ -5175,26 +5183,20 @@ namespace ContaPlusAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Product", b =>
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Inventory", b =>
                 {
                     b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.ProductSale", b =>
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Product", b =>
                 {
-                    b.HasOne("ContaPlusAPI.Models.InventoryModule.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("ContaPlusAPI.Models.AccountingModule.Transaction", null)
-                        .WithMany("ProductSales")
-                        .HasForeignKey("TransactionId");
-
-                    b.Navigation("Product");
+                    b.HasOne("ContaPlusAPI.Models.InventoryModule.Inventory", null)
+                        .WithMany("Products")
+                        .HasForeignKey("InventoryId");
                 });
 
             modelBuilder.Entity("RoleUserCompanyRole", b =>
@@ -5212,20 +5214,32 @@ namespace ContaPlusAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.PartialPaymentTransaction", b =>
+                {
+                    b.HasOne("ContaPlusAPI.Models.AccountingModule.Transaction", "MainTransaction")
+                        .WithMany("PartialPayments")
+                        .HasForeignKey("MainTransactionTransactionId");
+
+                    b.Navigation("MainTransaction");
+                });
+
             modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Transaction", b =>
                 {
-                    b.Navigation("ProductSales");
+                    b.Navigation("PartialPayments");
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.CompanyModule.Company", b =>
                 {
                     b.Navigation("ChartOfAccounts");
 
-                    b.Navigation("Products");
-
                     b.Navigation("Transactions");
 
                     b.Navigation("UserCompanyRoles");
+                });
+
+            modelBuilder.Entity("ContaPlusAPI.Models.InventoryModule.Inventory", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.UserModule.User", b =>

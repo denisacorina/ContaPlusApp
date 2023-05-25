@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 
 @Component({
@@ -13,20 +16,48 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class IncomeComponent implements OnInit {
 
   transactions: any[] = [];
-  transactionDateFilter: any;
-  dueDateFilter: any;
+  transactionDateFilter!: any;
+  dueDateFilter!: any;
 
   createIncomeTransactionForm!: FormGroup;
   isCreateIncomeTransactionDialogOpen: boolean = false;
+
+  dataSource!: MatTableDataSource<any>;
+  displayedColumns: string[] = ['checkbox', 'documentNumber', 'documentSeries', 'transactionAmount', 'paidAmount', 'remainingAmount', 'debitAccountCode', 'creditAccountCode', 'transactionDate', 'dueDate', 'description', 'paymentStatus'];
+
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  selection: any;
 
   constructor(private transactionService: TransactionService, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.getIncomeTransactions();
-    this.initializeCreateIncomeTransactionForm();
+    this.createIncomeTransaction();
+
+
+    this.dataSource = new MatTableDataSource(this.transactions);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+  
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+  
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  initializeCreateIncomeTransactionForm() {
+ createIncomeTransaction() {
     this.createIncomeTransactionForm = new FormGroup({
       transactionAmount: new FormControl('', [Validators.required]),
       debitAccount: new FormControl('', [Validators.required]),
@@ -55,15 +86,11 @@ export class IncomeComponent implements OnInit {
     const creditAccount = {
       accountCode: this.createIncomeTransactionForm.value.creditAccount
     };
-
-
     const paidAmount = this.createIncomeTransactionForm.value.paidAmount;
     const documentNumber = this.createIncomeTransactionForm.value.documentNumber;
     const documentSeries = this.createIncomeTransactionForm.value.documentSeries;
     const dueDate = new Date(this.createIncomeTransactionForm.value.dueDate);
     const description = this.createIncomeTransactionForm.value.description;
-  
-  
 
       const model = {
         transactionAmount,
@@ -78,47 +105,29 @@ export class IncomeComponent implements OnInit {
   
       this.transactionService.createIncomeTransaction(model).subscribe(
         () => {
-          alert("good");
+          window.location.reload();
         },
         (error) => {
           console.log(error);
         }
       );
-    
   }
   
-
-
-
   getIncomeTransactions() {
     const companyId = sessionStorage.getItem('selectedCompanyId');
     if (companyId) {
       this.transactionService.getIncomeTransactions(companyId).subscribe(
         (response) => {
           this.transactions = response;
-          this.applyFilters();
+    
+         
         }
       );
     }
   }
   
-  applyFilters() {
-    if (this.transactionDateFilter) {
-      this.transactions = this.transactions.filter(
-        (transaction) =>
-          new Date(transaction.transactionDate).toDateString() ===
-          new Date(this.transactionDateFilter).toDateString()
-      );
-    }
-  
-    if (this.dueDateFilter) {
-      this.transactions = this.transactions.filter(
-        (transaction) =>
-          new Date(transaction.dueDate).toDateString() ===
-          new Date(this.dueDateFilter).toDateString()
-      );
-    }
-  }
+ 
+
 
   getPaymentStatus(status: number): string {
     switch (status) {
@@ -132,6 +141,28 @@ export class IncomeComponent implements OnInit {
         return 'overdue';
       default:
         return '';
+    }
+  }
+
+  deleteTransaction(transactionId: number) {
+    const confirmed = confirm('Are you sure you want to delete this transaction?');
+    if (confirmed) {
+      this.transactionService.deleteTransaction(transactionId).subscribe(
+        () => {
+          window.location.reload();
+        }
+      );
+    }
+  }
+
+  deletePartialPaymentTransaction(transactionId: number) {
+    const confirmed = confirm('Are you sure you want to delete this partial payment?');
+    if (confirmed) {
+      this.transactionService.deletePartialPaymentTransaction(transactionId).subscribe(
+        () => {
+          window.location.reload();
+        }
+      );
     }
   }
 }
