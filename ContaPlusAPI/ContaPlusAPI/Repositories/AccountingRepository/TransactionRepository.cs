@@ -110,6 +110,11 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
                     transaction.PaymentStatus = PaymentStatus.Paid;
                 }
 
+                if (transaction.DueDate < DateTime.UtcNow && transaction.PaymentStatus != PaymentStatus.Paid)
+                {
+                    transaction.PaymentStatus = PaymentStatus.Overdue;
+                }
+
                 await _context.SaveChangesAsync();
             }
         }

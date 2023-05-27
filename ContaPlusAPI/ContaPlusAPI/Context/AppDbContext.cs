@@ -19,13 +19,14 @@ namespace ContaPlusAPI.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<UserCompanyRole> UserCompanyRoles { get; set; }
-        public DbSet<GeneralChartOfAccounts> GeneralChartOfAccounts { get; set; }
+        public DbSet<GeneralChartOfAccounts> GeneralChartOfAccounts { get; set; } 
+        public DbSet<CompanyChartOfAccounts> CompanyChartOfAccounts { get; set; } 
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<CompanyChartOfAccounts> CompanyChartOfAccounts { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductSale> ProductSales { get; set; }
+        public DbSet<Document> Documents { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -44,8 +45,6 @@ namespace ContaPlusAPI.Context
                 .WithMany()
                 .HasForeignKey(t => t.CreditAccountCode)
                 .OnDelete(DeleteBehavior.NoAction);
-
-
 
 
             base.OnModelCreating(modelBuilder);

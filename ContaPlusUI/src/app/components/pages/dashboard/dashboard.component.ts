@@ -18,13 +18,15 @@ Chart.register(...registerables);
   providers: [AuthGuard]
 })
 export class DashboardComponent implements OnInit {
+  companyId = sessionStorage.getItem('selectedCompanyId')
+
   model: any;
   title = 'chartDemo';
   userId: any;
   user: any;
   companies!: any;
+  company!: any;
   selectedCompanyId!: string;
-  companyData: any;
   showCompanyDropdown: boolean = false;
   isUpdateCompanyDialogOpen: boolean = false;
   updateCompanyForm!: FormGroup;
@@ -52,7 +54,18 @@ export class DashboardComponent implements OnInit {
     this.getCompaniesForUser();
     this.getClients();
     this.getIncomeTransactions();
+    this.getCurrentCompany();
 
+
+  }
+
+  getCurrentCompany()
+  {
+    if(this.companyId)
+    this.companyService.getCompanyById(this.companyId).subscribe( (response) =>
+    {
+        this.company = response;
+    })
   }
 
   options = document.getElementsByClassName('option');
@@ -66,7 +79,6 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
-
 
   toggleEarningDropdown(): void {
     this.isEarningDropdownOpen = !this.isEarningDropdownOpen;

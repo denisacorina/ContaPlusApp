@@ -1,6 +1,5 @@
 ﻿using ContaPlusAPI.Context;
 using ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface;
-using ContaPlusAPI.Interfaces.IService;
 using ContaPlusAPI.Models.InventoryModule;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,9 +47,18 @@ namespace ContaPlusAPI.Repositories.InventoryRepository
             if (company != null)
             {
                 company.Products.Add(product);
+                product.Company = company;
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task AddProductSale(ProductSale productSale)
+        {
+            await _context.AddAsync(productSale);
+
+            await _context.SaveChangesAsync();
+
         }
 
         public async Task UpdateProductForCompany(Product product, Guid companyId)

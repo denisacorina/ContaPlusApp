@@ -34,5 +34,6 @@ namespace ContaPlusAPI.Models.AccountingModule
         public virtual ICollection<ProductSale>? ProductSales { get; set; } = new List<ProductSale>();
         public virtual Supplier? Supplier { get; set; }
         public virtual Client? Client { get; set; }
+        public virtual ICollection<Document>? Documents { get; set; } = new List<Document>();
     }
 }

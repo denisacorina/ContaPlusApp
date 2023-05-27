@@ -26,9 +26,9 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("createIncomeTransaction")]
-        public async Task CreateIncomeTransaction([FromBody] Transaction model, Guid companyId)
+        public async Task CreateIncomeTransaction([FromBody] Transaction model, Guid companyId, int clientId)
         {
-            await _transactionService.CreateIncomeTransaction(model, companyId);
+            await _transactionService.CreateIncomeTransaction(model, companyId, clientId);
         }
 
         [HttpGet("getExpenseTransactions")]
@@ -38,9 +38,9 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("createExpenseTransaction")]
-        public async Task CreateExpenseTransaction([FromBody] Transaction model, Guid companyId)
+        public async Task CreateExpenseTransaction([FromBody] Transaction model, Guid companyId, int supplierId)
         {
-            await _transactionService.CreateExpenseTransaction(model, companyId);
+            await _transactionService.CreateExpenseTransaction(model, companyId, supplierId);
         }
 
         [HttpPost("createProductSaleTransaction")]
@@ -49,23 +49,11 @@ namespace ContaPlusAPI.Controllers
             await _transactionService.CreateProductSaleTransaction(model, companyId);
         }
 
-        //[HttpPost("createProductPurchaseTransaction")]
-        //public async Task CreateProductPurchaseTransaction([FromBody] PurchaseSaleTransaction model, Guid companyId)
-        //{
-        //    await _transactionService.CreateProductPurchaseTransaction(model, companyId);
-        //}
-
-        //[HttpPost("createSupplierPaymentTransaction")]
-        //public async Task CreateSupplierPaymentTransaction([FromBody] Transaction model, Guid companyId)
-        //{
-        //    await _transactionService.CreateSupplierPaymentTransaction(model, companyId);
-        //}
-
-        //[HttpPost("createCustomerReceiptTransaction")]
-        //public async Task CreateCustomerReceiptTransaction([FromBody] Transaction model, Guid companyId)
-        //{
-        //    await _transactionService.CreateCustomerReceiptTransaction(model, companyId);
-        //}
+        [HttpPost("createProductPurchaseTransaction")]
+        public async Task CreateProductPurchaseTransaction([FromBody] PurchaseSaleTransaction model, Guid companyId)
+        {
+            await _transactionService.CreateProductPurchaseTransaction(model, companyId);
+        }
 
         [HttpPut("updateTransaction")]
         public async Task UpdateTransaction(Transaction transaction)

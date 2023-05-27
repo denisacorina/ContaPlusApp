@@ -4,6 +4,7 @@ using ContaPlusAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContaPlusAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230527071459_UpdatedProductSaleTable")]
+    partial class UpdatedProductSaleTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,33 +73,6 @@ namespace ContaPlusAPI.Migrations
                     b.HasIndex("GeneralChartOfAccountsAccountCode");
 
                     b.ToTable("CompanyChartOfAccounts");
-                });
-
-            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Document", b =>
-                {
-                    b.Property<int>("DocumentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentId"));
-
-                    b.Property<DateTime>("DocumentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DocumentType")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("PdfFile")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int?>("TransactionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentId");
-
-                    b.HasIndex("TransactionId");
-
-                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.GeneralChartOfAccounts", b =>
@@ -4720,6 +4696,46 @@ namespace ContaPlusAPI.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Invoice", b =>
+                {
+                    b.Property<int>("InvoiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceId"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentSeries")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PaidAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("RemainingAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("InvoiceId");
+
+                    b.ToTable("Invoice");
+                });
+
             modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Supplier", b =>
                 {
                     b.Property<int>("SupplierId")
@@ -4782,6 +4798,9 @@ namespace ContaPlusAPI.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("InvoiceId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("PaidAmount")
                         .HasColumnType("decimal(18, 2)");
 
@@ -4812,6 +4831,8 @@ namespace ContaPlusAPI.Migrations
                     b.HasIndex("CreditAccountCode");
 
                     b.HasIndex("DebitAccountCode");
+
+                    b.HasIndex("InvoiceId");
 
                     b.HasIndex("SupplierId");
 
@@ -5146,15 +5167,6 @@ namespace ContaPlusAPI.Migrations
                     b.Navigation("GeneralChartOfAccounts");
                 });
 
-            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Document", b =>
-                {
-                    b.HasOne("ContaPlusAPI.Models.AccountingModule.Transaction", "Transaction")
-                        .WithMany("Documents")
-                        .HasForeignKey("TransactionId");
-
-                    b.Navigation("Transaction");
-                });
-
             modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Supplier", b =>
                 {
                     b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
@@ -5186,6 +5198,10 @@ namespace ContaPlusAPI.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("ContaPlusAPI.Models.AccountingModule.Invoice", "Invoice")
+                        .WithMany("Transactions")
+                        .HasForeignKey("InvoiceId");
+
                     b.HasOne("ContaPlusAPI.Models.AccountingModule.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId");
@@ -5197,6 +5213,8 @@ namespace ContaPlusAPI.Migrations
                     b.Navigation("CreditAccount");
 
                     b.Navigation("DebitAccount");
+
+                    b.Navigation("Invoice");
 
                     b.Navigation("Supplier");
                 });
@@ -5270,10 +5288,13 @@ namespace ContaPlusAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Invoice", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
             modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Transaction", b =>
                 {
-                    b.Navigation("Documents");
-
                     b.Navigation("ProductSales");
                 });
 

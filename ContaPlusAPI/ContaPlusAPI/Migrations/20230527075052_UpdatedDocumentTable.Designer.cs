@@ -4,6 +4,7 @@ using ContaPlusAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContaPlusAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230527075052_UpdatedDocumentTable")]
+    partial class UpdatedDocumentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,12 +92,7 @@ namespace ContaPlusAPI.Migrations
                     b.Property<byte[]>("PdfFile")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("TransactionId")
-                        .HasColumnType("int");
-
                     b.HasKey("DocumentId");
-
-                    b.HasIndex("TransactionId");
 
                     b.ToTable("Documents");
                 });
@@ -4773,6 +4771,9 @@ namespace ContaPlusAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("DocumentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("DocumentNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -4812,6 +4813,8 @@ namespace ContaPlusAPI.Migrations
                     b.HasIndex("CreditAccountCode");
 
                     b.HasIndex("DebitAccountCode");
+
+                    b.HasIndex("DocumentId");
 
                     b.HasIndex("SupplierId");
 
@@ -5146,15 +5149,6 @@ namespace ContaPlusAPI.Migrations
                     b.Navigation("GeneralChartOfAccounts");
                 });
 
-            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Document", b =>
-                {
-                    b.HasOne("ContaPlusAPI.Models.AccountingModule.Transaction", "Transaction")
-                        .WithMany("Documents")
-                        .HasForeignKey("TransactionId");
-
-                    b.Navigation("Transaction");
-                });
-
             modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Supplier", b =>
                 {
                     b.HasOne("ContaPlusAPI.Models.CompanyModule.Company", "Company")
@@ -5186,6 +5180,10 @@ namespace ContaPlusAPI.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("ContaPlusAPI.Models.AccountingModule.Document", "Document")
+                        .WithMany("Transactions")
+                        .HasForeignKey("DocumentId");
+
                     b.HasOne("ContaPlusAPI.Models.AccountingModule.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId");
@@ -5197,6 +5195,8 @@ namespace ContaPlusAPI.Migrations
                     b.Navigation("CreditAccount");
 
                     b.Navigation("DebitAccount");
+
+                    b.Navigation("Document");
 
                     b.Navigation("Supplier");
                 });
@@ -5270,10 +5270,13 @@ namespace ContaPlusAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Document", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
             modelBuilder.Entity("ContaPlusAPI.Models.AccountingModule.Transaction", b =>
                 {
-                    b.Navigation("Documents");
-
                     b.Navigation("ProductSales");
                 });
 

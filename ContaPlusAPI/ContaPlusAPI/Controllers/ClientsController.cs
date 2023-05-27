@@ -1,4 +1,5 @@
-﻿using ContaPlusAPI.Interfaces.IService.AccountingServiceInterface;
+﻿using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
+using ContaPlusAPI.Interfaces.IService.AccountingServiceInterface;
 using ContaPlusAPI.Models;
 using ContaPlusAPI.Models.AccountingModule;
 using Microsoft.AspNetCore.Http;
@@ -9,9 +10,11 @@ namespace ContaPlusAPI.Controllers
     public class ClientsController : BaseApiController
     {
         private readonly IClientSupplierService _clientSupplierService;
-        public ClientsController(IClientSupplierService clientSupplierService) 
+        private readonly IClientSupplierRepository _clientSupplierRepository;
+        public ClientsController(IClientSupplierService clientSupplierService, IClientSupplierRepository clientSupplierRepository) 
         { 
             _clientSupplierService = clientSupplierService;
+            _clientSupplierRepository = clientSupplierRepository;
         }
 
         [HttpGet("getAllClientsForCompany")]
@@ -25,6 +28,13 @@ namespace ContaPlusAPI.Controllers
         public async Task<Client> GetClientByIdForCompany(int clientId, Guid companyId)
         {
             var client = await _clientSupplierService.GetClientByIdForCompany(clientId, companyId);
+            return client;
+        }
+
+        [HttpGet("getClientById")]
+        public async Task<Client> GetClientById(int clientId)
+        {
+            var client = await _clientSupplierRepository.GetClientById(clientId);
             return client;
         }
 

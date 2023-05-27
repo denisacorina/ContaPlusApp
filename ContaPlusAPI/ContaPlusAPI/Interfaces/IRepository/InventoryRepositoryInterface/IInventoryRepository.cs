@@ -11,5 +11,8 @@ namespace ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface
         Task UpdateProductForCompany(Product product, Guid companyId);
         Task UpdateProductQuantity(Product product, Guid companyId);
         Task DeleteProductForCompany(int productId, Guid companyId);
+
+
+        Task AddProductSale(ProductSale productSale);
     }
 }
