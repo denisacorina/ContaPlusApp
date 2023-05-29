@@ -16,10 +16,8 @@ namespace ContaPlusAPI.Interfaces.IService.AccountingServiceInterface
         Task UpdateTransaction(Transaction transaction);
         Task DeleteTransaction(int transactionId, Guid companyId);
         Task DeletePartialPaymentTransaction(int transactionId, Guid companyId);
-    }
 
-    public interface IPaymentStatusVerifier
-    {
-        PaymentStatus VerifyPaymentStatus(decimal totalAmount, decimal paidAmount, Transaction transaction);
+        Task PayExistingTransaction(int transactionId, decimal amount);
+        Task<PaymentStatus> VerifyPaymentStatus(decimal totalAmount, decimal paidAmount, Transaction transaction);
     }
 }

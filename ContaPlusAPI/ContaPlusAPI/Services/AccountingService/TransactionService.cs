@@ -15,17 +15,17 @@ namespace ContaPlusAPI.Services.AccountingService
         private readonly ITransactionRepository _transactionRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly ICompanyRepository _companyRepository;
-        private readonly IPaymentStatusVerifier _paymentStatusVerifier;
         private readonly IClientSupplierRepository _clientSupplierRepository;
-      
+        private readonly IDocumentRepository _documentRepository;
 
-        public TransactionService(ITransactionRepository transactionRepository, IInventoryRepository inventoryRepository, ICompanyRepository companyRepository, IPaymentStatusVerifier paymentStatusVerifier, IClientSupplierRepository clientSupplierRepository)
+
+        public TransactionService(ITransactionRepository transactionRepository, IInventoryRepository inventoryRepository, ICompanyRepository companyRepository, IClientSupplierRepository clientSupplierRepository, IDocumentRepository documentRepository)
         {
             _transactionRepository = transactionRepository;
             _inventoryRepository = inventoryRepository;
             _companyRepository = companyRepository;
-            _paymentStatusVerifier = paymentStatusVerifier;
             _clientSupplierRepository = clientSupplierRepository;
+            _documentRepository = documentRepository;
         }
 
         public async Task CreateIncomeTransaction(Transaction model, Guid companyId, int clientId)
@@ -33,34 +33,47 @@ namespace ContaPlusAPI.Services.AccountingService
             var company = await _companyRepository.GetCompanyById(companyId);
             var client = await _clientSupplierRepository.GetClientById(clientId);
 
-            var existingTransaction = await _transactionRepository.GetTransactionByDocumentNumberAndSeries(model.DocumentNumber, model.DocumentSeries);
-
-            if (existingTransaction != null)
-            {
-                UpdateExistingTransaction(existingTransaction, model.PaidAmount, model.PaymentStatus, model.TransactionAmount);
-                await _transactionRepository.UpdateTransactionPaidAmountAndStatus(model.DocumentNumber, model.DocumentSeries, model.PaidAmount);
-            }
-
             var debitGeneralAccount = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(model.DebitAccount.AccountCode);
             var creditGeneralAccount = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(model.CreditAccount.AccountCode);
 
-            if (existingTransaction == null || (existingTransaction != null && existingTransaction.RemainingAmount != 0))
+
+            var transaction = await CreateNewIncomeTransaction(model, debitGeneralAccount, creditGeneralAccount, company, TransactionType.Income, client);
+
+
+            await _transactionRepository.AddTransaction(transaction);
+
+            if (client != null)
             {
-                var transaction = CreateNewIncomeTransaction(existingTransaction, model, debitGeneralAccount, creditGeneralAccount, company, TransactionType.Income, client);
-
-
-                await _transactionRepository.AddTransaction(transaction);
-
-                if (model.PaymentStatus != PaymentStatus.Paid)
+                if (transaction.TransactionType == TransactionType.Income)
                 {
-                    await _transactionRepository.UpdateTransactionPaidAmountAndStatus(model.DocumentNumber, model.DocumentSeries, model.PaidAmount);
+                    var invoice = new Document
+                    {
+                        DocumentType = DocumentType.Invoice,
+                        DocumentDate = DateTime.UtcNow,
+                        Transaction = transaction
+
+                    };
+
+                    await _documentRepository.CreateInvoice(invoice);
+
+                    if (transaction.PaidAmount != 0 || transaction.PaidAmount <= transaction.TransactionAmount)
+                    {
+                        var receipt = new Document
+                        {
+                            DocumentType = DocumentType.CustomerReceipt,
+                            DocumentDate = DateTime.UtcNow,
+                            Transaction = transaction
+                        };
+
+                        await _documentRepository.CreateReceipt(receipt);
+                    }
                 }
-
-                company.CashBalance += model.PaidAmount;
-
-                await UpdateDebitAccountBalance(model.DebitAccount, -model.PaidAmount, transaction.TransactionType, company);
-                await UpdateCreditAccountBalance(model.CreditAccount, model.PaidAmount, transaction.TransactionType, company);
             }
+
+            company.CashBalance += model.PaidAmount;
+
+            await UpdateDebitAccountBalance(model.DebitAccount, -model.PaidAmount, model.TransactionType, company);
+            await UpdateCreditAccountBalance(model.CreditAccount, model.PaidAmount, model.TransactionType, company);
         }
 
         public async Task CreateExpenseTransaction(Transaction model, Guid companyId, int supplierId)
@@ -69,95 +82,52 @@ namespace ContaPlusAPI.Services.AccountingService
 
             var supplier = await _clientSupplierRepository.GetSupplierById(supplierId);
 
-            var existingTransaction = await _transactionRepository.GetTransactionByDocumentNumberAndSeries(model.DocumentNumber, model.DocumentSeries);
-
-            if (existingTransaction != null)
-            {
-                UpdateExistingTransaction(existingTransaction, model.PaidAmount, model.PaymentStatus, model.TransactionAmount);
-                await _transactionRepository.UpdateTransactionPaidAmountAndStatus(model.DocumentNumber, model.DocumentSeries, model.PaidAmount);
-            }
-
             var debitGeneralAccount = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(model.DebitAccount.AccountCode);
             var creditGeneralAccount = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(model.CreditAccount.AccountCode);
 
-            if (existingTransaction == null || (existingTransaction != null && existingTransaction.RemainingAmount != 0))
+            var transaction = await CreateNewExpenseTransaction(model, debitGeneralAccount, creditGeneralAccount, company, TransactionType.Expense, supplier);
+
+            await _transactionRepository.AddTransaction(transaction);
+
+            if (company.CashBalance >= model.PaidAmount)
             {
-                var transaction = CreateNewExpenseTransaction(existingTransaction, model, debitGeneralAccount, creditGeneralAccount, company, TransactionType.Expense, supplier);
-
-                await _transactionRepository.AddTransaction(transaction);
-
-                if (model.PaymentStatus != PaymentStatus.Paid)
-                {
-                    await _transactionRepository.UpdateTransactionPaidAmountAndStatus(model.DocumentNumber, model.DocumentSeries, model.PaidAmount);
-                }
-
-                if (company.CashBalance >= model.PaidAmount)
-                {
-                    company.CashBalance -= model.PaidAmount;
-                    await UpdateDebitAccountBalance(model.DebitAccount, model.PaidAmount, transaction.TransactionType, company);
-                    await UpdateCreditAccountBalance(model.CreditAccount, -model.PaidAmount, transaction.TransactionType, company);
-                }
-                else
-                    throw new Exception("Insufficient cash balance.");
-
-
-            }
-        }
-
-
-        private static void UpdateExistingTransaction(Transaction existingTransaction, decimal paidAmount, PaymentStatus paymentStatus, decimal totalAmount)
-        {
-            existingTransaction.PaidAmount = paidAmount;
-            existingTransaction.PaymentStatus = paymentStatus;
-
-            if (existingTransaction.PaymentStatus == PaymentStatus.Paid)
-            {
-                existingTransaction.RemainingAmount = 0;
+                company.CashBalance -= model.PaidAmount;
+                await UpdateDebitAccountBalance(model.DebitAccount, model.PaidAmount, model.TransactionType, company);
+                await UpdateCreditAccountBalance(model.CreditAccount, -model.PaidAmount, model.TransactionType, company);
             }
             else
-            {
-                existingTransaction.RemainingAmount = Math.Max(0, totalAmount - paidAmount);
-            }
+                throw new Exception("Insufficient cash balance.");
         }
 
-        private Transaction CreateNewIncomeTransaction(Transaction existingTransaction, Transaction model, GeneralChartOfAccounts debitGeneralAccount, GeneralChartOfAccounts creditGeneralAccount, Company company, TransactionType transactionType, Client client)
+        private async Task<Transaction> CreateNewIncomeTransaction(Transaction model, GeneralChartOfAccounts debitGeneralAccount, GeneralChartOfAccounts creditGeneralAccount, Company company, TransactionType transactionType, Client client)
         {
             bool clientExists = false;
 
             if (client != null)
-                clientExists = true; 
+                clientExists = true;
 
             var transaction = new Transaction
             {
                 DocumentNumber = model.DocumentNumber,
                 DocumentSeries = model.DocumentSeries,
-                TransactionAmount = existingTransaction?.TransactionAmount ?? model.TransactionAmount,
+                TransactionAmount = model.TransactionAmount,
                 PaidAmount = model.PaidAmount,
                 TransactionDate = DateTime.UtcNow,
-                DueDate = existingTransaction?.DueDate ?? model.DueDate,
+                DueDate = model.DueDate,
                 TransactionType = transactionType,
                 Description = model.Description,
                 DebitAccount = debitGeneralAccount,
                 CreditAccount = creditGeneralAccount,
                 Company = company,
                 Client = clientExists ? client : null
-            };
+            };       
 
-            _paymentStatusVerifier.VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
-
-            if (transaction.PaymentStatus == PaymentStatus.Paid)
-            {
-                transaction.RemainingAmount = 0;
-            }
-            else
-            {
-                transaction.RemainingAmount = Math.Max(0, model.TransactionAmount - model.PaidAmount);
-            }
-
+            await VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
+      
             return transaction;
         }
 
-        private Transaction CreateNewExpenseTransaction(Transaction existingTransaction, Transaction model, GeneralChartOfAccounts debitGeneralAccount, GeneralChartOfAccounts creditGeneralAccount, Company company, TransactionType transactionType, Supplier supplier)
+        private async Task<Transaction> CreateNewExpenseTransaction(Transaction model, GeneralChartOfAccounts debitGeneralAccount, GeneralChartOfAccounts creditGeneralAccount, Company company, TransactionType transactionType, Supplier supplier)
         {
             bool supplierExists = false;
 
@@ -168,10 +138,10 @@ namespace ContaPlusAPI.Services.AccountingService
             {
                 DocumentNumber = model.DocumentNumber,
                 DocumentSeries = model.DocumentSeries,
-                TransactionAmount = existingTransaction?.TransactionAmount ?? model.TransactionAmount,
+                TransactionAmount = model.TransactionAmount,
                 PaidAmount = model.PaidAmount,
                 TransactionDate = DateTime.UtcNow,
-                DueDate = existingTransaction?.DueDate ?? model.DueDate,
+                DueDate = model.DueDate,
                 TransactionType = transactionType,
                 Description = model.Description,
                 DebitAccount = debitGeneralAccount,
@@ -180,16 +150,7 @@ namespace ContaPlusAPI.Services.AccountingService
                 Supplier = supplierExists ? supplier : null
             };
 
-            _paymentStatusVerifier.VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
-
-            if (transaction.PaymentStatus == PaymentStatus.Paid)
-            {
-                transaction.RemainingAmount = 0;
-            }
-            else
-            {
-                transaction.RemainingAmount = Math.Max(0, model.TransactionAmount - model.PaidAmount);
-            }
+            await VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
 
             return transaction;
         }
@@ -260,7 +221,7 @@ namespace ContaPlusAPI.Services.AccountingService
                 }
                 else if (transaction.TransactionType == TransactionType.Sale)
                 {
-                    if(product.Quantity < newQuantity)
+                    if (product.Quantity < newQuantity)
                     {
                         throw new Exception("Quantity is not available.");
                     }
@@ -321,7 +282,7 @@ namespace ContaPlusAPI.Services.AccountingService
                 Company = company
             };
 
-            _paymentStatusVerifier.VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
+            await VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
 
             await _transactionRepository.AddTransaction(transaction);
 
@@ -350,7 +311,7 @@ namespace ContaPlusAPI.Services.AccountingService
                 Company = company
             };
 
-            _paymentStatusVerifier.VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
+            await VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
 
             await _transactionRepository.AddTransaction(transaction);
 
@@ -384,34 +345,56 @@ namespace ContaPlusAPI.Services.AccountingService
         {
             return _transactionRepository.DeletePartialPaymentTransaction(transactionId, companyId);
         }
-    }
 
-    public class PaymentVerifierService : IPaymentStatusVerifier
-    {
-        public PaymentStatus VerifyPaymentStatus(decimal totalAmount, decimal paidAmount, Transaction transaction)
+        public async Task PayExistingTransaction(int transactionId, decimal amount)
         {
+            var transaction = await _transactionRepository.GetTransactionById(transactionId);
+
+            var newPaidAmount = transaction.PaidAmount += amount;
+
+            await VerifyPaymentStatus(transaction.TransactionAmount, newPaidAmount, transaction);
+
+            if (transaction.TransactionType == TransactionType.Income && (transaction.PaymentStatus == PaymentStatus.Paid || transaction.PaymentStatus == PaymentStatus.Partial))
+            {
+                var receipt = new Document
+                {
+                    DocumentType = DocumentType.CustomerReceipt,
+                    DocumentDate = DateTime.UtcNow,
+                    Transaction = transaction
+                };
+
+                await _documentRepository.CreateReceipt(receipt);
+            }
+
+            await _transactionRepository.UpdateTransaction(transaction);
+        }
+
+        public async Task<PaymentStatus> VerifyPaymentStatus(decimal totalAmount, decimal paidAmount, Transaction transaction)
+        {
+            if (paidAmount > transaction.TransactionAmount)
+                throw new Exception($"The paid amount is bigger than the total amount of {transaction.TransactionAmount}");
+
             decimal remainingAmount = totalAmount - paidAmount;
             transaction.RemainingAmount = remainingAmount;
 
+            if (transaction.PaidAmount == transaction.TransactionAmount)
+                transaction.RemainingAmount = 0;
+
             if (remainingAmount == 0)
                 transaction.PaymentStatus = PaymentStatus.Paid;
-                //AddInvoiceDocument(transaction);
-                //AddReceiptDocument(transaction);
 
-            if(paidAmount == 0)
+            if (paidAmount == 0)
                 transaction.PaymentStatus = PaymentStatus.Unpaid;
-                //AddInvoiceDocument(transaction);
-
 
             if (paidAmount < totalAmount)
                 transaction.PaymentStatus = PaymentStatus.Partial;
-                //AddReceiptDocument(transaction);           
 
             if (transaction.DueDate < DateTime.UtcNow && transaction.PaymentStatus != PaymentStatus.Paid)
             {
                 transaction.PaymentStatus = PaymentStatus.Overdue;
             }
 
+            await _transactionRepository.UpdateTransaction(transaction);
             return transaction.PaymentStatus;
         }
     }

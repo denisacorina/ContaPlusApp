@@ -19,6 +19,12 @@ namespace ContaPlusAPI.Controllers
             _transactionService = transactionService;
         }
 
+        [HttpPut("payExistingTransaction")]
+        public async Task PayExistingTransaction(int transactionId, decimal amount)
+        {
+            await _transactionService.PayExistingTransaction(transactionId, amount);
+        }
+
         [HttpGet("getIncomeTransactions")]
         public async Task<ICollection<Transaction>> GetIncomeTransactions(Guid companyId)
         {

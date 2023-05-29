@@ -9,11 +9,9 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
     public class TransactionRepository : ITransactionRepository
     {
         private readonly AppDbContext _context;
-        private readonly IPaymentStatusVerifier _paymentStatusVerifier;
-        public TransactionRepository(AppDbContext context, IPaymentStatusVerifier paymentStatusVerifier)
+        public TransactionRepository(AppDbContext context)
         {
             _context = context;
-            _paymentStatusVerifier = paymentStatusVerifier;
         }
 
         public async Task AddTransaction(Transaction transaction)
@@ -94,29 +92,6 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
             var transaction = await _context.Transactions
                .FirstOrDefaultAsync(t => t.DocumentNumber == documentNumber && t.DocumentSeries == documentSeries);
             return transaction;
-        }
-
-        public async Task UpdateTransactionPaidAmountAndStatus(string documentNumber, string documentSeries, decimal paidAmount)
-        {
-            var transaction = await GetTransactionByDocumentNumberAndSeries(documentNumber, documentSeries);
-
-            if (transaction != null)
-            {
-                transaction.PaidAmount = paidAmount;
-                transaction.PaymentStatus = _paymentStatusVerifier.VerifyPaymentStatus(transaction.TransactionAmount, paidAmount, transaction);
-
-                if (transaction.RemainingAmount == 0)
-                {
-                    transaction.PaymentStatus = PaymentStatus.Paid;
-                }
-
-                if (transaction.DueDate < DateTime.UtcNow && transaction.PaymentStatus != PaymentStatus.Paid)
-                {
-                    transaction.PaymentStatus = PaymentStatus.Overdue;
-                }
-
-                await _context.SaveChangesAsync();
-            }
         }
 
         public async Task<ICollection<Transaction>> GetIncomeTransactions(Guid companyId)
@@ -212,6 +187,16 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
                     await UpdateCompanyChartOfAccountsBalance(existingDebitAccountCompany, companyId);
                 }
             }
+        }
+
+        public async Task<Transaction> GetTransactionById(int transactionId)
+        {
+            return await _context.Transactions.FirstOrDefaultAsync(t => t.TransactionId == transactionId);
+        }
+
+        public async Task<ICollection<Transaction>> GetAllTransactions()
+        {
+            return await _context.Transactions.ToListAsync();
         }
     }
 }

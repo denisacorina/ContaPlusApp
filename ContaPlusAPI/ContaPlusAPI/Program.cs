@@ -1,4 +1,5 @@
 using ContaPlusAPI.Context;
+using ContaPlusAPI.Helpers;
 using ContaPlusAPI.Interfaces.IRepository;
 using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
 using ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface;
@@ -115,7 +116,6 @@ builder.Services.AddScoped<IUserCompanyRoleService, UserCompanyRoleService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IClientSupplierService, ClientSupplierService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-builder.Services.AddScoped<IPaymentStatusVerifier, PaymentVerifierService>();
 
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -130,8 +130,9 @@ builder.Services.AddScoped<IPhotosRepository, PhotoRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IClientSupplierRepository, ClientSupplierRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
-
+builder.Services.AddHostedService<BackgroundOverdueCheckTask>();
 
 var app = builder.Build();
 

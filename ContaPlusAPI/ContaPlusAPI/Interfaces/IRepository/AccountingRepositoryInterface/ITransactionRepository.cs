@@ -7,6 +7,8 @@ namespace ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface
     public interface ITransactionRepository
     {
         Task AddTransaction(Transaction transaction);
+        Task<ICollection<Transaction>> GetAllTransactions();
+        Task<Transaction> GetTransactionById(int transactionId);
         Task<GeneralChartOfAccounts> GetGeneralChartOfAccountsByAccountCode(int accountCode);
         Task<CompanyChartOfAccounts> GetCompanyChartOfAccountsByAccountCode(int accountCode, Guid companyId);
         Task <ICollection<Transaction>> GetIncomeTransactions(Guid companyId);
@@ -17,6 +19,5 @@ namespace ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface
         Task DeletePartialPaymentTransaction(int transactionId, Guid companyId);
         Task UpdateCompanyChartOfAccountsBalance(CompanyChartOfAccounts account, Guid companyId);
         Task<Transaction> GetTransactionByDocumentNumberAndSeries(string documentNumber, string documentSeries);
-        Task UpdateTransactionPaidAmountAndStatus(string documentNumber, string documentSeries, decimal paidAmount);
     }
 }
