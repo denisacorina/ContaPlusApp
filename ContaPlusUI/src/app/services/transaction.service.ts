@@ -17,7 +17,7 @@ export class TransactionService {
     return this.http.get<any[]>(`${this.baseTransactionUrl}/getIncomeTransactions`,{ params: { companyId } });
   }
 
-  createIncomeTransaction(model: any): Observable<any> {
+  createIncomeTransaction(model: any, companyId: string): Observable<any> {
     const url = `${this.baseTransactionUrl}/createIncomeTransaction?companyId=${this.companyId}`;
     return this.http.post<any>(url, model);
   }
@@ -30,6 +30,15 @@ export class TransactionService {
   deletePartialPaymentTransaction(transactionId: number) {
     const url = `${this.baseTransactionUrl}/deletePartialPaymentTransaction?transactionId=${transactionId}&companyId=${this.companyId}`;
     return this.http.delete(url);
+  }
+
+  getExpenseTransactions(companyId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseTransactionUrl}/getExpenseTransactions`,{ params: { companyId } });
+  }
+
+  createExpenseTransaction(model: any): Observable<any> {
+    const url = `${this.baseTransactionUrl}/createExpenseTransaction?companyId=${this.companyId}`;
+    return this.http.post<any>(url, model);
   }
 }
  

@@ -33,6 +33,14 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CreateIncomeComponent } from './components/accounting/create-income/create-income.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { ClientComponent } from './components/pages/company-info/clients/client.component';
+import { SupplierComponent } from './components/pages/company-info/suppliers/suppliers.component';
+import { InventoryComponent } from './components/pages/inventory/inventory.component';
+
+
 
 export function tokenGetter()
 {
@@ -51,6 +59,10 @@ export function tokenGetter()
     ResetPasswordComponent,
     UserProfileComponent,
     IncomeComponent,
+    CreateIncomeComponent,
+    ClientComponent,
+    SupplierComponent,
+    InventoryComponent
     
 
   ],
@@ -75,6 +87,8 @@ export function tokenGetter()
     MatPaginatorModule,
     MatTableModule,
     MatCheckboxModule,
+    MatButtonModule,
+    MatMenuModule,
     ModalModule.forRoot(),
     JwtModule.forRoot({
       config: {

@@ -1,0 +1,30 @@
+.clients {
+    width: auto;
+    box-shadow: 0 0px 20px 0 rgba(231, 231, 231, 0.638);
+    height: auto;
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.addClient {
+    font-size: 12px;
+    background-color: #5757f3;
+    border: none;
+    color: white;
+    border-radius: 10px;
+  }
+
+/* .add-client-dialog{
+    width: auto;
+    height: 50%;
+    background-color: white;
+    padding: 70px 70px 0px 125px;
+    z-index: 1000;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 70vmax rgba(0, 0, 0, .7), rgba(32, 32, 32, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+} */

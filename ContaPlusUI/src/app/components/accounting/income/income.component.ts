@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @Component({
@@ -23,41 +24,32 @@ export class IncomeComponent implements OnInit {
   isCreateIncomeTransactionDialogOpen: boolean = false;
 
   dataSource!: MatTableDataSource<any>;
-  displayedColumns: string[] = ['checkbox', 'documentNumber', 'documentSeries', 'transactionAmount', 'paidAmount', 'remainingAmount', 'debitAccountCode', 'creditAccountCode', 'transactionDate', 'dueDate', 'description', 'paymentStatus'];
+  displayedColumns: string[] = ['documentNumber', 'documentSeries', 'transactionAmount', 'paidAmount', 'remainingAmount', 'transactionDate', 'dueDate', 'paymentStatus', 'actions'];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   selection: any;
+  documentNumberFilter: any;
+  documentSeriesFilter: any;
+  transactionAmount: any;
+  startDate!: Date;
+  endDate!: Date;
+
 
   constructor(private transactionService: TransactionService, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.getIncomeTransactions();
     this.createIncomeTransaction();
+    this.filterTable();
+  }
 
-
-    this.dataSource = new MatTableDataSource(this.transactions);
-    this.dataSource.sort = this.sort;
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-  }
-  
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-  
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.dataSource.sort = this.sort;
   }
 
- createIncomeTransaction() {
+  createIncomeTransaction() {
     this.createIncomeTransactionForm = new FormGroup({
       transactionAmount: new FormControl('', [Validators.required]),
       debitAccount: new FormControl('', [Validators.required]),
@@ -69,7 +61,7 @@ export class IncomeComponent implements OnInit {
       description: new FormControl('', [Validators.required])
     });
   }
-  
+
   openCreateIncomeTransactionDialog(): void {
     this.isCreateIncomeTransactionDialogOpen = true;
   }
@@ -79,6 +71,8 @@ export class IncomeComponent implements OnInit {
   }
 
   onCreateIncomeTransactionSubmit(): void {
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
     const transactionAmount = this.createIncomeTransactionForm.value.transactionAmount;
     const debitAccount = {
       accountCode: this.createIncomeTransactionForm.value.debitAccount
@@ -92,41 +86,43 @@ export class IncomeComponent implements OnInit {
     const dueDate = new Date(this.createIncomeTransactionForm.value.dueDate);
     const description = this.createIncomeTransactionForm.value.description;
 
-      const model = {
-        transactionAmount,
-        debitAccount,
-        creditAccount,
-        paidAmount,
-        documentNumber,
-        documentSeries,
-        dueDate,
-        description
-      };
-  
-      this.transactionService.createIncomeTransaction(model).subscribe(
-        () => {
-          window.location.reload();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    const model = {
+      transactionAmount,
+      debitAccount,
+      creditAccount,
+      paidAmount,
+      documentNumber,
+      documentSeries,
+      dueDate,
+      description
+    };
+
+    this.transactionService.createIncomeTransaction(model, companyId).subscribe(
+      () => {
+        window.location.reload();
+      
+      }
+    );
+    }
   }
-  
+
   getIncomeTransactions() {
     const companyId = sessionStorage.getItem('selectedCompanyId');
     if (companyId) {
       this.transactionService.getIncomeTransactions(companyId).subscribe(
         (response) => {
           this.transactions = response;
-    
-         
+          this.dataSource = new MatTableDataSource(this.transactions);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+
+          
         }
       );
     }
   }
-  
- 
+
+
 
 
   getPaymentStatus(status: number): string {
@@ -155,14 +151,51 @@ export class IncomeComponent implements OnInit {
     }
   }
 
-  deletePartialPaymentTransaction(transactionId: number) {
-    const confirmed = confirm('Are you sure you want to delete this partial payment?');
-    if (confirmed) {
-      this.transactionService.deletePartialPaymentTransaction(transactionId).subscribe(
-        () => {
-          window.location.reload();
+  onSortData(event: any) {
+    const direction = event.direction;
+    const active = event.active;
+
+    if (direction === '') {
+      this.dataSource.data = this.transactions;
+    } else {
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'transactionDate':
+            return new Date(item.transactionDate);
+          default:
+            return item[property];
         }
-      );
+      };
+      this.dataSource.sort = this.sort;
+      this.dataSource.sort.active = active || '';
+      this.dataSource.sort.direction = direction || '';
+     
     }
+  }
+
+
+  filterTable() {
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      return (
+        data.name.toLocaleLowerCase().includes(filter)
+      )
+    }
+  }
+
+  applyFilter(event: Event): void {
+    const filter = (event.target as HTMLInputElement).value.trim().toLocaleLowerCase();
+    this.dataSource.filter = filter;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  onPaginateChange(event: any) {
+    const pageSize = event.pageSize;
+    const pageIndex = event.pageIndex;
+  
+    const startIndex = pageIndex * pageSize;
+    const endIndex = startIndex + pageSize;
+    this.dataSource.data = this.transactions.slice(startIndex, endIndex); 
   }
 }

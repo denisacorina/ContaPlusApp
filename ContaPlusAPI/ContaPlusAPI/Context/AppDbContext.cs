@@ -19,8 +19,8 @@ namespace ContaPlusAPI.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<UserCompanyRole> UserCompanyRoles { get; set; }
-        public DbSet<GeneralChartOfAccounts> GeneralChartOfAccounts { get; set; } 
-        public DbSet<CompanyChartOfAccounts> CompanyChartOfAccounts { get; set; } 
+        public DbSet<GeneralChartOfAccounts> GeneralChartOfAccounts { get; set; }
+        public DbSet<CompanyChartOfAccounts> CompanyChartOfAccounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
@@ -46,6 +46,15 @@ namespace ContaPlusAPI.Context
                 .HasForeignKey(t => t.CreditAccountCode)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Transaction>()
+                   .HasMany(t => t.Documents)
+                   .WithOne(d => d.Transaction)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Transaction>()
+                .HasMany(t => t.ProductSales)
+                .WithOne(ps => ps.Transaction)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

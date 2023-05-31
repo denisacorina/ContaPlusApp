@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-bar',
@@ -13,7 +14,11 @@ export class SideBarComponent {
   dropdownExpenseVisible = false;
   dropdownCompanyVisible = false;
 
+  constructor(private router: Router) {}
   
+  isActive(route: string): boolean {
+    return this.router.isActive(route, false);
+  }
 
   toggleDropdownIncome() {
     this.dropdownIncomeVisible = !this.dropdownIncomeVisible;

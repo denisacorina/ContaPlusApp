@@ -32,7 +32,7 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("createIncomeTransaction")]
-        public async Task CreateIncomeTransaction([FromBody] Transaction model, Guid companyId, int clientId)
+        public async Task CreateIncomeTransaction([FromBody] Transaction model, [FromQuery] Guid companyId, int clientId)
         {
             await _transactionService.CreateIncomeTransaction(model, companyId, clientId);
         }

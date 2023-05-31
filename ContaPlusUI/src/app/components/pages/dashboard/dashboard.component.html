@@ -11,7 +11,7 @@
         <div class="option selected" (click)="toggleOption(2)" style="border-right: 0.5px solid #8e8e8e;">Today</div>
       </div>
     </div>
-    <!-- Cards for displaying data -->
+
     <div class="cards row" style="margin-left: 1px;">
       <div class="col-3">
         <div class="row">
@@ -41,7 +41,7 @@
               <div class="col-8" style="margin-top: 10px; color: #747474;">
                 <h6>Supppliers</h6>
               </div>
-              <h1>56</h1>
+              <h1>{{totalSuppliers}}</h1>
 
             </div>
           </div>
@@ -134,7 +134,7 @@
                 </div>
               </div>
             </div>
-            <h2>456 lei</h2>
+            <h2>{{totalExpense}} lei</h2>
             <h6 style="color: rgb(116, 116, 116); margin-top: 5px;">Total Expenses</h6>
 
           </div>
@@ -146,7 +146,7 @@
                 wallet
               </span>
 
-              <h2 style="color: rgb(255, 255, 255);">{{company.cashBalance}} lei</h2>
+            <h2 style="color: rgb(255, 255, 255);">{{ company?.cashBalance !== null ? company?.cashBalance : 0 }}  lei</h2>
               <h6 style="color: rgb(239, 239, 239); margin-top: 5px;">Cash Balance</h6>
 
 

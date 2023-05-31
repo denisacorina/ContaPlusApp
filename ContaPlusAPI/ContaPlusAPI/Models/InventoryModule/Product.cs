@@ -18,6 +18,7 @@ namespace ContaPlusAPI.Models.InventoryModule
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public bool IsService { get; set; }
+        public virtual GeneralChartOfAccounts ChartOfAccountsCode { get; set; }
         public virtual Company Company { get; set; }
     }
 }

@@ -9,6 +9,8 @@ import { Chart, Colors, registerables } from 'chart.js';
 import * as ApexCharts from 'apexcharts';
 import { ClientService } from 'src/app/services/client.service';
 import { TransactionService } from 'src/app/services/transaction.service';
+import { SupplierService } from 'src/app/services/supplier.service';
+import { formatDate } from '@angular/common';
 Chart.register(...registerables);
 
 @Component({
@@ -40,12 +42,18 @@ export class DashboardComponent implements OnInit {
   totalClients: number = 0;
   clients: [] = [];
   client!: any;
+  suppliers: [] = [];
+  supplier!: any;
 
   totalIncome: number = 0;
 
+  selectedFilter: string = 'today';
+  totalSuppliers: any;
+  totalExpense!: number;
 
   constructor(private companyService: CompanyService,
     private clientService: ClientService,
+    private supplierService: SupplierService,
     private transactionService: TransactionService) { }
 
   ngOnInit() {
@@ -53,7 +61,9 @@ export class DashboardComponent implements OnInit {
     this.barChart();
     this.getCompaniesForUser();
     this.getClients();
+    this.getSuppliers();
     this.getIncomeTransactions();
+    this.getExpenseTransactions();
     this.getCurrentCompany();
 
 
@@ -77,6 +87,23 @@ export class DashboardComponent implements OnInit {
       } else {
         this.options[i].classList.remove('selected');
       }
+    }
+  
+    switch (selectedIndex) {
+      case 0: 
+        this.selectedFilter = 'month';
+       
+        break;
+      case 1: 
+        this.selectedFilter = 'week';
+       
+        break;
+      case 2:
+        this.selectedFilter = 'today';
+      
+        break;
+      default:
+        break;
     }
   }
 
@@ -223,12 +250,38 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  getSuppliers() {
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
+      this.supplierService.getSuppliers(companyId).subscribe(
+        (response: any[]) => {
+          this.supplier = response;
+          this.totalSuppliers = this.supplier.length;
+          console.log(this.totalSuppliers)
+        }
+      )
+    }
+  }
+
   getIncomeTransactions() {
     const companyId = sessionStorage.getItem('selectedCompanyId');
     if (companyId) {
       this.transactionService.getIncomeTransactions(companyId).subscribe(
         (transactions: any) => {
           this.totalIncome = this.calculatePaidAmountSum(transactions);
+        }
+      );
+    }
+  }
+
+ 
+
+  getExpenseTransactions() {
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
+      this.transactionService.getExpenseTransactions(companyId).subscribe(
+        (transactions: any) => {
+          this.totalExpense = this.calculatePaidAmountSum(transactions);
         }
       );
     }
@@ -241,6 +294,7 @@ export class DashboardComponent implements OnInit {
     }
     return sum;
   }
+
 
   // onUpdateCompanySubmit(): void {
   //   if (this.updateCompanyForm.invalid) {

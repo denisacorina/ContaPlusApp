@@ -25,5 +25,11 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
             _context.Documents.Add(receipt);
             await _context.SaveChangesAsync();
         }
+        
+        public async Task CreateGoodsReceiptNote(Document goodsReceiptNote)
+        {
+            _context.Documents.Add(goodsReceiptNote);
+            await _context.SaveChangesAsync();
+        }
     }
 }

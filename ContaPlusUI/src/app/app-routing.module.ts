@@ -8,6 +8,10 @@ import { ForgotPasswordComponent } from './components/pages/forgot-password/forg
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
 import { UserProfileComponent } from './components/pages/user-profile/user-profile.component';
 import { IncomeComponent } from './components/accounting/income/income.component';
+import { CreateIncomeComponent } from './components/accounting/create-income/create-income.component';
+import { ClientComponent } from './components/pages/company-info/clients/client.component';
+import { SupplierComponent } from './components/pages/company-info/suppliers/suppliers.component';
+import { InventoryComponent } from './components/pages/inventory/inventory.component';
 
 export const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -18,6 +22,11 @@ export const routes: Routes = [
   {path: 'reset-password/:email/:resetToken', component: ResetPasswordComponent },
   {path: 'myProfile', component: UserProfileComponent},
   {path: 'income', component: IncomeComponent},
+  {path: 'income/addIncomeTransaction', component: CreateIncomeComponent},
+  {path: 'income/allIncomes', component: IncomeComponent},
+  {path: 'company/clients', component: ClientComponent},
+  {path: 'company/suppliers', component: SupplierComponent},
+  {path: 'inventory', component: InventoryComponent},
 
 ];
 

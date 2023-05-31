@@ -2,85 +2,106 @@
 <div id="main">
     <app-top-nav-bar></app-top-nav-bar>
 
+<h3 class="mb-4 col" style="font-weight: 700; color: #525252;">Income Transactions</h3>
+ <button class="createTransaction" type="button" style="margin-left: 15px;" (click)="openCreateIncomeTransactionDialog()">Create New Transaction</button>
 
-<h6 style="font-weight: 700;">Income Transactions</h6>
 <div class="transactions" style="font-size: 14px; margin-top: 30px;">
+  <div>
 
-    <div>
-        <div class="options">
-        <button type="button" style="margin-right: 10px;" (click)="openCreateIncomeTransactionDialog()">Create New Transaction</button>
-        <mat-form-field>
-          <mat-label>Enter a date range</mat-label>
-          <mat-date-range-input [rangePicker]="picker">
-            <input id="transactionDateFilter" [(ngModel)]="transactionDateFilter" style="margin-right: 10px;" matStartDate placeholder="Start date">
-            <input id="dueDateFilter" [(ngModel)]="dueDateFilter" style="margin-right: 10px;" matEndDate placeholder="End date">
-          </mat-date-range-input>
-          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
-       
-    </div>
-      </div>
-    <table class="table" id="#transaction">
-        <thead class="thead">
-             <tr>
-        
-    <th style="border-top-left-radius: 30px;" scope="col">Document Number</th>
-             <th scope="col">Document Series</th>
-             <th scope="col">Total Amount</th>
-             <th scope="col">Paid Amount</th>
-             <th scope="col">Remaining Amount</th>
-             <!-- <th scope="col">Debited Account</th>
-             <th scope="col">Credited Account</th> -->
-             <th scope="col">Transaction Date</th>
-             <th scope="col">Due Date</th>
-             <!-- <th scope="col">Description</th> -->
-             <th scope="col">Payment Status</th>
-             <th scope="col">Details</th>
-             <th scope="col">Edit</th>
-             <th style="border-top-right-radius: 30px;" scope="col">Delete</th>
-         </tr> </thead><tbody>
+     
+      
+      <mat-form-field >
+        <input matInput placeholder="Search" (input)="applyFilter($event)">
+      </mat-form-field>
+      
+      <!-- <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input [(ngModel)]="startDate" matStartDate placeholder="Start date">
+          <input [(ngModel)]="endDate" matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field> -->
 
-          <div *ngIf="transactions.length === 0">
-              <h3 class="no-data">No transactions</h3>
-          </div>
+          
 
-             <tr *ngFor="let transaction of transactions">
-                 
-                 <td>{{ transaction.documentNumber }}</td>
-                 <td>{{ transaction.documentSeries }}</td>
-                 <td>{{ transaction.transactionAmount }}</td>
-                 <td>{{ transaction.paidAmount }}</td>
-                 <td>{{ transaction.remainingAmount  }}</td>
-                 <!-- <td>{{ transaction.debitAccountCode  }}</td>
-                 <td>{{ transaction.creditAccountCode  }}</td> -->
-                 <td>{{ transaction.transactionDate | date: 'dd/MM/yyyy' }}</td>
-                 <td>{{ transaction.dueDate | date: 'dd/MM/yyyy'  }}</td>
-                 <!-- <td>{{ transaction.description ? transaction.description : 'No description' }}</td> -->
-                 <td [ngClass]="getPaymentStatus(transaction.paymentStatus)" id="#paymentStatus">
-                    {{ transaction.paymentStatus === 0 ? 'Unpaid' : '' }}
-                    {{ transaction.paymentStatus === 1 ? 'Partial' : '' }}
-                    {{ transaction.paymentStatus === 2 ? 'Paid' : '' }}
-                    {{ transaction.paymentStatus === 3 ? 'Overdue' : '' }}
-                  </td>
-                  <td><img src="../../../assets/img/details.png" id="details"></td>
-                  <td><img src="../../../assets/img/edit.png" id="edit"></td>
-                  <td>
-                    <ng-container *ngIf="transaction.paymentStatus === 1">
-                        <img src="../../../assets/img/delete.png" id="delete" (click)="deletePartialPaymentTransaction(transaction.transactionId)" style="cursor: pointer;">
-                    </ng-container>
-                  
-                    <ng-container *ngIf="transaction.paymentStatus !== 1">
-                        <img src="../../../assets/img/delete.png" id="delete" (click)="deleteTransaction(transaction.transactionId)" style="cursor: pointer;">
-                    </ng-container>
-                  </td>
-                 
-                
-             </tr>
-         </tbody>
-     </table>
+  </div>
+  <table mat-table [dataSource]="dataSource" matSort matSortDirection="desc">
+   
+    <ng-container matColumnDef="documentNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Number</th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.documentNumber }}</td>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="documentSeries">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Series</th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.documentSeries }}</td>
+    </ng-container>
+    <ng-container matColumnDef="transactionAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount</th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.transactionAmount }}</td>
+    </ng-container>
+    <ng-container matColumnDef="paidAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Paid Amount</th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.paidAmount }}</td>
+    </ng-container>
+    <ng-container matColumnDef="remainingAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Remaining Amount</th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.remainingAmount }}</td>
+    </ng-container>
+    <ng-container matColumnDef="transactionDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Transaction Date</th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.transactionDate | date: 'dd/MM/yyyy' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="dueDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.dueDate | date: 'dd/MM/yyyy' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="paymentStatus">
+      <th mat-header-cell *matHeaderCellDef>Payment Status</th>
+      <td mat-cell *matCellDef="let transaction" [ngClass]="getPaymentStatus(transaction.paymentStatus)" id="#paymentStatus">
+        {{ transaction.paymentStatus === 0 ? 'Unpaid' : '' }}
+        {{ transaction.paymentStatus === 1 ? 'Partial' : '' }}
+        {{ transaction.paymentStatus === 2 ? 'Paid' : '' }}
+        {{ transaction.paymentStatus === 3 ? 'Overdue' : '' }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let transaction">
+        <button mat-icon-button [matMenuTriggerFor]="dropdownMenu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #dropdownMenu="matMenu">
+          <button mat-menu-item >
+            <span>Details</span>
+          </button>
+          <button mat-menu-item >
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item (click)="deleteTransaction(transaction.transactionId)">
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  
+  <mat-paginator [length]="dataSource.data.length" [pageSizeOptions]="[10, 25, 100]" showFirstLastButtons (page)="onPaginateChange($event)"></mat-paginator>
+  <div *ngIf="dataSource.data.length === 0">
+    <h3 class="no-data">No transactions</h3>
+  </div>
 </div>
+
+
+
+
+
 
 
 
@@ -130,20 +151,19 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
-          <mat-form-field>
-            <mat-label>Due Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="dueDate">
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </div>
+       
         <div class="col">
           <mat-form-field>
             <input matInput type="text" placeholder="Description" formControlName="description" required>
           </mat-form-field>
-        </div>
+        </div> 
+        <div class="col">
+        <mat-form-field>
+          <input matInput [matDatepicker]="dueDatePicker" placeholder="Due Date" formControlName="dueDate" required>
+          <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #dueDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
       </div>
       <div class="row">
         <div class="col-md-12">
@@ -152,7 +172,8 @@
             <button mat-button mat-dialog-close (click)="closeCreateIncomeTransactionDialog()">Cancel</button>
           </mat-dialog-actions>
         </div>
-      </div>
+       
+    </div>
     </form>
   </div>
 </div>

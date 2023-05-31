@@ -6,5 +6,6 @@ namespace ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface
     {
         Task CreateInvoice(Document invoice);
         Task CreateReceipt(Document receipt);
+        Task CreateGoodsReceiptNote(Document goodsReceiptNote);
     }
 }

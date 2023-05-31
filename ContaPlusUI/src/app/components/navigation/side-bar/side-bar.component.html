@@ -5,82 +5,76 @@
   </div>
 
   <div class="sidenav">
-    <a href="dashboard">
+    <a [routerLink]="['/dashboard']" [class.active]="isActive('/dashboard')">
       <span class="material-icons">
         dashboard
-        </span>
+      </span>
       <span class="sideBarText">Dashboard</span>
     </a>
 
-    <a (mouseenter)="toggleDropdownIncome()">
+    <a (mouseenter)="toggleDropdownIncome()" [class.active]="isActive('/income')">
       <span class="material-icons">
         trending_up
-        </span>
+      </span>
       <span class="sideBarText">Income </span><span class="material-icons">
         arrow_drop_down
-        </span>        
+      </span>
     </a>
     <div class="dropdown-container" *ngIf="dropdownIncomeVisible" (mouseleave)="toggleDropdownIncome()">
-      <a href="income">Income Transactions
-      </a>
-      <!-- <a href="#">Inregistrare factura</a> -->
+      <a [routerLink]="['/income/addIncomeTransaction']" [class.active]="isActive('/income/addIncomeTransaction')">Add Transaction</a>
+      <a [routerLink]="['/income/allIncomes']" [class.active]="isActive('/income/allIncomes')">All Incomes</a>
     </div>
 
     <a (mouseenter)="toggleDropdownExpense()">
       <span class="material-icons">
         output
-        </span>
-        
-        
+      </span>
+
+
       <span class="sideBarText">Expense </span><span class="material-icons">
         arrow_drop_down
-        </span>
-        
+      </span>
+
     </a>
     <div class="dropdown-container" *ngIf="dropdownExpenseVisible" (mouseleave)="toggleDropdownExpense()">
-      <a href="#">Inregistrare factura</a>
-      <a href="#">Inregistrare factura</a>
+      <a href="income">Add Transaction</a> 
+      <a href="income">All Expenses </a>
     </div>
   </div>
   <a href="#">
     <span class="material-icons">
       table_view
-      </span>
-      
+    </span>
 
-      
     <span class="sideBarText">Invoices</span>
   </a>
   <a href="#">
     <span class="material-icons">
       inventory
-      </span>   
-       <span class="sideBarText">Reports</span>
+    </span>
+    <span class="sideBarText">Reports</span>
   </a>
-  <a href="#">
+  <a [routerLink]="['/inventory']" [class.active]="isActive('/inventory')">
     <span class="material-icons">
       receipt_long
-      </span>
+    </span>
     <span class="sideBarText">Inventory</span>
   </a>
-  <a (mouseenter)="toggleDropdownCompany()">
+  <a (mouseenter)="toggleDropdownCompany()" [class.active]="isActive('/company/clients') ">
     <span class="material-icons">
       business
-      </span>
-      
-      
+    </span>
+
+
     <span class="sideBarText">Company</span><span class="material-icons">
       arrow_drop_down
-      </span>
-      
+    </span>
+
   </a>
   <div class="dropdown-container" *ngIf="dropdownCompanyVisible" (mouseleave)="toggleDropdownCompany()">
     <a href="#">Company Details</a>
-    <a href="#">Clients</a>
-    <a href="#">Vendors</a>
+    <a [routerLink]="['/company/clients']" [class.active]="isActive('/company/clients')">Clients</a>
+    <a [routerLink]="['/company/suppliers']" [class.active]="isActive('/company/suppliers')">Suppliers</a>
     <a href="#">Team</a>
   </div>
 </div>
-
-   
-   

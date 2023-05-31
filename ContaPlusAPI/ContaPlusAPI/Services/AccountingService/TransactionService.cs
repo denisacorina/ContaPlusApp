@@ -39,6 +39,8 @@ namespace ContaPlusAPI.Services.AccountingService
 
             var transaction = await CreateNewIncomeTransaction(model, debitGeneralAccount, creditGeneralAccount, company, TransactionType.Income, client);
 
+            if (transaction.PaidAmount == 0)
+                transaction.PaymentStatus = PaymentStatus.Unpaid;
 
             await _transactionRepository.AddTransaction(transaction);
 
@@ -69,6 +71,7 @@ namespace ContaPlusAPI.Services.AccountingService
                     }
                 }
             }
+
 
             company.CashBalance += model.PaidAmount;
 
@@ -286,6 +289,30 @@ namespace ContaPlusAPI.Services.AccountingService
 
             await _transactionRepository.AddTransaction(transaction);
 
+            if (transaction.TransactionType == TransactionType.Sale)
+            {
+                var invoice = new Document
+                {
+                    DocumentType = DocumentType.Invoice,
+                    DocumentDate = DateTime.UtcNow,
+                    Transaction = transaction
+                };
+
+                await _documentRepository.CreateInvoice(invoice);
+
+                if (transaction.PaidAmount != 0 || transaction.PaidAmount <= transaction.TransactionAmount)
+                {
+                    var receipt = new Document
+                    {
+                        DocumentType = DocumentType.CustomerReceipt,
+                        DocumentDate = DateTime.UtcNow,
+                        Transaction = transaction
+                    };
+
+                    await _documentRepository.CreateReceipt(receipt);
+                }
+            }
+
             await UpdateDebitAccountBalance(model.DebitAccount, -model.PaidAmount, transaction.TransactionType, company);
             await UpdateCreditAccountBalance(model.CreditAccount, model.PaidAmount, transaction.TransactionType, company);
 
@@ -319,6 +346,15 @@ namespace ContaPlusAPI.Services.AccountingService
             await UpdateCreditAccountBalance(model.CreditAccount, -model.PaidAmount, transaction.TransactionType, model.Company);
 
             await UpdateProductQuantity(model.Product.ProductId, model.Product.Quantity, model.Company.CompanyId, transaction);
+
+            var goodsReceiptNote = new Document
+            {
+                DocumentType = DocumentType.GoodsReceiptNote,
+                DocumentDate = DateTime.UtcNow,
+                Transaction = transaction
+            };
+
+            await _documentRepository.CreateGoodsReceiptNote(goodsReceiptNote);
         }
 
         public async Task<ICollection<Transaction>> GetIncomeTransactions(Guid companyId)

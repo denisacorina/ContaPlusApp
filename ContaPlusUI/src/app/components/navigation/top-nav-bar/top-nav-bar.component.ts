@@ -71,7 +71,8 @@ export class TopNavBarComponent implements OnInit {
       phoneNumber: new FormControl('', [Validators.pattern(/^07\d{8}$/), Validators.required]),
       address: new FormControl('', Validators.required),
       tvaPayer: new FormControl(false),
-      socialCapital: new FormControl('', [Validators.min(200), Validators.required])
+      socialCapital: new FormControl('', [Validators.min(200), Validators.required]),
+      cashBalance: new FormControl('', Validators.required)
     });
   }
 
@@ -95,7 +96,7 @@ export class TopNavBarComponent implements OnInit {
 
     this.isAddCompanyDialogOpen = false;
     alert("company created")
-    //window.location.reload();
+    window.location.reload();
   }
 
   checkEmailExists(control: AbstractControl): Observable<ValidationErrors | null> {

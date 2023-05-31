@@ -21,14 +21,14 @@
   
   
   .unpaid {
-    background-color: rgb(223, 113, 113);
+    background-color: rgb(223, 114, 204);
     border-radius: 1px;
     font-weight: bold;   
     border-radius: 30px; 
     font-size: 10px;
     width: 20px;
     text-align: center;
-    color: rgb(124, 6, 6);
+    color: rgb(85, 26, 109);
   }
   
   .partial {
@@ -54,18 +54,18 @@
   }
   
   .overdue {
-    background-color: rgb(232, 180, 84);
+    background-color: rgb(230, 117, 117);
     border-radius: 1px;
     font-weight: bold;   
     border-radius: 30px; 
     font-size: 10px;
     width: 20px;
     text-align: center;
-    color: rgb(205, 116, 15);
+    color: rgb(156, 2, 2);
   }
   
 
-button {
+.createTransaction {
     font-size: 12px;
     background-color: #5757f3;
     border: none;

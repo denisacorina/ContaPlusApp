@@ -43,9 +43,11 @@ namespace ContaPlusAPI.Repositories.InventoryRepository
         public async Task AddProductForCompany(Product product, Guid companyId)
         {
             var company = await _context.Companies.FirstOrDefaultAsync(i => i.CompanyId == companyId);
+            var accountCode = await _context.GeneralChartOfAccounts.FirstOrDefaultAsync(i => i.AccountCode == product.ChartOfAccountsCode.AccountCode);
 
-            if (company != null)
+            if (company != null && accountCode != null)
             {
+             product.ChartOfAccountsCode = accountCode;
                 company.Products.Add(product);
                 product.Company = company;
 

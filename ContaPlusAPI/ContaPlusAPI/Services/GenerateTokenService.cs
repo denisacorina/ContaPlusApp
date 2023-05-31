@@ -31,7 +31,7 @@ namespace ContaPlusAPI.Services
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: user.RememberMe ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(3),
+                expires: user.RememberMe ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddDays(1),
                 signingCredentials: credentials);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
