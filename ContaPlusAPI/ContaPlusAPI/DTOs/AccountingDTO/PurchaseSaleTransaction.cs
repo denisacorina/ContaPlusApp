@@ -13,6 +13,7 @@ namespace ContaPlusAPI.DTOs.AccountingDTO
         public string DocumentSeries { get; set; }  
         public decimal TransactionAmount { get; set; }
         public decimal PaidAmount { get; set; }
+        public DateTime TransactionDate { get; set; }
         public DateTime DueDate { get; set; }
         public TransactionType TransactionType { get; set; }
         public PaymentStatus PaymentStatus { get; set; }

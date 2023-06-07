@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatSortModule } from '@angular/material/sort';
+
 
 
 @Component({
@@ -70,9 +70,8 @@ export class IncomeComponent implements OnInit {
     this.isCreateIncomeTransactionDialogOpen = false;
   }
 
-  onCreateIncomeTransactionSubmit(): void {
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    if (companyId) {
+  onCreateIncomeTransactionSubmit() {
+
     const transactionAmount = this.createIncomeTransactionForm.value.transactionAmount;
     const debitAccount = {
       accountCode: this.createIncomeTransactionForm.value.debitAccount
@@ -97,13 +96,13 @@ export class IncomeComponent implements OnInit {
       description
     };
 
-    this.transactionService.createIncomeTransaction(model, companyId).subscribe(
-      () => {
-        window.location.reload();
+    // this.transactionService.createIncomeTransaction(model).subscribe(
+    //   () => {
+    //     window.location.reload();
       
-      }
-    );
-    }
+    //   }
+    // );
+    
   }
 
   getIncomeTransactions() {

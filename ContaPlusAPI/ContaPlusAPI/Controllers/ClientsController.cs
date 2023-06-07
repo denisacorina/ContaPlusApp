@@ -31,6 +31,12 @@ namespace ContaPlusAPI.Controllers
             return client;
         }
 
+        [HttpGet("getClientByName")]
+        public async Task<Client> GetClientByName(string clientName)
+        {
+            return await _clientSupplierService.GetClientByName(clientName);
+        }
+
         [HttpGet("getClientById")]
         public async Task<Client> GetClientById(int clientId)
         {

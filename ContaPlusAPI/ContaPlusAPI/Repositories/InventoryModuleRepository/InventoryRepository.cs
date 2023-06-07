@@ -1,5 +1,6 @@
 ﻿using ContaPlusAPI.Context;
 using ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface;
+using ContaPlusAPI.Models.AccountingModule;
 using ContaPlusAPI.Models.InventoryModule;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ namespace ContaPlusAPI.Repositories.InventoryRepository
         public async Task<ICollection<Product>> GetProductsByCompanyId(Guid companyId)
         {
             var products = await _context.Products
+                .Include(i => i.ChartOfAccountsCode)
                 .Where(i => i.Company.CompanyId == companyId)
                 .ToListAsync();
 
@@ -26,6 +28,7 @@ namespace ContaPlusAPI.Repositories.InventoryRepository
         public async Task<Product> GetProductByIdForCompany(int productId, Guid companyId)
         {
             var product = await _context.Products
+                .Include(i => i.ChartOfAccountsCode)           
                 .Where(i => i.Company.CompanyId == companyId)
                 .FirstOrDefaultAsync(p => p.ProductId == productId);
 
@@ -132,6 +135,11 @@ namespace ContaPlusAPI.Repositories.InventoryRepository
                     await _context.SaveChangesAsync();
                 }
             }
+        }
+
+        public async Task<ICollection<GeneralChartOfAccounts>> GeneralChartOfAccountsList()
+        {
+            return await _context.GeneralChartOfAccounts.ToListAsync(); 
         }
     }
 }

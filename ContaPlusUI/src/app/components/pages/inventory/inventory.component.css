@@ -1,0 +1,46 @@
+.inventory {
+    width: auto;
+    box-shadow: 0 0px 20px 0 rgba(231, 231, 231, 0.638);
+    height: auto;
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.addProduct {
+    font-size: 12px;
+    background-color: #5757f3;
+    border: none;
+    color: white;
+    border-radius: 10px;
+  }
+
+  mat-form-field{
+    margin-right: 20px;
+  }
+
+form {
+    margin-top: 20px;
+  }
+
+  .service {
+    padding: 5px;
+    width: 70px;
+    border-radius: 20px;
+    background-color:  rgb(62, 62, 62);
+    color: rgb(189, 189, 189);
+    text-align: center;
+    margin-top: 15px;
+    font-weight: 700;
+  }
+
+  .good {
+    padding: 5px;
+    width: 70px;
+    border-radius: 20px;
+    background-color: rgb(240, 163, 200);
+    color:  rgb(226, 43, 131);
+    text-align: center;
+    margin-top: 15px;
+    font-weight: 700;
+  }

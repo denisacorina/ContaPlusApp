@@ -10,21 +10,26 @@ export class ClientService {
 
   private readonly baseClientUrl = environment.baseClientUrl;
 
+  companyId = sessionStorage.getItem('selectedCompanyId')
 
   constructor(private http: HttpClient) { }
 
 
-  getClients(companyId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseClientUrl}/getAllClientsForCompany`,{ params: { companyId } });
+  getClients(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseClientUrl}/getAllClientsForCompany?companyId=${this.companyId}`);
   }
 
-  addClientForCompany(client: any, companyId: string): Observable<any> {
-    const url = `${this.baseClientUrl}/addClientForCompany?companyId=${companyId}`;
+  getClientByName(clientName: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseClientUrl}/getClientByName?clientName=${clientName}`);
+  }
+
+  addClientForCompany(client: any): Observable<any> {
+    const url = `${this.baseClientUrl}/addClientForCompany?companyId=${this.companyId}`;
     return this.http.post<any>(url, client);
   }
 
-  updateClientForCompany(client: any, companyId: string): Observable<any> {
-    const url = `${this.baseClientUrl}/updateClientForCompany?companyId=${companyId}`;
+  updateClientForCompany(client: any): Observable<any> {
+    const url = `${this.baseClientUrl}/updateClientForCompany?companyId=${this.companyId}`;
     return this.http.put<any>(url, client);
   }
 

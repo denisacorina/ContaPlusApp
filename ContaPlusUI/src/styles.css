@@ -61,3 +61,10 @@ body { margin: 0; font-family: 'Raleway'; }
   padding-top: 50px;
   padding-bottom: 50px;
 }
+
+.mat-mdc-checkbox.mat-accent {
+  --mdc-checkbox-selected-focus-icon-color: #4f4feb !important;
+  --mdc-checkbox-selected-hover-icon-color: #4f4feb !important;
+  --mdc-checkbox-selected-icon-color: #4f4feb !important;
+  --mdc-checkbox-selected-pressed-icon-color: #4f4feb !important;
+}

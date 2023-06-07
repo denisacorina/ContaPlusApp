@@ -1,12 +1,246 @@
 <app-side-bar></app-side-bar>
 <div id="main">
-    <app-top-nav-bar></app-top-nav-bar>
+  <app-top-nav-bar></app-top-nav-bar>
+  <h3 class="col" style="font-weight: 700; color: #525252;">Add Income</h3>
+  <div class="row justify-content-center">
+    <mat-form-field style="width: 300px;">
+      <mat-label>Select Income Type</mat-label>
+      <mat-select required [(ngModel)]="selectedIncomeType">
+        <mat-option value="general">General Income</mat-option>
+        <mat-option value="client">Income from Client</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <br>
+
+  <form [formGroup]="form" (ngSubmit)="onCreateIncomeTransactionSubmit()">
+    <div class="row">
+      <div class="col-8">
+        <div class="row">
+          <div class="col-3" style="margin-right: 40px;">
+            <div *ngIf="selectedIncomeType == null">
+              <h5>
+                <mat-icon class="error-icon mat-icon-round mat-icon-outlined"
+                  style="color: #5757f3; margin-bottom: -5px;">error</mat-icon>
+                Please select an income type.
+              </h5>
+            </div>
+            <div *ngIf="selectedIncomeType === 'client'">
+              <mat-form-field>
+                <mat-label>Client</mat-label>
+                <mat-select required formControlName="clientId" (selectionChange)="getClientUnpaidTransactions()">
+                  <mat-option *ngFor="let client of clients" [value]="client.clientId">
+                    {{ client.clientName }}, {{ client.fiscalCode }}
+                  </mat-option>
+                  <mat-option (click)="openAddClientDialog()"><p style="color: #5757f3; font-weight: 700;"> <mat-icon style="margin-bottom: -5px;">add</mat-icon>Add Client</p></mat-option>
+                </mat-select>
+               
+              </mat-form-field>
+            </div>
+            <div *ngIf="selectedIncomeType === 'general'">
+              <mat-form-field>
+                <mat-label>Type</mat-label>
+                <mat-select required formControlName="debitAccount">
+                  <ng-container>
+                    <mat-option *ngFor="let account of generalChartOfAccounts" [value]="account.accountCode">
+                      <b>{{ account.accountCode }}</b> {{ account.accountDescription }}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+          </div>
+          <div class="col-3" style="margin-right: 40px;" *ngIf="this.selectedTransaction == null">
+            <mat-form-field style="width: 210px;">
+              <mat-label>Transaction Date</mat-label>
+              <input matInput [matDatepicker]="transactionDatePicker" placeholder="Transaction Date"
+                formControlName="transactionDate" required>
+              <mat-datepicker-toggle matSuffix [for]="transactionDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #transactionDatePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-3" *ngIf="this.selectedTransaction == null">
+            <mat-form-field style="width: 210px;">
+              <mat-label>Due Date</mat-label>
+              <input matInput [matDatepicker]="dueDatePicker" placeholder="Due Date" formControlName="dueDate" required>
+              <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #dueDatePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col" *ngIf="this.selectedTransaction == null">
+        <mat-form-field>
+          <mat-label>Series</mat-label>
+          <input matInput type="text" placeholder="Series" formControlName="documentSeries" required>
+        </mat-form-field>
+      </div>
+      <div class="col" *ngIf="this.selectedTransaction == null">
+        <mat-form-field>
+          <mat-label>Number</mat-label>
+          <input matInput type="text" placeholder="Number" formControlName="documentNumber" required>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form><br><br>
+
+  <div *ngIf="selectedIncomeType === 'client'">
+    <h6>You can choose an invoice from below or create a new one.</h6>
+
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="documentNumber">
+        <th mat-header-cell *matHeaderCellDef class="header">Document Number</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.documentNumber }}</td>
+      </ng-container>
+      <ng-container matColumnDef="documentSeries">
+        <th mat-header-cell *matHeaderCellDef class="header">Document Series</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.documentSeries }}</td>
+      </ng-container>
+      <ng-container matColumnDef="documentDate">
+        <th mat-header-cell *matHeaderCellDef class="header">Invoice Date</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.documents[0].documentDate | date: 'dd/MM/yyyy' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="transactionAmount">
+        <th mat-header-cell *matHeaderCellDef class="header">Transaction Amount</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.transactionAmount }}</td>
+      </ng-container>
+      <ng-container matColumnDef="remainingAmount">
+        <th mat-header-cell *matHeaderCellDef class="header">Remaining Amount</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.remainingAmount }}</td>
+      </ng-container>
+      <ng-container matColumnDef="dueDate">
+        <th mat-header-cell *matHeaderCellDef class="header">Due Date</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.dueDate | date: 'dd/MM/yyyy' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="pay">
+        <th mat-header-cell *matHeaderCellDef class="header">Pay</th>
+        <td mat-cell *matCellDef="let transaction">
+          <mat-checkbox (change)="updatePaidAmount(transaction)" [(ngModel)]="transaction.payCheckbox"></mat-checkbox>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let document; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  <br><br>
+
+  <div *ngIf="selectedIncomeType === 'client'">
+    <div *ngIf="dataSource.data.length === 0 && form.value.clientId !== ''" style="margin-top: -40px;">
+      <h5 class="no-data">
+        <mat-icon class="error-icon mat-icon-round mat-icon-outlined"
+          style="color: #5757f3; margin-bottom: -5px;">error</mat-icon>
+        The client has no unpaid documents.
+      </h5>
+    </div>
+    <div *ngIf="form.value.clientId === ''" style="margin-top: -40px;">
+      <h5 class="no-data">
+        <mat-icon class="error-icon mat-icon-round mat-icon-outlined"
+          style="color: #5757f3; margin-bottom: -5px;">error</mat-icon>
+        Please select a client.
+      </h5>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onCreateIncomeTransactionSubmit()">
+    <div class="row">
+      <div class="col-2">
+
+        <mat-form-field>
+          <input matInput type="number" placeholder="Amount" formControlName="amount" required>
+          <mat-error *ngIf="form.get('amount')?.hasError('invalidAmount')">Invalid amount. Please enter a valid
+            amount.</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-form-field>
+          <mat-label>Choose</mat-label>
+          <mat-select required formControlName="creditAccount">
+            <ng-container>
+              <mat-option *ngFor="let account of generalChartOfAccountsForReceivePayment" [value]="account.accountCode">
+                <b>{{ account.accountCode }}</b> {{ account.accountDescription }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+        <h6>Choose where you want to receive the payment</h6>
+      </div>
+      <div class="col">
+        <div class="col">
+          <div class="col" *ngIf="!selectedTransaction">
+            <mat-checkbox [(ngModel)]="payLater" formControlName="payLater" (change)="onPayLaterChange()">Pay
+              Later</mat-checkbox>
+          </div>
+          <div class="col">
+            <mat-checkbox [(ngModel)]="isPartialPayment" formControlName="isPartialPayment"
+              (change)="onPartialPaymentChange()">Partial pay</mat-checkbox>
+          </div>
+
+        </div>
+
+        <div class="row" *ngIf="isPartialPayment">
+          <div class="col">
+            <mat-form-field>
+              <input matInput type="number" placeholder="Paid Amount" formControlName="paidAmount">
+              <mat-error
+                *ngIf="form.get('paidAmount')?.invalid || form.get('paidAmount')?.value > form.get('amount')?.value"></mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <mat-form-field style="width: 400px;">
+          <textarea matInput placeholder="Details" formControlName="description" required></textarea>
+        </mat-form-field>
+      </div>
 
 
+    </div><br>
+
+    <button type="submit">Receive payment</button>
+  </form>
 
 
-
-
-
-    
 </div>
+
+
+<div *ngIf="isAddClientDialogOpen" class="add-client-dialog">
+  <div class="centered">
+    <form [formGroup]="addClientForm" (ngSubmit)="onAddClientSubmit()">
+      <div class="row">
+        <div class="col" >
+          <mat-form-field>
+            <input matInput type="text" placeholder="Client Name" formControlName="clientName" required>
+          </mat-form-field>
+        </div>
+        <div class="col input">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Fiscal Code" formControlName="fiscalCode" required>
+          </mat-form-field>
+        </div>
+     
+     
+        <div class="col input">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Address" formControlName="address" required>
+          </mat-form-field>
+        </div>
+        <div class="col input">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Bank Account" formControlName="bankAccount" required>
+          </mat-form-field>
+        </div>
+    
+        <div class="col">
+          <mat-dialog-actions>
+            <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;" type="submit">Add Client</button>
+            <button mat-button mat-dialog-close (click)="closeAddClientDialog()">Cancel</button>
+          </mat-dialog-actions>
+        </div>
+       
+    </div>
+    </form>
+  </div>

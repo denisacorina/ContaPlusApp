@@ -45,7 +45,6 @@ namespace ContaPlusAPI.Repositories
         public async Task<User> GetUserById(Guid userId)
         {
             return await _context.Users
-            
               .FirstOrDefaultAsync(u => u.UserId == userId);
         }
 

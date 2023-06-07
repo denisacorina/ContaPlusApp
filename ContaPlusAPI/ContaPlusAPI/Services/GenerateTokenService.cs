@@ -26,6 +26,7 @@ namespace ContaPlusAPI.Services
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.Name,user.UserId.ToString()),
+                
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt:Key").Value));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);

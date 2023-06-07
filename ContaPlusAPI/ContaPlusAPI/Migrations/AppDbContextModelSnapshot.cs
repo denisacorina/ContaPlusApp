@@ -4956,7 +4956,7 @@ namespace ContaPlusAPI.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")

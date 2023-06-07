@@ -2,6 +2,7 @@
 using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
 using ContaPlusAPI.Interfaces.IService;
 using ContaPlusAPI.Models.AccountingModule;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContaPlusAPI.Repositories.AccountingRepository
 {
@@ -31,5 +32,16 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
             _context.Documents.Add(goodsReceiptNote);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<ICollection<Document>> GetClientUnpaidInvoices(int clientId)
+        {
+            return await _context.Documents
+                .Include(d => d.Transaction)
+                .Where(d => d.Transaction.Client.ClientId == clientId
+                            && d.DocumentType == DocumentType.Invoice
+                            && d.Transaction.RemainingAmount > 0)
+                .ToListAsync();
+        }
+
     }
 }

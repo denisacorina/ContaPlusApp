@@ -59,6 +59,12 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
         {
             return await _context.Clients.FirstOrDefaultAsync(c => c.ClientId == clientId);
         }
+        public async Task<Client> GetClientByName(string clientName)
+        {
+            return await _context.Clients.FirstOrDefaultAsync(c => c.ClientName == clientName);
+        }
+
+
 
         public async Task<ICollection<Supplier>> GetAllSuppliersForCompany(Guid companyId)
         {
@@ -75,6 +81,11 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
         public async Task<Supplier> GetSupplierById(int supplierId)
         {
             return await _context.Suppliers.FirstOrDefaultAsync(s => s.SupplierId == supplierId);
+        }     
+        
+        public async Task<Supplier> GetSupplierByName(string supplierName)
+        {
+            return await _context.Suppliers.FirstOrDefaultAsync(s => s.SupplierName == supplierName);
         }
 
         public async Task UpdateClientForCompany(Client client, Guid companyId)

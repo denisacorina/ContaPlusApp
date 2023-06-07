@@ -3,8 +3,8 @@
     <app-top-nav-bar></app-top-nav-bar>
 
 <h3 class="mb-4 col" style="font-weight: 700; color: #525252;">Income Transactions</h3>
- <button class="createTransaction" type="button" style="margin-left: 15px;" (click)="openCreateIncomeTransactionDialog()">Create New Transaction</button>
-
+ <a href="/income/addIncomeTransaction"><button class="createTransaction" type="button" style="margin-left: 15px;" (click)="openCreateIncomeTransactionDialog()">Create New Transaction</button>
+</a>
 <div class="transactions" style="font-size: 14px; margin-top: 30px;">
   <div>
 
@@ -14,19 +14,6 @@
         <input matInput placeholder="Search" (input)="applyFilter($event)">
       </mat-form-field>
       
-      <!-- <mat-form-field>
-        <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [rangePicker]="picker">
-          <input [(ngModel)]="startDate" matStartDate placeholder="Start date">
-          <input [(ngModel)]="endDate" matEndDate placeholder="End date">
-        </mat-date-range-input>
-        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-      </mat-form-field> -->
-
-          
-
   </div>
   <table mat-table [dataSource]="dataSource" matSort matSortDirection="desc">
    

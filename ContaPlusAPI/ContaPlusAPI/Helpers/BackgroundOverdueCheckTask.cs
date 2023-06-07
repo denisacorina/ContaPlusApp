@@ -1,5 +1,6 @@
 ﻿using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
 using ContaPlusAPI.Models.AccountingModule;
+using ContaPlusAPI.Services.InventoryModuleService;
 
 namespace ContaPlusAPI.Helpers
 {
@@ -7,10 +8,12 @@ namespace ContaPlusAPI.Helpers
     {
         private readonly IServiceProvider _serviceProvider;
         private Timer _timer;
+        private readonly ILogger<BackgroundOverdueCheckTask> _logger;
 
-        public BackgroundOverdueCheckTask(IServiceProvider serviceProvider)
+        public BackgroundOverdueCheckTask(IServiceProvider serviceProvider, ILogger<BackgroundOverdueCheckTask> logger)
         {
             _serviceProvider = serviceProvider;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -21,6 +24,7 @@ namespace ContaPlusAPI.Helpers
                 null,
                 TimeSpan.Zero,
                 TimeSpan.FromHours(24));
+            _logger.LogInformation("Task Executed", DateTime.UtcNow.ToLongTimeString());
         }
 
         private async Task CheckOverdueTransactions(CancellationToken cancellationToken)

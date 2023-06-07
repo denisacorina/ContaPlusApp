@@ -1,0 +1,56 @@
+.account-description {
+   text-align: right;
+  }
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  th {
+    background-color:  #5757f3;
+
+    color: white;
+    text-align: left;
+    
+    padding: 8px;
+
+    font-weight: 200;
+  }
+  
+
+  td {
+    padding: 8px;
+  }
+  
+
+  button {
+    margin-top: 5px;
+    font-size: 16px;
+    padding: 10px 60px;
+    background-color: #5757f3;
+    border: none;
+    color: white;
+  }
+
+  .totalAmounts {
+    font-weight: 700;
+    text-align: right;
+    font-size: 16px;
+    margin-right: 50px;
+    margin-top: -20px;
+  }
+
+  .amount {
+    font-size: 30px;
+    font-weight: 800;
+    color: #5757f3;
+  }
+
+  .submitSaleForm {
+    margin-top: 50px;
+    padding: 10px 100px;
+  }

@@ -25,7 +25,7 @@ export class CompanyService {
     return this.http.get<any[]>(`${this.baseCompanyUrl}/getCompaniesForCurrentUser`,{ params: { userId } });
   }
 
-  getCompanyById(companyId: string): Observable<any[]> {
+  getCompanyById(companyId: string): Observable<any> {
     return this.http.get<any>(`${this.baseCompanyUrl}/getCompanyById`,{ params: { companyId } });
   }
 

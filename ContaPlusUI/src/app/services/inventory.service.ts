@@ -39,5 +39,9 @@ export class InventoryService {
     return this.http.delete<any>(url);
   }
 
+  getGeneralChartOfAccountsList(): Observable<any[]> {
+    const url = `${this.baseInventoryUrl}/getGeneralChartOfAccountsList`;
+    return this.http.get<any[]>(url);
+  }
   
 }

@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
   isEarningDropdownOpen: boolean = false;
   isExpenseDropdownOpen: boolean = false;
 
+
   totalClients: number = 0;
   clients: [] = [];
   client!: any;
@@ -123,95 +124,158 @@ export class DashboardComponent implements OnInit {
     this.isExpenseDropdownOpen = false;
   }
   barChart() {
-    var options = {
-      chart: {
-        type: 'bar',
-        toolbar: {
-          show: false
-        },
-        animations: {
-          enabled: true
-        },
-        dropShadow: {
-          enabled: true,
-          blur: 1,
-          opacity: 0.6
-        },
-        sparkline: {
-          enabled: false
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+    if (this.companyId) {
+      this.transactionService.getIncomeTransactions(this.companyId).subscribe(
+        (incomeTransactions) => {
+          const paidAmountByMonth = new Array<number>(12).fill(0);
+          for (const transaction of incomeTransactions) {
+            const transactionDate = new Date(transaction.transactionDate);
+            const monthIndex = transactionDate.getMonth();
+            const paidAmount = transaction.paidAmount;
+    
+            paidAmountByMonth[monthIndex] += paidAmount;
+          }
+          if (this.companyId) 
+          this.transactionService.getExpenseTransactions(this.companyId).subscribe(
+            (expenseTransactions) => {
+              const expensePaidAmountByMonth = new Array<number>(12).fill(0);
+              for (const transaction of expenseTransactions) {
+                const transactionDate = new Date(transaction.transactionDate);
+                const monthIndex = transactionDate.getMonth();
+                const paidAmount = transaction.paidAmount;
+    
+                expensePaidAmountByMonth[monthIndex] += paidAmount;
+              }
+    
+              var options = {
+                chart: {
+                  type: 'bar',
+                  toolbar: {
+                    show: false
+                  },
+                  animations: {
+                    enabled: true
+                  },
+                  dropShadow: {
+                    enabled: true,
+                    blur: 1,
+                    opacity: 0.6
+                  },
+                  sparkline: {
+                    enabled: false
+                  }
+                },
+                series: [
+                  {
+                    name: 'Expenses',
+                    data: expensePaidAmountByMonth,
+                  },
+                  {
+                    name: 'Incomes',
+                    data: paidAmountByMonth,
+                  }
+                ],
+                xaxis: {
+                  categories: months
+                },
+                colors: ['rgba(000, 000, 000, 0.700)', 'rgba(87, 87, 243, 0.600)'],
+                dataLabels: {
+                  enabled: false
+                }
+              };
+
+              var chart = new ApexCharts(document.querySelector("#chart"), options);
+              chart.render();
+            }
+          );
         }
-      },
-      series: [{
-        name: 'Expenses',
-        data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
-      },
-      {
-        name: 'Sales',
-        data: [3, 40, 45, 5, 49, 60, 7, 91, 15],
-      }],
-      xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-      },
-      colors: ['rgba(000, 000, 000, 0.700)', 'rgba(87, 87, 243, 0.600)'],
-      dataLabels: {
-        enabled: false
-      }
-    };
-
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-
-    chart.render();
+      );
+    }
   }
+  
 
   chart() {
-    var myChart = new Chart("myChart", {
-      type: 'line',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-
-          label: 'Expenses',
-          data: [19, 12, 5, 3, 1, 6],
-          backgroundColor: 'rgba(000, 000, 000, 0.730)',
-          borderColor: "#000",
-          borderWidth: 2,
-          fill: true,
-          tension: 0.4
-        },
-        {
-          label: 'Revenues',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: 'rgba(87, 87, 243, 0.675)',
-          borderColor: "#5757f3",
-          borderWidth: 2,
-          fill: true,
-          tension: 0.4
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+    if (this.companyId) {
+      this.transactionService.getIncomeTransactions(this.companyId).subscribe(
+        (incomeTransactions) => {
+          const paidAmountByMonth = new Array<number>(12).fill(0);
+          for (const transaction of incomeTransactions) {
+            const transactionDate = new Date(transaction.transactionDate);
+            const monthIndex = transactionDate.getMonth();
+            const paidAmount = transaction.paidAmount;
+    
+            paidAmountByMonth[monthIndex] += paidAmount;
           }
-        },
-        plugins: {
-          legend: {
-            position: 'bottom'
-          },
-          tooltip: {
-            intersect: false
-          }
-        },
-        elements: {
-          line: {
-            tension: 0.4
-          }
+    if(this.companyId)
+          this.transactionService.getExpenseTransactions(this.companyId).subscribe(
+            (expenseTransactions) => {
+              const expensePaidAmountByMonth = new Array<number>(12).fill(0);
+              for (const transaction of expenseTransactions) {
+                const transactionDate = new Date(transaction.transactionDate);
+                const monthIndex = transactionDate.getMonth();
+                const paidAmount = transaction.paidAmount;
+    
+                expensePaidAmountByMonth[monthIndex] += paidAmount;
+              }
+    
+              var myChart = new Chart("myChart", {
+                type: 'line',
+                data: {
+                  labels: months,
+                  datasets: [
+                    {
+                      label: 'Expenses',
+                      data: expensePaidAmountByMonth,
+                      backgroundColor: 'rgba(000, 000, 000, 0.730)',
+                      borderColor: "#000",
+                      borderWidth: 2,
+                      fill: true,
+                      tension: 0.4
+                    },
+                    {
+                      label: 'Incomes',
+                      data: paidAmountByMonth,
+                      backgroundColor: 'rgba(87, 87, 243, 0.675)',
+                      borderColor: "#5757f3",
+                      borderWidth: 2,
+                      fill: true,
+                      tension: 0.4
+                    }
+                  ]
+                },
+                options: {
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  },
+                  plugins: {
+                    legend: {
+                      position: 'bottom'
+                    },
+                    tooltip: {
+                      intersect: false
+                    }
+                  },
+                  elements: {
+                    line: {
+                      tension: 0.4
+                    }
+                  }
+                }
+              });
+            }
+          );
         }
-      }
-
-    });
+      );
+    }
   }
-
+  
+  
 
   updateCompany() {
     this.updateCompanyForm = new FormGroup({
@@ -238,29 +302,24 @@ export class DashboardComponent implements OnInit {
   }
 
   getClients() {
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    if (companyId) {
-      this.clientService.getClients(companyId).subscribe(
+      this.clientService.getClients().subscribe(
         (response: any[]) => {
           this.client = response;
           this.totalClients = this.client.length;
           console.log(this.totalClients)
         }
       )
-    }
+    
   }
 
   getSuppliers() {
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    if (companyId) {
-      this.supplierService.getSuppliers(companyId).subscribe(
+      this.supplierService.getSuppliers().subscribe(
         (response: any[]) => {
           this.supplier = response;
           this.totalSuppliers = this.supplier.length;
           console.log(this.totalSuppliers)
         }
-      )
-    }
+      )  
   }
 
   getIncomeTransactions() {

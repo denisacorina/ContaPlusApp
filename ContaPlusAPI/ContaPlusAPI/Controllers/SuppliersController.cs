@@ -26,6 +26,12 @@ namespace ContaPlusAPI.Controllers
             return supplier;
         }
 
+        [HttpGet("getSupplierByName")]
+        public async Task<Supplier> GetSupplierByName(string supplierName)
+        {
+            return await _clientSupplierService.GetSupplierByName(supplierName);
+        }
+
         [HttpPost("addSupplierForCompany")]
         public async Task AddSupplierForCompany(Supplier supplier, Guid companyId)
         {

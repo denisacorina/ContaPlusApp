@@ -1,0 +1,143 @@
+<app-side-bar></app-side-bar>
+<div id="main">
+    <app-top-nav-bar></app-top-nav-bar>
+
+    <h3 class="col" style="font-weight: 700; color: #525252;">Register Purchase Transaction</h3><br>
+
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+        <div class="row">
+            <div class="col">
+                <mat-form-field>
+                    <mat-label>Supplier</mat-label>
+                    <mat-select required formControlName="supplierId">
+                        <mat-option *ngFor="let supplier of suppliers" [value]="supplier.supplierId">
+                            {{ supplier.supplierName }}, {{ supplier.fiscalCode }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col" style="margin-right: 40px;">
+                <mat-form-field style="width: 210px;">
+                    <mat-label>Transaction Date</mat-label>
+                    <input matInput [matDatepicker]="transactionDatePicker" placeholder="Transaction Date"
+                        formControlName="transactionDate" required>
+                    <mat-datepicker-toggle matSuffix [for]="transactionDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #transactionDatePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field style="width: 210px;">
+                    <mat-label>Due Date</mat-label>
+                    <input matInput [matDatepicker]="dueDatePicker" placeholder="Due Date" formControlName="dueDate"
+                        required>
+                    <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #dueDatePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+
+            <div class="col">
+                <mat-form-field>
+                    <mat-label>Series</mat-label>
+                    <input matInput type="text" placeholder="Series" formControlName="documentSeries" required>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field>
+                    <mat-label>Number</mat-label>
+                    <input matInput type="text" placeholder="Number" formControlName="documentNumber" required>
+                </mat-form-field>
+            </div>
+        </div><br><br><br>
+
+
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nr</th>
+                        <th>Name of the product</th>
+                        <th>Product Type</th>
+                        <th>Quantity</th>
+                        <th>Bought price</th>
+                        <th>Selling price</th>
+                        <th>Total without TVA</th>
+                        <th>TVA</th>
+                        <th>Total with TVA</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of addedProducts; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ product.productName }}</td>
+                        <td>{{ product.accountCode }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.boughtPrice }}</td>
+                        <td>{{ product.sellingPrice }}</td>
+                        <td>{{ product.totalWithoutTva }}</td>
+                        <td>{{ product.tva }}</td>
+                        <td>{{ product.totalWithTva }}</td>
+                        <td>{{ product.description }}</td>
+                        <td><a (click)="removeProduct(i)" style="color: #5757f3; font-size: 16px;"><i class="material-icons">delete</i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <div class="row mt-4">
+                <div class="col"  style="margin-right: 100px;">
+                    <mat-form-field>
+                        <input matInput formControlName="productName" placeholder="Product Name">
+                    </mat-form-field>
+                </div>
+                <div class="col" style="margin-right: 150px;">
+                    
+                    <mat-form-field style="width: 290px;" >
+                        <mat-label>Product Type</mat-label>
+                        <mat-select formControlName="selectedAccount">
+                            <mat-option *ngFor="let account of accountCodes" [value]="account.accountCode">
+                                {{ account.accountCode}} - {{ account.accountDescription }}
+                                <!-- <span *ngIf="!product.isService">, {{ product.quantity }}</span>
+                                <span style="margin-left: 30px; font-size: 10px;">{{
+                                    product.chartOfAccountsCode.accountDescription }}</span> -->
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field style="width: 100px;">
+                        <input matInput formControlName="quantity" placeholder="Quantity">
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field style="width: 150px;">
+                        <input matInput formControlName="boughtPrice" placeholder="Bought Price">
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field style="width: 150px;">
+                        <input matInput formControlName="sellingPrice" placeholder="Selling Price">
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field>
+                        <input matInput formControlName="description" placeholder="Description">
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <button type="button" style="width: 30px;"  (click)="addProduct()">Add</button>
+                </div>
+            </div>
+
+
+            <button class="submitSaleForm" type="submit">Submit</button>
+        </div>
+    </form>
+    <div class="totalAmounts" *ngIf="addedProducts.length > 0">
+        <div>Total without TVA: <span class="amount"> ${{ totalAmountWithoutTva ? totalAmountWithoutTva : 0 }}</span></div>
+        <div>Total TVA: <span class="amount"> ${{ totalAmountTva ? totalAmountTva : 0 }}</span></div>
+        <div>Total with TVA: <span class="amount"> ${{ totalAmountWithTva ? totalAmountWithTva : 0 }}</span></div>
+    </div>
+
+</div>

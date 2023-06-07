@@ -124,12 +124,6 @@ mat-dialog-actions {
 
 }
 
-.mat-mdc-checkbox.mat-accent {
-    --mdc-checkbox-selected-focus-icon-color: #4f4feb !important;
-    --mdc-checkbox-selected-hover-icon-color: #4f4feb !important;
-    --mdc-checkbox-selected-icon-color: #4f4feb !important;
-    --mdc-checkbox-selected-pressed-icon-color: #4f4feb !important;
-}
 
 .centered {
     position: absolute;

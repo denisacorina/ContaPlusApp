@@ -22,10 +22,11 @@
     </a>
     <div class="dropdown-container" *ngIf="dropdownIncomeVisible" (mouseleave)="toggleDropdownIncome()">
       <a [routerLink]="['/income/addIncomeTransaction']" [class.active]="isActive('/income/addIncomeTransaction')">Add Transaction</a>
+      <a [routerLink]="['/income/createSale']" [class.active]="isActive('/income/createSale')">Sale Transaction</a>
       <a [routerLink]="['/income/allIncomes']" [class.active]="isActive('/income/allIncomes')">All Incomes</a>
     </div>
 
-    <a (mouseenter)="toggleDropdownExpense()">
+    <a (mouseenter)="toggleDropdownExpense()" [class.active]="isActive('/expense')">
       <span class="material-icons">
         output
       </span>
@@ -37,8 +38,9 @@
 
     </a>
     <div class="dropdown-container" *ngIf="dropdownExpenseVisible" (mouseleave)="toggleDropdownExpense()">
-      <a href="income">Add Transaction</a> 
-      <a href="income">All Expenses </a>
+      <a [routerLink]="['/expense/addExpenseTransaction']" [class.active]="isActive('/expense/addExpenseTransaction')">Add Transaction</a> 
+      <a [routerLink]="['/expense/createPurchase']" [class.active]="isActive('/expense/createPurchase')">Purchase Transaction</a>
+      <a [routerLink]="['/expense/allExpenses']" [class.active]="isActive('/expense/allExpenses')">All Expenses </a>
     </div>
   </div>
   <a href="#">
@@ -60,7 +62,7 @@
     </span>
     <span class="sideBarText">Inventory</span>
   </a>
-  <a (mouseenter)="toggleDropdownCompany()" [class.active]="isActive('/company/clients') ">
+  <a (mouseenter)="toggleDropdownCompany()" [class.active]="isActive('/company/clients') || isActive('/company/suppliers')">
     <span class="material-icons">
       business
     </span>
@@ -72,9 +74,9 @@
 
   </a>
   <div class="dropdown-container" *ngIf="dropdownCompanyVisible" (mouseleave)="toggleDropdownCompany()">
-    <a href="#">Company Details</a>
+    <!-- <a href="#">Company Details</a> -->
     <a [routerLink]="['/company/clients']" [class.active]="isActive('/company/clients')">Clients</a>
     <a [routerLink]="['/company/suppliers']" [class.active]="isActive('/company/suppliers')">Suppliers</a>
-    <a href="#">Team</a>
+    <!-- <a href="#">Team</a> -->
   </div>
 </div>

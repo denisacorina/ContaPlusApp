@@ -64,7 +64,7 @@
                   </button>
                   <div class="dropdown-menu" [class.show]="isEarningDropdownOpen" aria-labelledby="dropdownMenuButton"
                     (mouseleave)="closeEarningDropdown()">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" [routerLink]="['/income/addIncomeTransaction']">
                       <div class="row">
 
                         <div class="col-2">
@@ -72,24 +72,24 @@
                             add
                           </span>
                         </div>
-                        <div class="col">Add New Earning </div>
+                        <div class="col">Add New Income </div>
                       </div>
                     </a>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" [routerLink]="['/income/allIncomes']">
                       <div class="row">
 
                         <div class="col-2"><span class="material-icons">
                             list_alt
                           </span></div>
                         <div class="col">
-                          Earnings List</div>
+                          Incomes List</div>
                       </div>
                     </a>
                   </div>
                 </div>
               </div>
             </div>
-            <h2>{{totalIncome}} lei</h2>
+            <h2>${{totalIncome}}</h2>
             <h6 style="color: #747474; margin-top: 5px;">Total Revenues</h6>
 
           </div>
@@ -134,7 +134,7 @@
                 </div>
               </div>
             </div>
-            <h2>{{totalExpense}} lei</h2>
+            <h2>${{totalExpense}}</h2>
             <h6 style="color: rgb(116, 116, 116); margin-top: 5px;">Total Expenses</h6>
 
           </div>
@@ -146,7 +146,7 @@
                 wallet
               </span>
 
-            <h2 style="color: rgb(255, 255, 255);">{{ company?.cashBalance !== null ? company?.cashBalance : 0 }}  lei</h2>
+            <h2 style="color: rgb(255, 255, 255);">${{ company?.cashBalance !== null ? company?.cashBalance : 0 }}</h2>
               <h6 style="color: rgb(239, 239, 239); margin-top: 5px;">Cash Balance</h6>
 
 

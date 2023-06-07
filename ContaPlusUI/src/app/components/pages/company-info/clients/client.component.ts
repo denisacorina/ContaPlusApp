@@ -35,8 +35,8 @@ export class ClientComponent implements OnInit {
 
   getClientsForCompany()
   {
-    if(this.companyId)
-    this.clientService.getClients(this.companyId).subscribe((response) =>
+ 
+    this.clientService.getClients().subscribe((response) =>
     {
       this.clients = response;
       this.dataSource = new MatTableDataSource(this.clients);
@@ -45,10 +45,10 @@ export class ClientComponent implements OnInit {
 
   addClient() {
     this.addClientForm = new FormGroup({
-      clientName: new FormControl('', [Validators.required]),
-      fiscalCode: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-      bankAccount: new FormControl('', [Validators.required])
+      clientName: new FormControl('', Validators.required),
+      fiscalCode: new FormControl('', Validators.required),
+      address: new FormControl('', Validators.required),
+      bankAccount: new FormControl('', Validators.required)
     });
   }
 
@@ -61,8 +61,7 @@ export class ClientComponent implements OnInit {
   }
 
   onAddClientSubmit(): void {
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    if (companyId) {
+
     const clientName = this.addClientForm.value.clientName;
     const fiscalCode = this.addClientForm.value.fiscalCode;
     const address = this.addClientForm.value.address;
@@ -75,13 +74,14 @@ export class ClientComponent implements OnInit {
       bankAccount
     };
 
-    this.clientService.addClientForCompany(model, companyId).subscribe(
+    if(this.addClientForm.valid)
+    this.clientService.addClientForCompany(model).subscribe(
       () => {
         window.location.reload();
       
       }
     );
-    }
+    
   }
 
 

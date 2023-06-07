@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -133,6 +134,8 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 builder.Services.AddHostedService<BackgroundOverdueCheckTask>();
+
+builder.Services.AddLogging();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
-﻿using ContaPlusAPI.Models.InventoryModule;
+﻿using ContaPlusAPI.Models.AccountingModule;
+using ContaPlusAPI.Models.InventoryModule;
 
 namespace ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface
 {
@@ -14,5 +15,7 @@ namespace ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface
 
 
         Task AddProductSale(ProductSale productSale);
+
+        Task<ICollection<GeneralChartOfAccounts>> GeneralChartOfAccountsList();
     }
 }

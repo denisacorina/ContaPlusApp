@@ -49,24 +49,24 @@
             <div class="centered">
               <form [formGroup]="addClientForm" (ngSubmit)="onAddClientSubmit()">
                 <div class="row">
-                  <div class="col">
+                  <div class="col" >
                     <mat-form-field>
                       <input matInput type="text" placeholder="Client Name" formControlName="clientName" required>
                     </mat-form-field>
                   </div>
-                  <div class="col">
+                  <div class="col input">
                     <mat-form-field>
                       <input matInput type="text" placeholder="Fiscal Code" formControlName="fiscalCode" required>
                     </mat-form-field>
                   </div>
                
                
-                  <div class="col">
+                  <div class="col input">
                     <mat-form-field>
                       <input matInput type="text" placeholder="Address" formControlName="address" required>
                     </mat-form-field>
                   </div>
-                  <div class="col">
+                  <div class="col input">
                     <mat-form-field>
                       <input matInput type="text" placeholder="Bank Account" formControlName="bankAccount" required>
                     </mat-form-field>

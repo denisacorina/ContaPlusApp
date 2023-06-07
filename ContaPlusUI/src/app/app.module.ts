@@ -39,6 +39,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ClientComponent } from './components/pages/company-info/clients/client.component';
 import { SupplierComponent } from './components/pages/company-info/suppliers/suppliers.component';
 import { InventoryComponent } from './components/pages/inventory/inventory.component';
+import { ExpenseComponent } from './components/accounting/expense/expense.component';
+import { CreateExpenseComponent } from './components/accounting/create-expense/create-expense.component';
+import { CreateSaleComponent } from './components/accounting/create-sale/create-sale.component';
+import { PreviewDocumentComponent } from './components/accounting/preview-document/preview-document.component';
+import { CreatePurchaseComponent } from './components/accounting/create-purchase/create-purchase.component';
+
 
 
 
@@ -62,7 +68,13 @@ export function tokenGetter()
     CreateIncomeComponent,
     ClientComponent,
     SupplierComponent,
-    InventoryComponent
+    InventoryComponent,
+    ExpenseComponent,
+    CreateExpenseComponent,
+    CreateSaleComponent,
+    PreviewDocumentComponent,
+    CreatePurchaseComponent,
+
     
 
   ],

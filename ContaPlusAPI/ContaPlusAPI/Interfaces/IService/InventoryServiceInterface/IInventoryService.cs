@@ -1,4 +1,5 @@
-﻿using ContaPlusAPI.Models.InventoryModule;
+﻿using ContaPlusAPI.Models.AccountingModule;
+using ContaPlusAPI.Models.InventoryModule;
 
 namespace ContaPlusAPI.Interfaces.IService.InventoryServiceInterface
 {
@@ -9,5 +10,7 @@ namespace ContaPlusAPI.Interfaces.IService.InventoryServiceInterface
         Task AddProductForCompany(Product product, Guid companyId);
         Task UpdateProductForCompany(Product product, Guid companyId);
         Task DeleteProductForCompany(int productId, Guid companyId);
+
+        Task<ICollection<GeneralChartOfAccounts>> GeneralChartOfAccountsList();
     }
 }

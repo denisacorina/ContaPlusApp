@@ -198,5 +198,21 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
         {
             return await _context.Transactions.ToListAsync();
         }
+
+        public async Task<ICollection<Transaction>> GetClientUnpaidTransactions(int clientId)
+        {
+            return await _context.Transactions
+                .Include(t => t.Documents)
+                .Where(t => t.RemainingAmount > 0 && t.Client.ClientId == clientId)
+                .ToListAsync();
+        }
+        
+        public async Task<ICollection<Transaction>> GetSupplierUnpaidTransactions(int supplierId)
+        {
+            return await _context.Transactions
+                .Include(t => t.Documents)
+                .Where(t => t.RemainingAmount > 0 && t.Supplier.SupplierId == supplierId)
+                .ToListAsync();
+        }
     }
 }

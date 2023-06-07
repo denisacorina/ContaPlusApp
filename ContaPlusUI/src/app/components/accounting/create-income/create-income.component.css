@@ -1,0 +1,25 @@
+.header {
+    background-color: #5757f3!important;
+    color: white;
+  }
+
+  button {
+    font-size: 16px;
+    background-color: #5757f3;
+    border: none;
+    color: white;
+  }
+
+
+  .add-client-dialog {
+    width: 50%;
+    height: 80%;
+    background-color: white;
+    z-index: 1000;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 70vmax rgba(0, 0, 0, .7), rgba(32, 32, 32, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+}

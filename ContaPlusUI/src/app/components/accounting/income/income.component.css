@@ -66,11 +66,10 @@
   
 
 .createTransaction {
-    font-size: 12px;
-    background-color: #5757f3;
-    border: none;
-    color: white;
-    border-radius: 10px;
+  font-size: 14px;
+  background-color: #5757f3;
+  border: none;
+  color: white;
   }
 
   .options {

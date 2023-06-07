@@ -1,12 +1,16 @@
 ﻿using ContaPlusAPI.Interfaces.IService.InventoryServiceInterface;
+using ContaPlusAPI.Models.AccountingModule;
 using ContaPlusAPI.Models.InventoryModule;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContaPlusAPI.Controllers
-{
+{   
+    [Authorize]
     public class ProductsController : BaseApiController
     {
+     
         private readonly IInventoryService _inventoryService;
 
         public ProductsController(IInventoryService inventoryService)
@@ -44,6 +48,12 @@ namespace ContaPlusAPI.Controllers
         public async Task DeleteProductForCompany(int productId, Guid companyId)
         {
             await _inventoryService.DeleteProductForCompany(productId, companyId);
+        }
+
+        [HttpGet("getGeneralChartOfAccountsList")]
+        public async Task<ICollection<GeneralChartOfAccounts>> GeneralChartOfAccountsList()
+        {
+            return await _inventoryService.GeneralChartOfAccountsList();
         }
     }
 }

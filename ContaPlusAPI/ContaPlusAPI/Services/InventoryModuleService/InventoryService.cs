@@ -1,5 +1,6 @@
 ﻿using ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface;
 using ContaPlusAPI.Interfaces.IService.InventoryServiceInterface;
+using ContaPlusAPI.Models.AccountingModule;
 using ContaPlusAPI.Models.InventoryModule;
 
 namespace ContaPlusAPI.Services.InventoryModuleService
@@ -35,6 +36,11 @@ namespace ContaPlusAPI.Services.InventoryModuleService
         public async Task UpdateProductForCompany(Product product, Guid companyId)
         {
             await _inventoryRepository.UpdateProductForCompany(product, companyId);
+        }
+
+        public async Task<ICollection<GeneralChartOfAccounts>> GeneralChartOfAccountsList()
+        {
+            return await _inventoryRepository.GeneralChartOfAccountsList();
         }
     }
 }

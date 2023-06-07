@@ -37,7 +37,7 @@ activeRoute!: string;
   getSuppliersForCompany()
   {
      if(this.companyId)
-     this.supplierService.getSuppliers(this.companyId).subscribe((response) =>
+     this.supplierService.getSuppliers().subscribe((response) =>
     {
       this.suppliers = response;
       this.dataSource = new MatTableDataSource(this.suppliers);
@@ -63,8 +63,7 @@ activeRoute!: string;
   }
 
   onAddSupplierSubmit(): void {
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    if (companyId) {
+  
     const supplierName = this.addSupplierForm.value.supplierName;
     const fiscalCode = this.addSupplierForm.value.fiscalCode;
     const address = this.addSupplierForm.value.address;
@@ -77,13 +76,14 @@ activeRoute!: string;
       bankAccount
     };
 
-    this.supplierService.addSupplierForCompany(model, companyId).subscribe(
+    if(this.addSupplierForm.valid)
+    this.supplierService.addSupplierForCompany(model).subscribe(
       () => {
         window.location.reload();
       
       }
     );
     }
-  }
+  
 
 }

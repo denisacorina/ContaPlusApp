@@ -12,6 +12,12 @@ import { CreateIncomeComponent } from './components/accounting/create-income/cre
 import { ClientComponent } from './components/pages/company-info/clients/client.component';
 import { SupplierComponent } from './components/pages/company-info/suppliers/suppliers.component';
 import { InventoryComponent } from './components/pages/inventory/inventory.component';
+import { ExpenseComponent } from './components/accounting/expense/expense.component';
+import { CreateExpenseComponent } from './components/accounting/create-expense/create-expense.component';
+import { CreateSaleComponent } from './components/accounting/create-sale/create-sale.component';
+import { PreviewDocumentComponent } from './components/accounting/preview-document/preview-document.component';
+import { CreatePurchaseComponent } from './components/accounting/create-purchase/create-purchase.component';
+
 
 export const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -24,9 +30,14 @@ export const routes: Routes = [
   {path: 'income', component: IncomeComponent},
   {path: 'income/addIncomeTransaction', component: CreateIncomeComponent},
   {path: 'income/allIncomes', component: IncomeComponent},
+  {path: 'income/createSale', component: CreateSaleComponent},
   {path: 'company/clients', component: ClientComponent},
   {path: 'company/suppliers', component: SupplierComponent},
   {path: 'inventory', component: InventoryComponent},
+  {path: 'expense/allExpenses', component: ExpenseComponent},
+  {path: 'expense/addExpenseTransaction', component: CreateExpenseComponent},
+  {path: 'expense/createPurchase', component: CreatePurchaseComponent},
+  {path: 'preview', component: PreviewDocumentComponent}
 
 ];
 

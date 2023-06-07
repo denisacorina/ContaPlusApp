@@ -33,14 +33,14 @@
   
       <tr mat-header-row *matHeaderRowDef="displayedSuppliersColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedSuppliersColumns;"></tr>
-  
+  <div *ngIf="suppliers.length === 0">
+    <h3 class="no-data">No suppliers</h3>
+  </div>
     </table>
   </div>
   
   
-  <div *ngIf="suppliers.length === 0">
-    <h3 class="no-data">No suppliers</h3>
-  </div>
+  
 
 
   <div *ngIf="isAddSupplierDialogOpen" class="add-client-dialog">

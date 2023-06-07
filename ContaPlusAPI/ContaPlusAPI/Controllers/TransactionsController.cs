@@ -32,7 +32,7 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("createIncomeTransaction")]
-        public async Task CreateIncomeTransaction([FromBody] Transaction model, [FromQuery] Guid companyId, int clientId)
+        public async Task CreateIncomeTransaction([FromBody] Transaction model, [FromQuery] Guid companyId, [FromQuery] int clientId)
         {
             await _transactionService.CreateIncomeTransaction(model, companyId, clientId);
         }
@@ -44,21 +44,21 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("createExpenseTransaction")]
-        public async Task CreateExpenseTransaction([FromBody] Transaction model, Guid companyId, int supplierId)
+        public async Task CreateExpenseTransaction([FromBody] Transaction model, [FromQuery] Guid companyId, [FromQuery] int supplierId)
         {
             await _transactionService.CreateExpenseTransaction(model, companyId, supplierId);
         }
 
         [HttpPost("createProductSaleTransaction")]
-        public async Task CreateProductSaleTransaction([FromBody] PurchaseSaleTransaction model, Guid companyId)
+        public async Task CreateProductSaleTransaction([FromBody] ProductSaleTransactionModel model, Guid companyId)
         {
-            await _transactionService.CreateProductSaleTransaction(model, companyId);
+            await _transactionService.CreateProductSaleTransaction(model.Transaction, companyId, model.ProductSaleItems);
         }
 
         [HttpPost("createProductPurchaseTransaction")]
-        public async Task CreateProductPurchaseTransaction([FromBody] PurchaseSaleTransaction model, Guid companyId)
+        public async Task CreateProductPurchaseTransaction([FromBody] ProductPurchaseTransactionModel model, Guid companyId)
         {
-            await _transactionService.CreateProductPurchaseTransaction(model, companyId);
+            await _transactionService.CreateProductPurchaseTransaction(model.Transaction, companyId, model.ProductPurchaseItems);
         }
 
         [HttpPut("updateTransaction")]
@@ -73,10 +73,16 @@ namespace ContaPlusAPI.Controllers
             await _transactionService.DeleteTransaction(transactionId, companyId);
         }
 
-        [HttpDelete("deletePartialPaymentTransaction")]
-        public async Task DeletePartialPaymentTransaction(int transactionId, Guid companyId)
+        [HttpGet("getClientUnpaidTransactions")]
+        public async Task<ICollection<Transaction>> GetClientUnpaidTransactions(int clientId)
         {
-            await _transactionService.DeletePartialPaymentTransaction(transactionId, companyId);
+            return await _transactionService.GetClientUnpaidTransactions(clientId);
+        }
+
+        [HttpGet("getSupplierUnpaidTransactions")]
+        public async Task<ICollection<Transaction>> GetSupplierUnpaidTransactions(int supplierId)
+        {
+            return await _transactionService.GetSupplierUnpaidTransactions(supplierId);
         }
     }
 }

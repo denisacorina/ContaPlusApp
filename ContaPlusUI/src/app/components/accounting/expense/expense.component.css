@@ -1,0 +1,121 @@
+.transactions {
+    width: auto;
+    box-shadow: 0 0px 20px 0 rgba(231, 231, 231, 0.638);
+    height: auto;
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+
+
+#paymentStatus {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;   
+    border-radius: 30px; 
+    margin-right: 5px;
+    font-size: 10px;
+  }
+  
+  
+  .unpaid {
+    background-color: rgb(223, 114, 204);
+    border-radius: 1px;
+    font-weight: bold;   
+    border-radius: 30px; 
+    font-size: 10px;
+    width: 20px;
+    text-align: center;
+    color: rgb(85, 26, 109);
+  }
+  
+  .partial {
+    background-color: rgb(232, 230, 118);
+    border-radius: 1px;
+    font-weight: bold;   
+    border-radius: 30px; 
+    font-size: 10px;
+    width: 20px;
+    text-align: center;
+    color: rgb(106, 122, 0);
+  }
+  
+  .paid {
+    background-color: rgb(133, 194, 113);
+    border-radius: 1px;
+    font-weight: bold;   
+    border-radius: 30px; 
+    font-size: 10px;
+    width: 20px;
+    text-align: center;
+    color: rgb(14, 77, 12);
+  }
+  
+  .overdue {
+    background-color: rgb(230, 117, 117);
+    border-radius: 1px;
+    font-weight: bold;   
+    border-radius: 30px; 
+    font-size: 10px;
+    width: 20px;
+    text-align: center;
+    color: rgb(156, 2, 2);
+  }
+  
+
+.createTransaction {
+    font-size: 12px;
+    background-color: #5757f3;
+    border: none;
+    color: white;
+    border-radius: 10px;
+  }
+
+  .options {
+    margin-left: 10px;
+  }
+
+  .create-income-transaction-dialog {
+    width: 50%;
+    height: 80%;
+    background-color: white;
+    padding: 70px 70px 0px 125px;
+    z-index: 1000;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 70vmax rgba(0, 0, 0, .7), rgba(32, 32, 32, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+    }
+    
+    
+    mat-form-field {
+      width: 230px;
+      height: 70px;
+      font-size: 12px;
+      margin-right: 20px;
+    }
+    
+    mat-dialog-actions {
+    
+      display: flex;
+      justify-content: center;
+    
+    }
+
+    #details {
+      width: 20px;
+      margin-left: 15px;
+    }
+
+    #edit {
+      width: 20px;
+    }
+
+    #delete {
+      width: 20px;
+      margin-left: 15px;
+    }

@@ -14,7 +14,7 @@ namespace ContaPlusAPI.Models.InventoryModule
         public string Description { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public bool IsService { get; set; }

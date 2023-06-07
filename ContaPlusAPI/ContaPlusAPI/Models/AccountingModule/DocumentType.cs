@@ -5,6 +5,7 @@
         Invoice, 
         CustomerReceipt,
         ConsumptionVoucher, // bon de consum
-        GoodsReceiptNote // nota de intrare receptie (NIR)
+        GoodsReceivedNote, // nota de intrare receptie (NIR)
+        GoodsDispatchNote // nota de iesire receptie (NIR)
     }
 }

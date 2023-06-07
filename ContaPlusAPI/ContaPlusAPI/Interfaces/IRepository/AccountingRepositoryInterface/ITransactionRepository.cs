@@ -19,5 +19,7 @@ namespace ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface
         Task DeletePartialPaymentTransaction(int transactionId, Guid companyId);
         Task UpdateCompanyChartOfAccountsBalance(CompanyChartOfAccounts account, Guid companyId);
         Task<Transaction> GetTransactionByDocumentNumberAndSeries(string documentNumber, string documentSeries);
+        Task<ICollection<Transaction>> GetClientUnpaidTransactions(int clientId);
+        Task<ICollection<Transaction>> GetSupplierUnpaidTransactions(int supplierId);
     }
 }

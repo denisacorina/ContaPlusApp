@@ -17,26 +17,30 @@ namespace ContaPlusAPI.Services.AccountingService
         private readonly ICompanyRepository _companyRepository;
         private readonly IClientSupplierRepository _clientSupplierRepository;
         private readonly IDocumentRepository _documentRepository;
+        private readonly ILogger<Transaction> _logger;
 
 
-        public TransactionService(ITransactionRepository transactionRepository, IInventoryRepository inventoryRepository, ICompanyRepository companyRepository, IClientSupplierRepository clientSupplierRepository, IDocumentRepository documentRepository)
+        public TransactionService(ITransactionRepository transactionRepository, IInventoryRepository inventoryRepository, ICompanyRepository companyRepository, IClientSupplierRepository clientSupplierRepository, IDocumentRepository documentRepository, ILogger<Transaction> logger)
         {
             _transactionRepository = transactionRepository;
             _inventoryRepository = inventoryRepository;
             _companyRepository = companyRepository;
             _clientSupplierRepository = clientSupplierRepository;
             _documentRepository = documentRepository;
+            _logger = logger;
         }
 
         public async Task CreateIncomeTransaction(Transaction model, Guid companyId, int clientId)
         {
+            _logger.LogInformation("Start creating income transaction.");
+
             var company = await _companyRepository.GetCompanyById(companyId);
             var client = await _clientSupplierRepository.GetClientById(clientId);
 
             var debitGeneralAccount = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(model.DebitAccount.AccountCode);
             var creditGeneralAccount = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(model.CreditAccount.AccountCode);
 
-
+            _logger.LogInformation("Create transaction.");
             var transaction = await CreateNewIncomeTransaction(model, debitGeneralAccount, creditGeneralAccount, company, TransactionType.Income, client);
 
             if (transaction.PaidAmount == 0)
@@ -44,43 +48,49 @@ namespace ContaPlusAPI.Services.AccountingService
 
             await _transactionRepository.AddTransaction(transaction);
 
+
+            if (transaction.TransactionType == TransactionType.Income)
+            {
+                _logger.LogInformation("Create invoice document for Income.");
+                var invoice = new Document
+                {
+                    DocumentType = DocumentType.Invoice,
+                    DocumentDate = DateTime.UtcNow,
+                    Transaction = transaction
+
+                };
+
+                await _documentRepository.CreateInvoice(invoice);
+            }
+
             if (client != null)
             {
-                if (transaction.TransactionType == TransactionType.Income)
+
+                if (transaction.PaidAmount != 0 || transaction.PaidAmount <= transaction.TransactionAmount)
                 {
-                    var invoice = new Document
+                    _logger.LogInformation("Create receipt document.");
+                    var receipt = new Document
                     {
-                        DocumentType = DocumentType.Invoice,
+                        DocumentType = DocumentType.CustomerReceipt,
                         DocumentDate = DateTime.UtcNow,
                         Transaction = transaction
-
                     };
 
-                    await _documentRepository.CreateInvoice(invoice);
-
-                    if (transaction.PaidAmount != 0 || transaction.PaidAmount <= transaction.TransactionAmount)
-                    {
-                        var receipt = new Document
-                        {
-                            DocumentType = DocumentType.CustomerReceipt,
-                            DocumentDate = DateTime.UtcNow,
-                            Transaction = transaction
-                        };
-
-                        await _documentRepository.CreateReceipt(receipt);
-                    }
+                    await _documentRepository.CreateReceipt(receipt);
                 }
             }
 
-
+            _logger.LogInformation("Updating the cash balance of the company.");
             company.CashBalance += model.PaidAmount;
 
+            _logger.LogInformation("Updating the debit and credit account.");
             await UpdateDebitAccountBalance(model.DebitAccount, -model.PaidAmount, model.TransactionType, company);
             await UpdateCreditAccountBalance(model.CreditAccount, model.PaidAmount, model.TransactionType, company);
         }
 
         public async Task CreateExpenseTransaction(Transaction model, Guid companyId, int supplierId)
         {
+            _logger.LogInformation("Start creating expense transaction.");
             var company = await _companyRepository.GetCompanyById(companyId);
 
             var supplier = await _clientSupplierRepository.GetSupplierById(supplierId);
@@ -95,11 +105,14 @@ namespace ContaPlusAPI.Services.AccountingService
             if (company.CashBalance >= model.PaidAmount)
             {
                 company.CashBalance -= model.PaidAmount;
+
+                _logger.LogInformation("Updating the cash balance of the company.");
                 await UpdateDebitAccountBalance(model.DebitAccount, model.PaidAmount, model.TransactionType, company);
                 await UpdateCreditAccountBalance(model.CreditAccount, -model.PaidAmount, model.TransactionType, company);
             }
             else
                 throw new Exception("Insufficient cash balance.");
+                _logger.LogWarning("Insufficient cash balance.");
         }
 
         private async Task<Transaction> CreateNewIncomeTransaction(Transaction model, GeneralChartOfAccounts debitGeneralAccount, GeneralChartOfAccounts creditGeneralAccount, Company company, TransactionType transactionType, Client client)
@@ -109,13 +122,14 @@ namespace ContaPlusAPI.Services.AccountingService
             if (client != null)
                 clientExists = true;
 
+            _logger.LogInformation("Create new income transaction.");
             var transaction = new Transaction
             {
                 DocumentNumber = model.DocumentNumber,
                 DocumentSeries = model.DocumentSeries,
                 TransactionAmount = model.TransactionAmount,
                 PaidAmount = model.PaidAmount,
-                TransactionDate = DateTime.UtcNow,
+                TransactionDate = model.TransactionDate,
                 DueDate = model.DueDate,
                 TransactionType = transactionType,
                 Description = model.Description,
@@ -123,10 +137,11 @@ namespace ContaPlusAPI.Services.AccountingService
                 CreditAccount = creditGeneralAccount,
                 Company = company,
                 Client = clientExists ? client : null
-            };       
+            };
+            _logger.LogInformation($"New income transaction created {transaction}.");
 
             await VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
-      
+
             return transaction;
         }
 
@@ -137,6 +152,7 @@ namespace ContaPlusAPI.Services.AccountingService
             if (supplier != null)
                 supplierExists = true;
 
+            _logger.LogInformation("Create new expense transaction.");
             var transaction = new Transaction
             {
                 DocumentNumber = model.DocumentNumber,
@@ -152,6 +168,7 @@ namespace ContaPlusAPI.Services.AccountingService
                 Company = company,
                 Supplier = supplierExists ? supplier : null
             };
+            _logger.LogInformation($"New expense transaction created {transaction}.");
 
             await VerifyPaymentStatus(model.TransactionAmount, model.PaidAmount, transaction);
 
@@ -167,12 +184,15 @@ namespace ContaPlusAPI.Services.AccountingService
 
             if (existingAccountCompany != null)
             {
-
+                _logger.LogInformation("Updating company current balance.");
                 existingAccountCompany.CurrentBalance += currentBalance;
+
+                _logger.LogInformation("Updating company chart of accounts balance.");
                 await _transactionRepository.UpdateCompanyChartOfAccountsBalance(existingAccountCompany, company.CompanyId);
             }
             else
             {
+                _logger.LogInformation("Adding new chart of accounts code in company chart of accounts.");
                 var newAccountCompany = new CompanyChartOfAccounts
                 {
                     AccountCode = account.AccountCode,
@@ -194,11 +214,15 @@ namespace ContaPlusAPI.Services.AccountingService
 
             if (existingAccountCompany != null)
             {
+                _logger.LogInformation("Updating company current balance.");
                 existingAccountCompany.CurrentBalance += currentBalance;
+
+                _logger.LogInformation("Updating company chart of accounts balance.");
                 await _transactionRepository.UpdateCompanyChartOfAccountsBalance(existingAccountCompany, company.CompanyId);
             }
             else
             {
+                _logger.LogInformation("Adding new chart of accounts code in company chart of accounts.");
                 var newAccountCompany = new CompanyChartOfAccounts
                 {
                     AccountCode = account.AccountCode,
@@ -211,7 +235,7 @@ namespace ContaPlusAPI.Services.AccountingService
             }
         }
 
-        private async Task UpdateProductQuantity(int productId, int newQuantity, Guid companyId, Transaction transaction)
+        private async Task UpdateProductQuantity(int productId, int? newQuantity, Guid companyId, Transaction transaction)
         {
             var company = await _companyRepository.GetCompanyById(companyId);
             var product = await _inventoryRepository.GetProductByIdForCompany(productId, companyId);
@@ -220,48 +244,78 @@ namespace ContaPlusAPI.Services.AccountingService
             {
                 if (transaction.TransactionType == TransactionType.Purchase)
                 {
-                    product.Quantity += newQuantity;
+                    if (newQuantity.HasValue)
+                        product.Quantity += newQuantity.Value;
                 }
                 else if (transaction.TransactionType == TransactionType.Sale)
                 {
-                    if (product.Quantity < newQuantity)
+                    if (newQuantity.HasValue)
                     {
-                        throw new Exception("Quantity is not available.");
+                        _logger.LogInformation("Checking quantity.");
+                        if (product.Quantity < newQuantity.Value)
+                        {
+                            throw new Exception("Quantity is not available.");
+                        }
+                        if (!product.IsService)
+                            product.Quantity -= newQuantity.Value;
+
+                        _logger.LogInformation("Creating product sale.");
+                        var productSale = new ProductSale
+                        {
+                            Product = product,
+                            SoldQuantity = newQuantity.Value,
+                            SaleDate = DateTime.UtcNow,
+                            Transaction = transaction,
+                            Company = company
+                        };
+
+                        if (productSale.Company.TvaPayer)
+                            productSale.TvaFromSellingPrice = productSale.CalculateTvaFromSellingPrice();
+
+                        productSale.TotalPriceWithoutTva = productSale.CalculateTotalPriceWithoutTva();
+
+                        if(productSale.Company.TvaPayer)
+                            productSale.TotalPriceWithTva = productSale.CalculateTotalPriceWithTva();
+
+                        await _inventoryRepository.AddProductSale(productSale);
                     }
-
-                    product.Quantity -= newQuantity;
-
-                    var productSale = new ProductSale
+                    else
                     {
-                        Product = product,
-                        SoldQuantity = newQuantity,
-                        SaleDate = DateTime.UtcNow,
-                        Transaction = transaction,
-                        Company = company
-                    };
+                        if (product.Quantity == null)
+                        {
+                            _logger.LogInformation("Creating product sale.");
+                            var productSale = new ProductSale
+                            {
+                                Product = product,
+                                SoldQuantity = 1,
+                                TotalPriceWithoutTva = product.Price,
+                                SaleDate = DateTime.UtcNow,
+                                Transaction = transaction,
+                                Company = company
+                            };
 
-                    productSale.TvaFromSellingPrice = productSale.CalculateTvaFromSellingPrice();
-                    productSale.TotalPriceWithoutTva = productSale.CalculateTotalPriceWithoutTva();
-                    productSale.TotalPriceWithTva = productSale.CalculateTotalPriceWithTva();
 
-                    await _inventoryRepository.AddProductSale(productSale);
+                            if (productSale.Company.TvaPayer)
+                                productSale.TvaFromSellingPrice = productSale.CalculateTvaFromSellingPrice();
+
+                            if (productSale.Company.TvaPayer)
+                                productSale.TotalPriceWithTva = productSale.CalculateTotalPriceWithTva();
+
+                            await _inventoryRepository.AddProductSale(productSale);
+                        }
+                    }
                 }
 
+                _logger.LogInformation("Updating the product.");
                 await _inventoryRepository.UpdateProductForCompany(product, company.CompanyId);
             }
-            if (product == null && transaction.TransactionType == TransactionType.Purchase)
+            else if (transaction.TransactionType == TransactionType.Purchase)
             {
-                var newProduct = new Product
-                {
-                    ProductName = product.ProductName,
-                    Quantity = newQuantity
-                };
-
-                await _inventoryRepository.AddProductForCompany(newProduct, company.CompanyId);
+                throw new Exception("This type of transaction cannot be done here.");
             }
         }
 
-        public async Task CreateProductSaleTransaction(PurchaseSaleTransaction model, Guid companyId)
+        public async Task CreateProductSaleTransaction(PurchaseSaleTransaction model, Guid companyId, List<Product> productSaleItems)
         {
             var company = await _companyRepository.GetCompanyById(companyId);
 
@@ -276,11 +330,12 @@ namespace ContaPlusAPI.Services.AccountingService
                 DocumentSeries = model.DocumentSeries,
                 TransactionAmount = model.TransactionAmount,
                 PaidAmount = model.PaidAmount,
-                TransactionDate = DateTime.UtcNow,
+                TransactionDate = model.TransactionDate,
                 DueDate = model.DueDate,
                 TransactionType = TransactionType.Sale,
                 DebitAccount = debitGeneralAccount,
                 CreditAccount = creditGeneralAccount,
+                Description = model.Description,
                 Client = client,
                 Company = company
             };
@@ -300,7 +355,7 @@ namespace ContaPlusAPI.Services.AccountingService
 
                 await _documentRepository.CreateInvoice(invoice);
 
-                if (transaction.PaidAmount != 0 || transaction.PaidAmount <= transaction.TransactionAmount)
+                if (transaction.PaidAmount != 0)
                 {
                     var receipt = new Document
                     {
@@ -316,24 +371,32 @@ namespace ContaPlusAPI.Services.AccountingService
             await UpdateDebitAccountBalance(model.DebitAccount, -model.PaidAmount, transaction.TransactionType, company);
             await UpdateCreditAccountBalance(model.CreditAccount, model.PaidAmount, transaction.TransactionType, company);
 
-            await UpdateProductQuantity(model.Product.ProductId, model.Product.Quantity, companyId, transaction);
+            foreach (var product in productSaleItems)
+            {
+                 await UpdateProductQuantity(product.ProductId, product.Quantity, companyId, transaction);
+            }
         }
 
-        public async Task CreateProductPurchaseTransaction(PurchaseSaleTransaction model, Guid companyId)
+        public async Task CreateProductPurchaseTransaction(PurchaseSaleTransaction model, Guid companyId, List<Product> productPurchaseItems)
         {
             var company = await _companyRepository.GetCompanyById(companyId);
             var supplier = await _clientSupplierRepository.GetSupplierByIdForCompany(model.Supplier.SupplierId, company.CompanyId);
+
+            var debitGeneralAccount = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(model.DebitAccount.AccountCode);
+            var creditGeneralAccount = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(model.CreditAccount.AccountCode);
+
+
             var transaction = new Transaction
             {
                 DocumentNumber = model.DocumentNumber,
                 DocumentSeries = model.DocumentSeries,
                 TransactionAmount = model.TransactionAmount,
                 PaidAmount = model.PaidAmount,
-                TransactionDate = DateTime.UtcNow,
+                TransactionDate = model.TransactionDate,
                 DueDate = model.DueDate,
                 TransactionType = TransactionType.Purchase,
-                DebitAccount = model.DebitAccount,
-                CreditAccount = model.CreditAccount,
+                DebitAccount = debitGeneralAccount,
+                CreditAccount = creditGeneralAccount,
                 Supplier = supplier,
                 Company = company
             };
@@ -342,19 +405,36 @@ namespace ContaPlusAPI.Services.AccountingService
 
             await _transactionRepository.AddTransaction(transaction);
 
-            await UpdateDebitAccountBalance(model.DebitAccount, model.PaidAmount, transaction.TransactionType, model.Company);
-            await UpdateCreditAccountBalance(model.CreditAccount, -model.PaidAmount, transaction.TransactionType, model.Company);
+            await UpdateDebitAccountBalance(model.DebitAccount, model.PaidAmount, transaction.TransactionType, company);
+            await UpdateCreditAccountBalance(model.CreditAccount, -model.PaidAmount, transaction.TransactionType, company);
 
-            await UpdateProductQuantity(model.Product.ProductId, model.Product.Quantity, model.Company.CompanyId, transaction);
-
-            var goodsReceiptNote = new Document
+            foreach (var product in productPurchaseItems)
             {
-                DocumentType = DocumentType.GoodsReceiptNote,
+                var chartOfAccountsCode = await _transactionRepository.GetGeneralChartOfAccountsByAccountCode(product.ChartOfAccountsCode.AccountCode);
+
+                var newProduct = new Product
+                {
+                    ProductName = product.ProductName,
+                    Quantity = product.Quantity,
+                    Price = product.Price,
+                    Company = company,
+                    CreatedAt = DateTime.UtcNow,
+                    IsService = false,
+                    ChartOfAccountsCode = chartOfAccountsCode,
+                    Description = product.Description
+                };
+
+                await _inventoryRepository.AddProductForCompany(newProduct, company.CompanyId);
+            }
+
+            var goodsReceivedNote = new Document
+            {
+                DocumentType = DocumentType.GoodsReceivedNote,
                 DocumentDate = DateTime.UtcNow,
                 Transaction = transaction
             };
 
-            await _documentRepository.CreateGoodsReceiptNote(goodsReceiptNote);
+            await _documentRepository.CreateGoodsReceiptNote(goodsReceivedNote);
         }
 
         public async Task<ICollection<Transaction>> GetIncomeTransactions(Guid companyId)
@@ -432,6 +512,16 @@ namespace ContaPlusAPI.Services.AccountingService
 
             await _transactionRepository.UpdateTransaction(transaction);
             return transaction.PaymentStatus;
+        }
+
+        public async Task<ICollection<Transaction>> GetClientUnpaidTransactions(int clientId)
+        {
+            return await _transactionRepository.GetClientUnpaidTransactions(clientId);
+        }
+        
+        public async Task<ICollection<Transaction>> GetSupplierUnpaidTransactions(int supplierId)
+        {
+            return await _transactionRepository.GetSupplierUnpaidTransactions(supplierId);
         }
     }
 }

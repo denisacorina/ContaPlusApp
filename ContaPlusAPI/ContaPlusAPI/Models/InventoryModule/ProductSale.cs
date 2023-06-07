@@ -27,7 +27,7 @@ namespace ContaPlusAPI.Models.InventoryModule
 
         public decimal CalculateTvaFromSellingPrice()
         {
-            return Product.Company.TvaPayer ? (SellingPrice * 0.19m) : 0;
+            return CalculateTotalPriceWithoutTva() * 0.19m;
         }
 
         public decimal CalculateTotalPriceWithoutTva()
