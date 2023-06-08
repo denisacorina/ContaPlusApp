@@ -56,6 +56,12 @@ export class UserService {
     return this.http.get<any[]>(`${this.baseUserUrl}/getUsersAndRolesFromCompany?companyId=${companyId}`);
   }
 
+  addUserRoleToCompany(userId: string, roleId: number, companyId: string) {
+    const url = `${this.baseUserUrl}/addUserRoleToCompany`;
+    const body = { userId, roleId, companyId };
+    return this.http.post(url, body);
+  }
+
   public getLoggedInUserId(): string | null {
     const token = localStorage.getItem('accessToken');
     if (token) {

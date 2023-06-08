@@ -54,3 +54,31 @@ table {
     margin-top: 50px;
     padding: 10px 100px;
   }
+
+
+  
+  .add-client-dialog {
+    width: 50%;
+    height: 80%;
+    background-color: white;
+    z-index: 1000;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 70vmax rgba(0, 0, 0, .7), rgba(32, 32, 32, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+}
+
+.add-product-dialog {
+    width: 50%;
+    height: 80%;
+    background-color: white;
+    z-index: 1000;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 70vmax rgba(0, 0, 0, .7), rgba(32, 32, 32, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+}

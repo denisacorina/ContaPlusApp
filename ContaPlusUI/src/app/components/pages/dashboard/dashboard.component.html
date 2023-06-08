@@ -5,11 +5,11 @@
   <div class="custom-scrollbar scrollable">
     <div class="row">
       <h3 class="mb-4 col" style="font-weight: 700; color: #525252;">Dashboard</h3>
-      <div class="options-bar col">
+      <!-- <div class="options-bar col">
         <div class="option" (click)="toggleOption(0)">This Month</div>
         <div class="option" (click)="toggleOption(1)">This Week</div>
         <div class="option selected" (click)="toggleOption(2)" style="border-right: 0.5px solid #8e8e8e;">Today</div>
-      </div>
+      </div> -->
     </div>
 
     <div class="cards row" style="margin-left: 1px;">
@@ -108,7 +108,7 @@
                   </button>
                   <div class="dropdown-menu" [class.show]="isExpenseDropdownOpen" aria-labelledby="dropdownMenuButton"
                     (mouseleave)="closeExpenseDropdown()">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" [routerLink]="['/expense/addExpenseTransaction']">
                       <div class="row">
 
                         <div class="col-2">
@@ -119,7 +119,7 @@
                         <div class="col">Add New Expense </div>
                       </div>
                     </a>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" [routerLink]="['/expense/allExpenses']">
                       <div class="row">
 
                         <div class="col-2"><span class="material-icons">

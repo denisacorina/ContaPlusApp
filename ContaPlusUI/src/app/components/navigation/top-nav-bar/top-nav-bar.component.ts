@@ -17,7 +17,7 @@ export class TopNavBarComponent implements OnInit {
   userId: any;
   user: any;
   companies!: any;
-  selectedCompanyId!: string;
+  selectedCompanyId!: any;
   companyData: any;
   showCompanyDropdown: boolean = false;
   showCancelButton: boolean = false;
@@ -25,11 +25,14 @@ export class TopNavBarComponent implements OnInit {
   addCompanyForm!: FormGroup;
 
   isAddCompanyDialogOpen = false;
+  isChooseCompanyDialogOpen = false;
 
   emailExists!: any;
   fiscalCodeExists!: Observable<boolean>;
   tradeRegisterExists!:  Observable<boolean>;
   imageUrl: any;
+  formBuilder: any;
+  selectCompanyForm: any;
 
 
   constructor(private companyService: CompanyService,
@@ -43,8 +46,15 @@ export class TopNavBarComponent implements OnInit {
     this.userService.getLoggedInUser();
     this.fetchListOfCompaniesForUser();
     this.addCompanyToUser();
+    this.getCompaniesForUser();
     this.userService.getUserProfilePicture();
     this.imageUrl = this.userService.imageUrl;
+
+    this.selectCompanyForm =  new FormGroup({
+      companyId: new FormControl('', Validators.required),
+    });
+
+    
   }
 
 
@@ -62,6 +72,8 @@ export class TopNavBarComponent implements OnInit {
     }
  }
 
+
+
   addCompanyToUser() {
     this.addCompanyForm = new FormGroup({
       companyName: new FormControl('', Validators.required),
@@ -77,10 +89,7 @@ export class TopNavBarComponent implements OnInit {
   }
 
   onAddCompanySubmit(): void {
-    if (this.addCompanyForm.invalid) {
-      return;
-    }
-
+    
    this.setErrorCheckEmailExists();
    this.setErrorCheckFiscalCodeExists();
    this.setErrorCheckTradeRegisterExists();
@@ -169,6 +178,16 @@ export class TopNavBarComponent implements OnInit {
     this.isAddCompanyDialogOpen = false;
   }
 
+  getCompaniesForUser()
+  {
+    const userId = this.userService.getLoggedInUserId();
+
+    if (userId) 
+      this.companyService.getCompaniesForUser(userId).subscribe(companies => {
+        this.companies = companies;
+      })
+  }
+
   fetchListOfCompaniesForUser() {
     const userId = this.userService.getLoggedInUserId();
 
@@ -181,8 +200,13 @@ export class TopNavBarComponent implements OnInit {
           this.showCancelButton = false;
           return;
         }
-    
-        if (this.companies.length === 1 || !sessionStorage.getItem('selectedCompanyId')) {
+        const selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
+        if( selectedCompanyId == null && this.companies.length != 0 && this.companies.length > 1)
+        {
+              this.isChooseCompanyDialogOpen = true;
+        }
+
+        if (this.companies.length === 1) {
           this.selectedCompanyId = this.companies[0]?.companyId;
           sessionStorage.setItem('selectedCompanyId', this.selectedCompanyId);
           this.showCompanyDropdown = false;
@@ -190,7 +214,7 @@ export class TopNavBarComponent implements OnInit {
         } else {
           this.showCompanyDropdown = true;
           this.showCancelButton = true;
-          this.selectedCompanyId = sessionStorage.getItem('selectedCompanyId') as string;
+          this.selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
         }
     
         this.selectCompany(this.selectedCompanyId);
@@ -209,12 +233,31 @@ export class TopNavBarComponent implements OnInit {
     sessionStorage.setItem('selectedCompanyId', companyId);
   }
 
+  openChooseCompanyDialog(): void {
+    this.isChooseCompanyDialogOpen = true;
+  }
+
+  closeChooseCompanyDialog(): void {
+    this.isChooseCompanyDialogOpen = false;
+  }
+
+  onSelectCompanySubmit(): void {
+    if (this.selectCompanyForm.valid) {
+      this.selectedCompanyId = this.selectCompanyForm.value.companyId;
+      sessionStorage.setItem('selectedCompanyId', this.selectedCompanyId);
+      this.selectCompany(this.selectedCompanyId);
+      this.isChooseCompanyDialogOpen = false;
+      window.location.reload()
+    }
+  }
+
 
 
 
   logout(): void {
     localStorage.removeItem('accessToken');
     sessionStorage.removeItem('selectedCompanyId');
+    sessionStorage.removeItem('userId');
   }
 }
 

@@ -1,0 +1,28 @@
+
+.add-user-to-company-dialog {
+    width: 50%;
+    height: 80%;
+    background-color: white;
+    padding: 70px 70px 0px 125px;
+    z-index: 1000;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 70vmax rgba(0, 0, 0, .7), rgba(32, 32, 32, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+    }
+    
+    
+    mat-form-field {
+      width: 270px;
+      font-size: 14px;
+      margin-right: 270px;
+    }
+    
+    mat-dialog-actions {
+    
+      display: flex;
+      justify-content: center;
+    
+    }

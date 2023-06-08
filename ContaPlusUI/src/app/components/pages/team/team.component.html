@@ -1,0 +1,96 @@
+<app-side-bar></app-side-bar>
+<div id="main">
+    <app-top-nav-bar></app-top-nav-bar>
+    <h3 class="col" style="font-weight: 700; color: #525252;">Team</h3><br>
+<table class="table">
+    <tbody>
+        <tr *ngFor="let user of companyUsers">
+            <td>
+                <img style="border-radius: 50%; margin-top: -7px;" [src]="user.profilePictureUrl"
+                    alt="Profile Picture" width="30" height="30">
+            </td>
+            <td>{{ user.user.firstName }} {{ user.user.lastName }}</td>
+            <td>{{ user.user.email }}</td>
+           
+            <td>
+                <ul>
+                    <li id="roles" *ngFor="let role of user.roles" class="{{ role.roleName }}">{{
+                        role.roleName }}</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<a *ngIf="isAdmin" style="display: flex; align-items: center; margin-left: 50px; font-size: 12px; cursor: pointer;" (click)="openAddUserToCompanyDialog()">
+    <span class="material-icons" style="margin-top: -15px; font-size: 16px;">add</span>
+    <p>Add New Employee</p>
+</a>
+  <br>
+  
+  <div *ngIf="isAddUserToCompanyDialogOpen" class="add-user-to-company-dialog">
+    <div class="centered">
+      <h4 class="mb-4" mat-dialog-title>Add User to Company</h4>
+      <form [formGroup]="addUserToCompanyForm" (ngSubmit)="onAddUserToCompanySubmit()">
+        <div class="row">
+          <div class="col">
+            <mat-form-field>
+              <input matInput type="email" placeholder="Email" formControlName="email" required (input)="checkIfUserExists(this.addUserToCompanyForm.value.email)">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row" *ngIf="isExistingUser == false">
+          <div class="col-md-6">
+            <mat-form-field>
+              <input matInput type="text" placeholder="First Name" formControlName="firstName" required>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field>
+              <input matInput type="text" placeholder="Last Name" formControlName="lastName" required>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field>
+              <mat-select placeholder="Role" formControlName="roleId" required>
+                <mat-option *ngFor="let role of roles" [value]="role.roleId">{{ role.roleName }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <mat-dialog-actions>
+              <button mat-raised-button 
+                style="background-color: #4f4feb; color: white; margin-right: 10px;" 
+                type="submit">Add User to Company</button>
+              <button mat-button mat-dialog-close (click)="closeAddUserToCompanyDialog()">Cancel</button>
+            </mat-dialog-actions>
+          </div>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+
+
+  <mat-form-field>
+    <mat-label>User</mat-label>
+    <mat-select [(ngModel)]="selectedUser">
+      <mat-option *ngFor="let user of users" [value]="user.user.userId">{{ user.user.lastName }} {{ user.user.lastName }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <mat-form-field>
+    <mat-label>Role</mat-label>
+    <mat-select [(ngModel)]="selectedRole">
+      <mat-option *ngFor="let role of roles" [value]="role.roleId">{{ role.roleName }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <button mat-raised-button color="primary" (click)="addUserRole()">Add Role</button>
+  
+</div>
+

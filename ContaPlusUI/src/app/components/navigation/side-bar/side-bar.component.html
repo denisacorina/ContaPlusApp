@@ -21,9 +21,9 @@
       </span>
     </a>
     <div class="dropdown-container" *ngIf="dropdownIncomeVisible" (mouseleave)="toggleDropdownIncome()">
-      <a [routerLink]="['/income/addIncomeTransaction']" [class.active]="isActive('/income/addIncomeTransaction')">Add Transaction</a>
-      <a [routerLink]="['/income/createSale']" [class.active]="isActive('/income/createSale')">Sale Transaction</a>
-      <a [routerLink]="['/income/allIncomes']" [class.active]="isActive('/income/allIncomes')">All Incomes</a>
+      <a [routerLink]="['/income/addIncomeTransaction']" [class.active]="isActive('/income/addIncomeTransaction')" >Add Transaction</a>
+      <a [routerLink]="['/income/createSale']" [class.active]="isActive('/income/createSale')" >Sale Transaction</a>
+      <a [routerLink]="['/income/allIncomes']" [class.active]="isActive('/income/allIncomes')" >All Incomes</a>
     </div>
 
     <a (mouseenter)="toggleDropdownExpense()" [class.active]="isActive('/expense')">
@@ -38,9 +38,9 @@
 
     </a>
     <div class="dropdown-container" *ngIf="dropdownExpenseVisible" (mouseleave)="toggleDropdownExpense()">
-      <a [routerLink]="['/expense/addExpenseTransaction']" [class.active]="isActive('/expense/addExpenseTransaction')">Add Transaction</a> 
-      <a [routerLink]="['/expense/createPurchase']" [class.active]="isActive('/expense/createPurchase')">Purchase Transaction</a>
-      <a [routerLink]="['/expense/allExpenses']" [class.active]="isActive('/expense/allExpenses')">All Expenses </a>
+      <a [routerLink]="['/expense/addExpenseTransaction']" [class.active]="isActive('/expense/addExpenseTransaction')"  >Add Transaction</a> 
+      <a [routerLink]="['/expense/createPurchase']" [class.active]="isActive('/expense/createPurchase')" >Purchase Transaction</a>
+      <a [routerLink]="['/expense/allExpenses']" [class.active]="isActive('/expense/allExpenses')" >All Expenses </a>
     </div>
   </div>
   <a href="#">
@@ -48,7 +48,7 @@
       table_view
     </span>
 
-    <span class="sideBarText">Invoices</span>
+    <!-- <span class="sideBarText">Invoices</span>
   </a>
   <a href="#">
     <span class="material-icons">
@@ -59,7 +59,7 @@
   <a [routerLink]="['/inventory']" [class.active]="isActive('/inventory')">
     <span class="material-icons">
       receipt_long
-    </span>
+    </span> -->
     <span class="sideBarText">Inventory</span>
   </a>
   <a (mouseenter)="toggleDropdownCompany()" [class.active]="isActive('/company/clients') || isActive('/company/suppliers')">
@@ -77,6 +77,6 @@
     <!-- <a href="#">Company Details</a> -->
     <a [routerLink]="['/company/clients']" [class.active]="isActive('/company/clients')">Clients</a>
     <a [routerLink]="['/company/suppliers']" [class.active]="isActive('/company/suppliers')">Suppliers</a>
-    <!-- <a href="#">Team</a> -->
+    <!-- <a [routerLink]="['/team']" [class.active]="isActive('/team')">Team</a>  -->
   </div>
 </div>

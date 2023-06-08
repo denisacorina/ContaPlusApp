@@ -2,7 +2,7 @@
 <div id="main">
     <app-top-nav-bar></app-top-nav-bar>
 
-    <h3 class="col" style="font-weight: 700; color: #525252;">Create Invoice</h3><br>
+    <h3 class="col" style="font-weight: 700; color: #525252;">Register Sale Transaction</h3><br>
 
     <form [formGroup]="form" (ngSubmit)="submitForm()">
         <div class="row">
@@ -13,6 +13,7 @@
                         <mat-option *ngFor="let client of clients" [value]="client.clientId">
                             {{ client.clientName }}, {{ client.fiscalCode }}
                         </mat-option>
+                        <mat-option (click)="openAddClientDialog()"><p style="color: #5757f3; font-weight: 700;"> <mat-icon style="margin-bottom: -5px;">add</mat-icon>Add Client</p></mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -84,9 +85,8 @@
             <div class="row mt-4">
                 <div class="col mr-4">
                     <mat-form-field style="width: 290px;">
-                        <mat-label>Product</mat-label>
-                        <mat-select formControlName="selectedProduct"
-                            (selectionChange)="onProductSelected($event.value)">
+                     
+                        <mat-select formControlName="selectedProduct" (selectionChange)="onProductSelected($event.value)" placeholder="Product">
                             <mat-option *ngFor="let product of products" [value]="product.productId">
                                 {{ product.productName }}
                                 <span *ngIf="!product.isService">, {{ product.quantity }}</span>
@@ -94,7 +94,13 @@
                                     product.chartOfAccountsCode.accountDescription }}</span>
                             </mat-option>
                         </mat-select>
+             
+                   
+                        <span *ngIf="products.length == 0">No products available. Please <a href="/inventory">add a product first.</a></span>
+                  
+                      
                     </mat-form-field>
+                    
                 </div>
                 <div class="col ml-4" *ngIf="!isServiceProduct()">
                     <mat-form-field>
@@ -128,3 +134,86 @@
     </div>
 
 </div>
+<div *ngIf="isAddClientDialogOpen" class="add-client-dialog">
+  <div class="centered">
+    <form [formGroup]="addClientForm" (ngSubmit)="onAddClientSubmit()">
+      <div class="row">
+        <div class="col" >
+          <mat-form-field>
+            <input matInput type="text" placeholder="Client Name" formControlName="clientName" required>
+          </mat-form-field>
+        </div>
+        <div class="col input">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Fiscal Code" formControlName="fiscalCode" required>
+          </mat-form-field>
+        </div>
+     
+     
+        <div class="col input">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Address" formControlName="address" required>
+          </mat-form-field>
+        </div>
+        <div class="col input">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Bank Account" formControlName="bankAccount" required>
+          </mat-form-field>
+        </div>
+    
+        <div class="col">
+          <mat-dialog-actions>
+            <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;" type="submit">Add Client</button>
+            <button mat-button mat-dialog-close (click)="closeAddClientDialog()">Cancel</button>
+          </mat-dialog-actions>
+        </div>
+       
+    </div>
+    </form>
+  </div>
+
+
+  
+<div *ngIf="isAddProductDialogOpen" class="add-product-dialog">
+  <div class="centered">
+        <form [formGroup]="productForm" (ngSubmit)="onAddProductSubmit()"> 
+            <mat-form-field>
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="accountCode" required>
+              <ng-container *ngFor="let group of generalChartOfAccounts">
+                <h3>{{ group.title }}</h3>
+                <mat-option *ngFor="let account of group.accounts" [value]="account.accountCode">
+                 <b>{{ account.accountCode }}</b> {{ account.accountDescription }}
+                </mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+            <mat-form-field>
+              <mat-label>Product Name</mat-label>
+              <input matInput formControlName="productName" required>
+            </mat-form-field>
+          
+            <mat-form-field>
+              <mat-label>Description</mat-label>
+              <input matInput formControlName="description" required>
+            </mat-form-field>
+          
+            <mat-form-field>
+              <mat-label>Price</mat-label>
+              <input matInput type="number" formControlName="price" required>
+            </mat-form-field>
+          
+            <mat-form-field *ngIf="productForm.get('accountCode')?.value !== 704">
+                
+                <mat-label>Quantity</mat-label>
+                <input matInput type="number" formControlName="quantity" required>
+              </mat-form-field>
+
+                <mat-dialog-actions>
+                  <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;" type="submit">Add</button>
+                  <button mat-button mat-dialog-close (click)="closeAddProductDialog()">Cancel</button>
+                </mat-dialog-actions>
+         
+            </form>
+    </div>
+    </div>

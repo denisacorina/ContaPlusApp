@@ -163,3 +163,27 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="isChooseCompanyDialogOpen" class="choose-company-dialog">
+  <div class="centered">
+    <form [formGroup]="selectCompanyForm" (ngSubmit)="onSelectCompanySubmit()">
+      <div class="row">
+        <div class="col">
+          <mat-form-field style="margin-left: 300px!important">
+            <mat-label>Select Company</mat-label>
+            <mat-select formControlName="companyId" required="">
+              <mat-option *ngFor="let company of companies" [value]="company.companyId">
+                {{ company.companyName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button type="submit" mat-raised-button color="primary" class="modal-select-button">Select</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

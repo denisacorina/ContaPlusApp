@@ -27,6 +27,7 @@ export class CreateIncomeComponent implements OnInit {
   generalChartOfAccountsForReceivePayment!: any[];
   addClientForm!: FormGroup;
   isAddClientDialogOpen!: boolean;
+  companyId = sessionStorage.getItem("selectedCompanyId")
 
   constructor(
     private inventoryService: InventoryService,
@@ -82,6 +83,8 @@ export class CreateIncomeComponent implements OnInit {
       };
     }
 
+
+
     let transactionAmount = this.form.value.amount;
     const creditAccount = {
       accountCode: this.form.value.creditAccount
@@ -94,17 +97,26 @@ export class CreateIncomeComponent implements OnInit {
     const dueDate = new Date(this.form.value.dueDate);
     const description = this.form.value.description !== '' ? this.form.value.description : null;
 
+
+    let isDueDateCorrect = false;
+    if (dueDate < transactionDate) {
+      alert('Due date cannot be before the Transaction Date');
+      isDueDateCorrect = false;
+      return;
+    } else isDueDateCorrect = true;
+
     if (this.selectedTransaction && this.selectedTransaction.payCheckbox) {
       const transactionId = this.selectedTransaction.transactionId;
       paidAmount = this.form.value.amount;
       if (this.isPartialPayment)
         paidAmount = this.form.value.paidAmount;
 
-      this.transactionService.payExistingTransaction(transactionId, paidAmount).subscribe(
-        () => {
-          window.location.reload();
-        }
-      );
+      if (isDueDateCorrect)
+        this.transactionService.payExistingTransaction(transactionId, paidAmount).subscribe(
+          () => {
+            window.location.reload();
+          }
+        );
     } else {
       const model = {
         transactionAmount,
@@ -149,7 +161,7 @@ export class CreateIncomeComponent implements OnInit {
       this.generalChartOfAccounts = response.filter((account) => account.accountNumber === 7);
     });
   }
-  
+
 
   fetchGeneralChartOfAccountsListForReceivePayment() {
     this.inventoryService.getGeneralChartOfAccountsList().subscribe((response) => {
@@ -158,7 +170,7 @@ export class CreateIncomeComponent implements OnInit {
   }
 
   getClients() {
-    this.clientService.getClients().subscribe((response) => {
+    this.clientService.getClients(this.companyId).subscribe((response) => {
       this.clients = response;
     });
   }
@@ -219,7 +231,7 @@ export class CreateIncomeComponent implements OnInit {
   }
 
 
-  
+
   addClient() {
     this.addClientForm = new FormGroup({
       clientName: new FormControl('', Validators.required),
@@ -251,14 +263,14 @@ export class CreateIncomeComponent implements OnInit {
       bankAccount
     };
 
-    if(this.addClientForm.valid)
-    this.clientService.addClientForCompany(model).subscribe(
-      () => {
-        this.isAddClientDialogOpen = false;
-        this.getClients();
-      
-      }
-    );
+    if (this.addClientForm.valid)
+      this.clientService.addClientForCompany(model, this.companyId).subscribe(
+        () => {
+          this.isAddClientDialogOpen = false;
+          this.getClients();
+
+        }
+      );
   }
 
 }

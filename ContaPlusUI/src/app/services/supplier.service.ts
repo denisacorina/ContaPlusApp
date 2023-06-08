@@ -9,27 +9,25 @@ export class SupplierService {
 
   private readonly baseSupplierUrl = environment.baseSupplierUrl;
 
-  companyId = sessionStorage.getItem('selectedCompanyId')
-
   constructor(private http: HttpClient) { }
 
 
-  getSuppliers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseSupplierUrl}/getAllSuppliersForCompany?companyId=${this.companyId}`);
+  getSuppliers(companyId: any): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseSupplierUrl}/getAllSuppliersForCompany?companyId=${companyId}`);
   }
 
   getSupplierByName(supplierName: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseSupplierUrl}/getSupplierByName?supplierName=${supplierName}`);
   }
 
-  addSupplierForCompany(supplier: any): Observable<any> {
-    const url = `${this.baseSupplierUrl}/addSupplierForCompany?companyId=${this.companyId}`;
-    return this.http.post<any>(url, supplier);
+  addSupplierForCompany(supplier: any, companyId: any): Observable<any> {
+    const url = `${this.baseSupplierUrl}/addSupplierForCompany`;
+    return this.http.post<any>(url, supplier, companyId);
   }
 
-  updateSupplierForCompany(client: any): Observable<any> {
-    const url = `${this.baseSupplierUrl}/updateSupplierForCompany?companyId=${this.companyId}`;
-    return this.http.put<any>(url, client);
+  updateSupplierForCompany(supplier: any, companyId: any): Observable<any> {
+    const url = `${this.baseSupplierUrl}/updateSupplierForCompany`;
+    return this.http.put<any>(url, supplier, companyId);
   }
 
   

@@ -28,10 +28,10 @@
             <div class="col">
                 <mat-form-field style="width: 210px;">
                     <mat-label>Due Date</mat-label>
-                    <input matInput [matDatepicker]="dueDatePicker" placeholder="Due Date" formControlName="dueDate"
-                        required>
+                    <input matInput [matDatepicker]="dueDatePicker" placeholder="Due Date" formControlName="dueDate" required>
                     <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
                     <mat-datepicker #dueDatePicker></mat-datepicker>
+              
                 </mat-form-field>
             </div>
 
@@ -98,9 +98,7 @@
                         <mat-select formControlName="selectedAccount">
                             <mat-option *ngFor="let account of accountCodes" [value]="account.accountCode">
                                 {{ account.accountCode}} - {{ account.accountDescription }}
-                                <!-- <span *ngIf="!product.isService">, {{ product.quantity }}</span>
-                                <span style="margin-left: 30px; font-size: 10px;">{{
-                                    product.chartOfAccountsCode.accountDescription }}</span> -->
+                         
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

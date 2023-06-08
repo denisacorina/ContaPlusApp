@@ -1,20 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-side-bar',
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.css']
 })
-export class SideBarComponent {
+export class SideBarComponent implements OnInit{
 
   mini = true;
 
   dropdownIncomeVisible = false;
   dropdownExpenseVisible = false;
   dropdownCompanyVisible = false;
+  currentUserRoles: any;
+  isAdmin: any;
+  isManager: any;
+  isAccountant: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
+  ngOnInit(): void {
+    this.getCurrentUserRoleToCompany();
+  }
   
   isActive(route: string): boolean {
     return this.router.isActive(route, false);
@@ -61,5 +69,24 @@ export class SideBarComponent {
 
     }
 
+  }
+
+
+  getCurrentUserRoleToCompany() {
+    const user = sessionStorage.getItem('userId');
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (user && companyId) {
+      this.userService.getUserCompanyRole(user, companyId).subscribe(
+        (response) => {
+          this.currentUserRoles = response.roles.map((role: { roleName: any; }) => role.roleName);
+          this.isAdmin = this.currentUserRoles.includes('admin');
+          this.isManager = this.currentUserRoles.includes('manager');
+          this.isAccountant = this.currentUserRoles.includes('accountant');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
   }
 }

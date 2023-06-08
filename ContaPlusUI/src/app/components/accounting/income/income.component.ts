@@ -62,48 +62,6 @@ export class IncomeComponent implements OnInit {
     });
   }
 
-  openCreateIncomeTransactionDialog(): void {
-    this.isCreateIncomeTransactionDialogOpen = true;
-  }
-
-  closeCreateIncomeTransactionDialog(): void {
-    this.isCreateIncomeTransactionDialogOpen = false;
-  }
-
-  onCreateIncomeTransactionSubmit() {
-
-    const transactionAmount = this.createIncomeTransactionForm.value.transactionAmount;
-    const debitAccount = {
-      accountCode: this.createIncomeTransactionForm.value.debitAccount
-    };
-    const creditAccount = {
-      accountCode: this.createIncomeTransactionForm.value.creditAccount
-    };
-    const paidAmount = this.createIncomeTransactionForm.value.paidAmount;
-    const documentNumber = this.createIncomeTransactionForm.value.documentNumber;
-    const documentSeries = this.createIncomeTransactionForm.value.documentSeries;
-    const dueDate = new Date(this.createIncomeTransactionForm.value.dueDate);
-    const description = this.createIncomeTransactionForm.value.description;
-
-    const model = {
-      transactionAmount,
-      debitAccount,
-      creditAccount,
-      paidAmount,
-      documentNumber,
-      documentSeries,
-      dueDate,
-      description
-    };
-
-    // this.transactionService.createIncomeTransaction(model).subscribe(
-    //   () => {
-    //     window.location.reload();
-      
-    //   }
-    // );
-    
-  }
 
   getIncomeTransactions() {
     const companyId = sessionStorage.getItem('selectedCompanyId');
@@ -114,14 +72,10 @@ export class IncomeComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.transactions);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-
-          
         }
       );
     }
   }
-
-
 
 
   getPaymentStatus(status: number): string {

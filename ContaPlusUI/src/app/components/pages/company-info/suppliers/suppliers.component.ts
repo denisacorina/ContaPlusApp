@@ -37,7 +37,7 @@ activeRoute!: string;
   getSuppliersForCompany()
   {
      if(this.companyId)
-     this.supplierService.getSuppliers().subscribe((response) =>
+     this.supplierService.getSuppliers(this.companyId).subscribe((response) =>
     {
       this.suppliers = response;
       this.dataSource = new MatTableDataSource(this.suppliers);
@@ -77,7 +77,7 @@ activeRoute!: string;
     };
 
     if(this.addSupplierForm.valid)
-    this.supplierService.addSupplierForCompany(model).subscribe(
+    this.supplierService.addSupplierForCompany(model, this.companyId).subscribe(
       () => {
         window.location.reload();
       

@@ -1,6 +1,0 @@
-.invoice-container {
-    width: 210mm; /* Lățimea unei foi A4 */
-    height: 297mm; /* Înălțimea unei foi A4 */
-    border: 1px solid #000; /* Bordură de 1 pixel de culoare neagră */
-    padding: 20px; /* Spațiere între conținut și bordură */
-  }

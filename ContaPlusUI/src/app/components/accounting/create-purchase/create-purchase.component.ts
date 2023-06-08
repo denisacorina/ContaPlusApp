@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ClientService } from 'src/app/services/client.service';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,6 +14,7 @@ import { SupplierService } from 'src/app/services/supplier.service';
 })
 export class CreatePurchaseComponent {
 
+  companyId = sessionStorage.getItem("selectedCompanyId")
   salesForm!: FormGroup;
   products: any[] = [];
   suppliers: any[] = [];
@@ -54,7 +55,7 @@ export class CreatePurchaseComponent {
   ngOnInit() {
     
 
-    this.supplierService.getSuppliers().subscribe(
+    this.supplierService.getSuppliers(this.companyId).subscribe(
       (suppliers) => {
         this.suppliers = suppliers;
       }
@@ -69,11 +70,6 @@ export class CreatePurchaseComponent {
     console.log(this.saleForm())
   
   }
-
-  // onAccountSelected(accountCode: any) {
-  //   this.selectedAccount = this.accountCodes.find(accountCode => accountCode.accountCode === accountCode);
-  //   console.log("onaccountselected", this.selectedAccount)
-  // }
 
   addProduct() {
     this.selectedAccount = this.form.get('selectedAccount')?.value;
@@ -163,15 +159,13 @@ export class CreatePurchaseComponent {
       description: new FormControl(''),
       documentNumber: new FormControl('', Validators.required),
       documentSeries: new FormControl('', Validators.required),
-      
       quantity: new FormControl(''),
       productName: new FormControl(''),
       boughtPrice: new FormControl(''),
       sellingPrice: new FormControl(''),
-      selectedAccount:  new FormControl('')
+      selectedAccount: new FormControl('')
     });
   }
-
 
   submitForm() {
     let debitAccount = {
@@ -184,11 +178,21 @@ export class CreatePurchaseComponent {
       supplierId: this.form.get('supplierId')?.value
     }
 
-  
-
     const selectedSupplierId = this.form.get('supplierId')?.value;
     const selectedSupplier = this.suppliers.find(supplier => supplier.supplierId === selectedSupplierId);
     const supplierName = selectedSupplier ? selectedSupplier.supplierName : '';
+
+    
+    let isDueDateCorrect = false;
+    const dueDate = this.form.get('dueDate')?.value;
+    const transactionDate = this.form.get('transactionDate')?.value
+ 
+
+    if (dueDate < transactionDate) {
+      alert('Due date cannot be before the Transaction Date');
+      isDueDateCorrect = false;
+      return;
+    } else isDueDateCorrect = true;
   
     const transaction = {
       
@@ -236,6 +240,7 @@ export class CreatePurchaseComponent {
     console.log("this.addedProducts", this.addedProducts)
     console.log(" this.productList",  this.productList)
   
+    if(isDueDateCorrect)
     this.transactionService.createProductPurchaseTransaction(model).subscribe(
       () => {
         window.location.reload();

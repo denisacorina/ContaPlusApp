@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CompanyService } from 'src/app/services/company.service';
 import { UserService } from 'src/app/services/user.service';
@@ -10,7 +9,7 @@ import * as ApexCharts from 'apexcharts';
 import { ClientService } from 'src/app/services/client.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { SupplierService } from 'src/app/services/supplier.service';
-import { formatDate } from '@angular/common';
+
 Chart.register(...registerables);
 
 @Component({
@@ -51,11 +50,14 @@ export class DashboardComponent implements OnInit {
   selectedFilter: string = 'today';
   totalSuppliers: any;
   totalExpense!: number;
+  isFirstLoad = true;
+
 
   constructor(private companyService: CompanyService,
     private clientService: ClientService,
     private supplierService: SupplierService,
-    private transactionService: TransactionService) { }
+    private transactionService: TransactionService,
+    private userService: UserService) { }
 
   ngOnInit() {
     this.chart();
@@ -66,47 +68,20 @@ export class DashboardComponent implements OnInit {
     this.getIncomeTransactions();
     this.getExpenseTransactions();
     this.getCurrentCompany();
-
-
+  
+   
   }
 
   getCurrentCompany()
   {
-    if(this.companyId)
-    this.companyService.getCompanyById(this.companyId).subscribe( (response) =>
+    const companyId = sessionStorage.getItem('selectedCompanyId')
+    if(companyId)
+    this.companyService.getCompanyById(companyId).subscribe( (response) =>
     {
         this.company = response;
     })
   }
 
-  options = document.getElementsByClassName('option');
-
-  toggleOption(selectedIndex: number) {
-    for (var i = 0; i < this.options.length; i++) {
-      if (i === selectedIndex) {
-        this.options[i].classList.add('selected');
-      } else {
-        this.options[i].classList.remove('selected');
-      }
-    }
-  
-    switch (selectedIndex) {
-      case 0: 
-        this.selectedFilter = 'month';
-       
-        break;
-      case 1: 
-        this.selectedFilter = 'week';
-       
-        break;
-      case 2:
-        this.selectedFilter = 'today';
-      
-        break;
-      default:
-        break;
-    }
-  }
 
   toggleEarningDropdown(): void {
     this.isEarningDropdownOpen = !this.isEarningDropdownOpen;
@@ -123,6 +98,7 @@ export class DashboardComponent implements OnInit {
   closeExpenseDropdown(): void {
     this.isExpenseDropdownOpen = false;
   }
+
   barChart() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   
@@ -291,7 +267,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getCompaniesForUser() {
-    const userId = sessionStorage.getItem('userId');
+    const userId = this.userService.getLoggedInUserId();
     if (userId) {
       this.companyService.getCompaniesForUser(userId).subscribe(
         (response) => {
@@ -302,24 +278,31 @@ export class DashboardComponent implements OnInit {
   }
 
   getClients() {
-      this.clientService.getClients().subscribe(
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
+      this.clientService.getClients(companyId).subscribe(
         (response: any[]) => {
           this.client = response;
           this.totalClients = this.client.length;
           console.log(this.totalClients)
         }
       )
+      }
     
   }
 
   getSuppliers() {
-      this.supplierService.getSuppliers().subscribe(
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
+      this.supplierService.getSuppliers(this.companyId).subscribe(
         (response: any[]) => {
           this.supplier = response;
           this.totalSuppliers = this.supplier.length;
           console.log(this.totalSuppliers)
         }
       )  
+    }
+    
   }
 
   getIncomeTransactions() {
@@ -354,132 +337,5 @@ export class DashboardComponent implements OnInit {
     return sum;
   }
 
-
-  // onUpdateCompanySubmit(): void {
-  //   if (this.updateCompanyForm.invalid) {
-  //     return;
-  //   }
-  //   const companyId = this.companyNeverUpdated.companyId;
-  //   this.companyService.updateCompany(this.updateCompanyForm.value, companyId).subscribe(
-  //     () => location.reload(),
-  //     error => console.error(error)
-  //   );
-
-  //   this.isUpdateCompanyDialogOpen = false;
-  //   alert("company updated")
-  // }
-
-  // showUpdateCompanyModal() {
-  //   const userId = this.getLoggedInUserId();
-  //   if (!userId) {
-  //     return;
-  //   }
-  //   this.companyService.getCompaniesForUser(userId).subscribe(companies => {
-  //     this.companyNeverUpdated = companies.find(c => c.UpdatedAt === null);
-
-  //     if (this.companyNeverUpdated) {
-  //       this.isUpdateCompanyDialogOpen = true;
-  //       this.updateCompany();
-  //     }
-  //   });
-  // }
-
-
-  // async getLoggedInUser() {
-  //   const userId = this.getLoggedInUserId();
-  //   if (userId) {
-  //     try {
-  //       const response = await this.userService.getUserInfo(userId).toPromise();
-  //       this.user = response;
-  //     } catch (error) {
-  //       console.error('Failed to retrieve user information:', error);
-  //     }
-  //   }
-  // }
-
-  // fetchListOfCompaniesForUser() {
-  //   const userId = this.getLoggedInUserId();
-
-  //   if (userId) {
-  //     this.companyService.getCompaniesForUser(userId).subscribe(companies => {
-  //       this.companies = companies;
-
-  //       if (this.companies) {
-  //         if (this.companies.length == 1 || !sessionStorage.getItem('selectedCompanyId')) {
-  //           this.selectedCompanyId = this.companies[0].companyId;
-  //           sessionStorage.setItem('selectedCompanyId', this.selectedCompanyId);
-  //           this.selectCompany(this.selectedCompanyId);
-  //           this.showCompanyDropdown = false;
-  //         }
-
-  //         if (this.companies.length > 1) {
-  //           this.showCompanyDropdown = true;
-  //           this.selectedCompanyId = sessionStorage.getItem('selectedCompanyId') as string;
-  //           this.selectCompany(this.selectedCompanyId);
-  //         }
-
-  //       } else {
-  //         console.error("No companies");
-  //       }
-  //     });
-  //   }
-  // }
-  // async selectCompany(companyId: string) {
-  //   if (companyId) {
-  //     try {
-  //       this.companyData = await this.companyService.getCompanyById(companyId).toPromise();
-  //       console.log('company data:', this.companyData);
-  //     } catch (error) {
-  //       console.log('Error fetching company data:', error);
-  //     }
-  //   }
-  //   sessionStorage.setItem('selectedCompanyId', companyId);
-  // }
-
-  // getLoggedInUserId(): string | null {
-  //   const token = localStorage.getItem('accessToken');
-  //   if (token) {
-  //     const decodedToken = this.jwtHelper.decodeToken(token);
-  //     if (decodedToken && decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']) {
-  //       return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-  //     }
-  //   }
-  //   return null;
-  // }
-
-  // onFileSelected(event: Event) {
-  //   const inputElement = event.target as HTMLInputElement;
-  //   if (inputElement.files && inputElement.files.length) {
-  //     this.selectedFile = inputElement.files[0];
-  //   }
-  // }
-
-  // onUpload() {
-  //   var userId = this.getLoggedInUserId();
-  //   if (userId) {
-  //     this.userService.uploadProfilePicture(userId, this.selectedFile).subscribe(
-  //       (response: any) => {
-  //         console.log('Profile picture uploaded successfully:', response);
-  //       }
-  //     );
-  //   } else {
-  //     console.error('User is not logged in');
-  //   }
-  // }
-
-  // async getUserProfilePicture() {
-  //   var userId = this.getLoggedInUserId();
-  //   if (userId) {
-  //   await this.userService.getProfilePicture(userId).subscribe(
-  //     (response: any) => {
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(response);
-  //       reader.onloadend = () => {
-  //         this.imageUrl = reader.result as string;
-  //       };
-  //     }
-  //   );
-  // }
-  // }
 
 }

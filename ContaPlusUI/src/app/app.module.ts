@@ -42,8 +42,8 @@ import { InventoryComponent } from './components/pages/inventory/inventory.compo
 import { ExpenseComponent } from './components/accounting/expense/expense.component';
 import { CreateExpenseComponent } from './components/accounting/create-expense/create-expense.component';
 import { CreateSaleComponent } from './components/accounting/create-sale/create-sale.component';
-import { PreviewDocumentComponent } from './components/accounting/preview-document/preview-document.component';
 import { CreatePurchaseComponent } from './components/accounting/create-purchase/create-purchase.component';
+import { TeamComponent } from './components/pages/team/team.component';
 
 
 
@@ -72,8 +72,8 @@ export function tokenGetter()
     ExpenseComponent,
     CreateExpenseComponent,
     CreateSaleComponent,
-    PreviewDocumentComponent,
     CreatePurchaseComponent,
+    TeamComponent,
 
     
 

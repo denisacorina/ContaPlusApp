@@ -26,6 +26,7 @@ export class CreateExpenseComponent implements OnInit {
   payLater: boolean = false;
   createExpenseTransactionForm: any;
   generalChartOfAccountsForMakePayment!: any[];
+  companyId = sessionStorage.getItem("selectedCompanyId")
 
   constructor(
     private inventoryService: InventoryService,
@@ -94,6 +95,15 @@ export class CreateExpenseComponent implements OnInit {
     const dueDate = new Date(this.form.value.dueDate);
     const description = this.form.value.description !== '' ? this.form.value.description : null;
 
+    
+    let isDueDateCorrect = false;
+
+    if (dueDate < transactionDate) {
+      alert('Due date cannot be before the Transaction Date');
+      isDueDateCorrect = false;
+      return;
+    } else isDueDateCorrect = true;
+
     if (this.selectedTransaction && this.selectedTransaction.payCheckbox) {
       const transactionId = this.selectedTransaction.transactionId;
       paidAmount = this.form.value.amount;
@@ -125,6 +135,7 @@ export class CreateExpenseComponent implements OnInit {
         paidAmount = 0;
       }
       if (supplierId) {
+        if(isDueDateCorrect)
         this.transactionService.createExpenseTransactionForSupplier(model, supplierId).subscribe(
           () => {
             window.location.reload();
@@ -132,6 +143,7 @@ export class CreateExpenseComponent implements OnInit {
         );
       }
       else {
+        if(isDueDateCorrect)
         this.transactionService.createExpenseTransaction(model).subscribe(
           () => {
             window.location.reload();
@@ -157,7 +169,7 @@ export class CreateExpenseComponent implements OnInit {
   }
 
   getSuppliers() {
-    this.supplierService.getSuppliers().subscribe((response) => {
+    this.supplierService.getSuppliers(this.companyId).subscribe((response) => {
       this.suppliers = response;
     });
   }

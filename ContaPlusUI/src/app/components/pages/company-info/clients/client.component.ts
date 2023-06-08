@@ -36,7 +36,7 @@ export class ClientComponent implements OnInit {
   getClientsForCompany()
   {
  
-    this.clientService.getClients().subscribe((response) =>
+    this.clientService.getClients(this.companyId).subscribe((response) =>
     {
       this.clients = response;
       this.dataSource = new MatTableDataSource(this.clients);
@@ -75,7 +75,7 @@ export class ClientComponent implements OnInit {
     };
 
     if(this.addClientForm.valid)
-    this.clientService.addClientForCompany(model).subscribe(
+    this.clientService.addClientForCompany(model, this.companyId).subscribe(
       () => {
         window.location.reload();
       
