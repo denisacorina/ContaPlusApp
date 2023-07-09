@@ -1,4 +1,5 @@
 ﻿using ContaPlusAPI.DTOs.AccountingDTO;
+using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
 using ContaPlusAPI.Interfaces.IService.AccountingServiceInterface;
 using ContaPlusAPI.Models;
 using ContaPlusAPI.Models.AccountingModule;
@@ -13,10 +14,12 @@ namespace ContaPlusAPI.Controllers
     public class TransactionsController : BaseApiController
     {
         private readonly ITransactionService _transactionService;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public TransactionsController(ITransactionService transactionService)
+        public TransactionsController(ITransactionService transactionService, ITransactionRepository transactionRepository)
         {
             _transactionService = transactionService;
+            _transactionRepository = transactionRepository;
         }
 
         [HttpPut("payExistingTransaction")]
@@ -31,10 +34,22 @@ namespace ContaPlusAPI.Controllers
             return await _transactionService.GetIncomeTransactions(companyId);
         }
 
-        [HttpPost("createIncomeTransaction")]
-        public async Task CreateIncomeTransaction([FromBody] Transaction model, [FromQuery] Guid companyId, [FromQuery] int clientId)
+        [HttpGet("getTransactionById")]
+        public async Task<Transaction> getTransactionById(int transactionId)
         {
-            await _transactionService.CreateIncomeTransaction(model, companyId, clientId);
+            return await _transactionRepository.GetTransactionById(transactionId);
+        }
+
+        [HttpGet("getAllCompanyTransactions")]
+        public async Task<ICollection<Transaction>> GetAllCompanyTransactions(Guid companyId)
+        {
+            return await _transactionRepository.GetAllCompanyTransactions(companyId);
+        }
+
+        [HttpPost("createIncomeTransaction")]
+        public async Task CreateIncomeTransaction([FromBody] Transaction model, [FromQuery] Guid companyId, [FromQuery] int clientId, [FromQuery] Guid userId)
+        {
+            await _transactionService.CreateIncomeTransaction(model, companyId, clientId, userId);
         }
 
         [HttpGet("getExpenseTransactions")]
@@ -44,27 +59,33 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("createExpenseTransaction")]
-        public async Task CreateExpenseTransaction([FromBody] Transaction model, [FromQuery] Guid companyId, [FromQuery] int supplierId)
+        public async Task CreateExpenseTransaction([FromBody] Transaction model, [FromQuery] Guid companyId, [FromQuery] int supplierId, [FromQuery] Guid userId)
         {
-            await _transactionService.CreateExpenseTransaction(model, companyId, supplierId);
+            await _transactionService.CreateExpenseTransaction(model, companyId, supplierId, userId);
         }
 
         [HttpPost("createProductSaleTransaction")]
-        public async Task CreateProductSaleTransaction([FromBody] ProductSaleTransactionModel model, Guid companyId)
+        public async Task CreateProductSaleTransaction([FromBody] ProductSaleTransactionModel model, Guid companyId, Guid userId)
         {
-            await _transactionService.CreateProductSaleTransaction(model.Transaction, companyId, model.ProductSaleItems);
+            await _transactionService.CreateProductSaleTransaction(model.Transaction, companyId, model.ProductSaleItems, userId);
         }
 
         [HttpPost("createProductPurchaseTransaction")]
-        public async Task CreateProductPurchaseTransaction([FromBody] ProductPurchaseTransactionModel model, Guid companyId)
+        public async Task CreateProductPurchaseTransaction([FromBody] ProductPurchaseTransactionModel model, Guid companyId, Guid userId)
         {
-            await _transactionService.CreateProductPurchaseTransaction(model.Transaction, companyId, model.ProductPurchaseItems);
+            await _transactionService.CreateProductPurchaseTransaction(model.Transaction, companyId, model.ProductPurchaseItems, userId);
         }
 
         [HttpPut("updateTransaction")]
         public async Task UpdateTransaction(Transaction transaction)
         {
             await _transactionService.UpdateTransaction(transaction);
+        }
+
+        [HttpPut("updateTransactionById/{transactionId}")]
+        public async Task UpdateTransactionById(int transactionId, Transaction updatedTransaction)
+        {
+            await _transactionService.UpdateTransactionById(transactionId, updatedTransaction);
         }
 
         [HttpDelete("deleteTransaction")]

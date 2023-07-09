@@ -9,32 +9,15 @@ import { environment } from 'environments/environment';
 })
 export class AuthService {
 
-  private isAuthenticated: boolean = false;
-
   private readonly baseAuthUrl = environment.baseAuthUrl;
- 
 
+  constructor(private http: HttpClient) { }
 
-  constructor(private http : HttpClient, private jwtHelper: JwtHelperService, private router: Router) { }
-
-  register(model:any)
-  {
-    return this.http.post<any>(`${this.baseAuthUrl}register`, model)
-    .pipe(
-      map(response => {
-         response.userId;
-        return response;
-      })
-    );
+  register(model: any) {
+    return this.http.post<any>(`${this.baseAuthUrl}register`, model);
   }
 
   login(model: any, rememberMe: boolean) {
-    return this.http.post<any>(`${this.baseAuthUrl}login`, { ...model, rememberMe })
-      .pipe(
-        map(response => {
-           response.userId;
-          return response;
-        })
-      );
+    return this.http.post<any>(`${this.baseAuthUrl}login`, { ...model, rememberMe });
   }
 }

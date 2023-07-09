@@ -1,11 +1,7 @@
 <div class="split left" id="registerForm">
   <div class="centered">
-    <form style="box-sizing: unset!important;" autocomplete="off" [formGroup]="registrationForm"
-      (ngSubmit)="onRegisterSubmit()">
-
-
+    <form style="box-sizing: unset!important;" autocomplete="off" [formGroup]="registrationForm" (ngSubmit)="onRegisterSubmit()">
       <h2 class="registerText">Register</h2>
-
       <mat-error style="font-size: 14px;" *ngIf="registrationForm.controls['firstName'].hasError('pattern')">
         First Name cannot contain digits or special characters.
       </mat-error>
@@ -22,23 +18,18 @@
       <mat-error style="font-size: 14px;" *ngIf="this.errorMessage">
         {{this.errorMessage}} <a routerLink="/login">Login</a>
       </mat-error>
-      <!-- firstName input -->
       <div class="form-outline mt-4 ">
         <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
           <mat-label>First Name</mat-label>
           <input formControlName="firstName" type="text" matInput placeholder="Denisa">
         </mat-form-field>
       </div>
-
-
       <div class="form-outline">
         <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
           <mat-label>Last Name</mat-label>
           <input formControlName="lastName" type="text" matInput placeholder="Black">
         </mat-form-field>
       </div>
-
-      <!-- Email input -->
       <div class="form-outline">
         <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
           <mat-label>Enter your email</mat-label>
@@ -46,7 +37,6 @@
         </mat-form-field>
       </div>
 
-      <!-- Password input -->
       <div class="form-outline">
 
         <mat-form-field appearance="fill" style="width: 420px!important; margin-left: -10px!important">
@@ -54,9 +44,7 @@
           <input formControlName="password" type="password" matInput placeholder="Legacy">
         </mat-form-field>
       </div>
-
       <div class="row mb-4">
-        <!-- Submit button -->
         <button value="Submit" class="btn btn-block" id="registerBtn">Register</button>
       </div>
     </form>

@@ -72,10 +72,10 @@
                     <tr *ngFor="let product of addedProducts; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td>{{ product.productName }}</td>
-                        <td>{{ product.accountCode }}</td>
+                        <td>{{ product.accountCode }} - {{ product.accountName }}</td>
                         <td>{{ product.quantity }}</td>
                         <td>{{ product.boughtPrice }}</td>
-                        <td>{{ product.sellingPrice }}</td>
+                        <td>{{ product.price }}</td>
                         <td>{{ product.totalWithoutTva }}</td>
                         <td>{{ product.tva }}</td>
                         <td>{{ product.totalWithTva }}</td>
@@ -88,7 +88,7 @@
             <div class="row mt-4">
                 <div class="col"  style="margin-right: 100px;">
                     <mat-form-field>
-                        <input matInput formControlName="productName" placeholder="Product Name">
+                        <input matInput formControlName="productName" placeholder="Product Name" >
                     </mat-form-field>
                 </div>
                 <div class="col" style="margin-right: 150px;">
@@ -96,7 +96,7 @@
                     <mat-form-field style="width: 290px;" >
                         <mat-label>Product Type</mat-label>
                         <mat-select formControlName="selectedAccount">
-                            <mat-option *ngFor="let account of accountCodes" [value]="account.accountCode">
+                            <mat-option *ngFor="let account of accountCodes" [value]="account.accountCode" >
                                 {{ account.accountCode}} - {{ account.accountDescription }}
                          
                             </mat-option>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="col">
                     <mat-form-field style="width: 100px;">
-                        <input matInput formControlName="quantity" placeholder="Quantity">
+                        <input matInput formControlName="quantity" placeholder="Quantity" >
                     </mat-form-field>
                 </div>
                 <div class="col">
@@ -124,12 +124,37 @@
                     </mat-form-field>
                 </div>
                 <div class="col">
-                    <button type="button" style="width: 30px;"  (click)="addProduct()">Add</button>
+                    <button type="button" style="padding: 10px; margin-left: 30px;"  (click)="addProduct()">Add</button>
                 </div>
             </div>
 
 
-            <button class="submitSaleForm" type="submit">Submit</button>
+              <div class="col">
+                <div class="col">
+                  <div class="col">
+                    <mat-checkbox [(ngModel)]="payLater" formControlName="payLater" (change)="onPayLaterChange()">Pay
+                      Later</mat-checkbox>
+                  </div>
+                  <div class="col">
+                    <mat-checkbox [(ngModel)]="isPartialPayment" formControlName="isPartialPayment"
+                      (change)="onPartialPaymentChange()">Partial pay</mat-checkbox>
+                  </div>
+        
+                </div>
+        
+                <div class="row" *ngIf="isPartialPayment">
+                  <div class="col">
+                    <mat-form-field>
+                      <input matInput type="number" placeholder="Paid Amount" formControlName="paidAmount">
+                      <mat-error
+                        *ngIf="form.get('paidAmount')?.invalid || form.get('paidAmount')?.value > form.get('amount')?.value"></mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+
+            <button class="submitSaleForm" type="submit">Generate Goods Receipt Note</button>
         </div>
     </form>
     <div class="totalAmounts" *ngIf="addedProducts.length > 0">

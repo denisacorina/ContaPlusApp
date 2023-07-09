@@ -44,6 +44,8 @@ import { CreateExpenseComponent } from './components/accounting/create-expense/c
 import { CreateSaleComponent } from './components/accounting/create-sale/create-sale.component';
 import { CreatePurchaseComponent } from './components/accounting/create-purchase/create-purchase.component';
 import { TeamComponent } from './components/pages/team/team.component';
+import { ReportsComponent } from './components/pages/reports/reports.component';
+
 
 
 
@@ -74,6 +76,7 @@ export function tokenGetter()
     CreateSaleComponent,
     CreatePurchaseComponent,
     TeamComponent,
+    ReportsComponent
 
     
 

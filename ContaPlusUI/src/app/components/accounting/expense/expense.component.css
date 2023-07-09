@@ -19,58 +19,13 @@
     font-size: 10px;
   }
   
-  
-  .unpaid {
-    background-color: rgb(223, 114, 204);
-    border-radius: 1px;
-    font-weight: bold;   
-    border-radius: 30px; 
-    font-size: 10px;
-    width: 20px;
-    text-align: center;
-    color: rgb(85, 26, 109);
-  }
-  
-  .partial {
-    background-color: rgb(232, 230, 118);
-    border-radius: 1px;
-    font-weight: bold;   
-    border-radius: 30px; 
-    font-size: 10px;
-    width: 20px;
-    text-align: center;
-    color: rgb(106, 122, 0);
-  }
-  
-  .paid {
-    background-color: rgb(133, 194, 113);
-    border-radius: 1px;
-    font-weight: bold;   
-    border-radius: 30px; 
-    font-size: 10px;
-    width: 20px;
-    text-align: center;
-    color: rgb(14, 77, 12);
-  }
-  
-  .overdue {
-    background-color: rgb(230, 117, 117);
-    border-radius: 1px;
-    font-weight: bold;   
-    border-radius: 30px; 
-    font-size: 10px;
-    width: 20px;
-    text-align: center;
-    color: rgb(156, 2, 2);
-  }
-  
+
 
 .createTransaction {
-    font-size: 12px;
+    font-size: 14px;
     background-color: #5757f3;
     border: none;
     color: white;
-    border-radius: 10px;
   }
 
   .options {

@@ -171,7 +171,7 @@
       <div class="col">
         <div class="col">
           <div class="col" *ngIf="!selectedTransaction">
-            <mat-checkbox [(ngModel)]="payLater" formControlName="payLater" (change)="onPayLaterChange()">Pay
+            <mat-checkbox *ngIf="selectedIncomeType === 'client'" [(ngModel)]="payLater" formControlName="payLater" (change)="onPayLaterChange()">Pay
               Later</mat-checkbox>
           </div>
           <div class="col">
@@ -193,14 +193,16 @@
       </div>
       <div class="col">
         <mat-form-field style="width: 400px;">
-          <textarea matInput placeholder="Details" formControlName="description" required></textarea>
+          <textarea matInput placeholder="Details" formControlName="description"></textarea>
         </mat-form-field>
       </div>
 
 
     </div><br>
 
-    <button type="submit">Receive payment</button>
+    <div>
+      <span><button class="submitSaleForm" type="submit">Generate Receipt</button></span>
+    </div>
   </form>
 
 

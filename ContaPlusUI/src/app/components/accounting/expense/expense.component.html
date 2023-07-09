@@ -3,7 +3,7 @@
     <app-top-nav-bar></app-top-nav-bar>
 
 <h3 class="mb-4 col" style="font-weight: 700; color: #525252;">Expense Transactions</h3>
- <button class="createTransaction" type="button" style="margin-left: 15px;" (click)="openCreateExpenseTransactionDialog()">Create New Transaction</button>
+<a href="/expense/addExpenseTransaction"><button class="createTransaction" type="button" style="margin-left: 15px;" >Create New Transaction</button></a>
 
 <div class="transactions" style="font-size: 14px; margin-top: 30px;">
   <div>
@@ -20,22 +20,51 @@
    
     <ng-container matColumnDef="documentNumber">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Number</th>
-      <td mat-cell *matCellDef="let transaction">{{ transaction.documentNumber }}</td>
+      <td mat-cell *matCellDef="let transaction">
+        <ng-container *ngIf="transaction.transactionId === editingTransactionId; else displayCell">
+          <input formControlName="documentNumber" matInput>
+        </ng-container>
+        <ng-template #displayCell>
+          {{ transaction.documentNumber }}
+        </ng-template>
+      </td>
     </ng-container>
 
     
     <ng-container matColumnDef="documentSeries">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Series</th>
-      <td mat-cell *matCellDef="let transaction">{{ transaction.documentSeries }}</td>
+      <td mat-cell *matCellDef="let transaction">
+        <ng-container *ngIf="transaction.transactionId === editingTransactionId; else displayCell">
+          <input  formControlName="documentSeries"  matInput>
+        </ng-container>
+        <ng-template #displayCell>
+          {{ transaction.documentSeries }}
+        </ng-template>
+      </td>
     </ng-container>
     <ng-container matColumnDef="transactionAmount">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount</th>
-      <td mat-cell *matCellDef="let transaction">{{ transaction.transactionAmount }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>transactionAmount</th>
+      <td mat-cell *matCellDef="let transaction">
+        <ng-container *ngIf="transaction.transactionId === editingTransactionId; else displayCell">
+          <input formControlName="transactionAmount" matInput>
+        </ng-container>
+        <ng-template #displayCell>
+          {{ transaction.transactionAmount }}
+        </ng-template>
+      </td>
     </ng-container>
     <ng-container matColumnDef="paidAmount">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Paid Amount</th>
-      <td mat-cell *matCellDef="let transaction">{{ transaction.paidAmount }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>paidAmount</th>
+      <td mat-cell *matCellDef="let transaction">
+        <ng-container *ngIf="transaction.transactionId === editingTransactionId; else displayCell">
+          <input formControlName="paidAmount" matInput>
+        </ng-container>
+        <ng-template #displayCell>
+          {{ transaction.paidAmount }}
+        </ng-template>
+      </td>
     </ng-container>
+
     <ng-container matColumnDef="remainingAmount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Remaining Amount</th>
       <td mat-cell *matCellDef="let transaction">{{ transaction.remainingAmount }}</td>
@@ -50,11 +79,43 @@
     </ng-container>
     <ng-container matColumnDef="paymentStatus">
       <th mat-header-cell *matHeaderCellDef>Payment Status</th>
-      <td mat-cell *matCellDef="let transaction" [ngClass]="getPaymentStatus(transaction.paymentStatus)" id="#paymentStatus">
-        {{ transaction.paymentStatus === 0 ? 'Unpaid' : '' }}
-        {{ transaction.paymentStatus === 1 ? 'Partial' : '' }}
-        {{ transaction.paymentStatus === 2 ? 'Paid' : '' }}
-        {{ transaction.paymentStatus === 3 ? 'Overdue' : '' }}
+      <td mat-cell *matCellDef="let transaction" [ngClass]="getPaymentStatus(transaction.paymentStatus)">
+        <div *ngIf="transaction.paymentStatus === 0">
+          <p style="background-color:rgb(223, 114, 204); font-weight: bold;   
+    border-radius: 30px; 
+    font-size: 10px;
+    margin-top: 15px;
+    text-align: center;
+    padding: 10px 20px;
+    color: rgb(85, 26, 109);">Unpaid</p>
+        </div>
+        <div *ngIf="transaction.paymentStatus === 1">
+          <p style="background-color: rgb(232, 230, 118); font-weight: bold;   
+      border-radius: 30px; 
+      font-size: 10px;
+      margin-top: 15px;
+      text-align: center;
+      padding: 10px 20px;
+      color: rgb(106, 122, 0);">Partial</p>
+        </div>
+        <div *ngIf="transaction.paymentStatus === 2">
+          <p style="background-color: rgb(133, 194, 113); font-weight: bold;   
+      border-radius: 30px; 
+      font-size: 10px;
+      margin-top: 15px;
+      text-align: center;
+      padding: 10px 20px;
+      color: rgb(14, 77, 12);">Paid</p>
+        </div>
+        <div *ngIf="transaction.paymentStatus === 3">
+          <p style="background-color: rgb(230, 117, 117); font-weight: bold;   
+          border-radius: 30px; 
+          font-size: 10px;
+          margin-top: 15px;
+          text-align: center;
+          padding: 10px 20px;
+          color: #9c0202;">Overdue</p>
+        </div>
       </td>
     </ng-container>
     <ng-container matColumnDef="actions">
@@ -64,14 +125,11 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #dropdownMenu="matMenu">
-          <button mat-menu-item >
-            <span>Details</span>
-          </button>
-          <button mat-menu-item >
-            <span>Edit</span>
-          </button>
           <button mat-menu-item (click)="deleteTransaction(transaction.transactionId)">
             <span>Delete</span>
+          </button>
+          <button mat-menu-item (click)="editTransaction(transaction.transactionId)">
+            <span>Edit</span>
           </button>
         </mat-menu>
       </td>
@@ -96,75 +154,6 @@
 
 
 </div> 
-
-
-<div *ngIf="isCreateExpenseTransactionDialogOpen" class="create-income-transaction-dialog">
-  <div class="centered">
-    <h4 class="mb-4" mat-dialog-title>Create Expense Transaction</h4>
-    <form [formGroup]="createExpenseTransactionForm" (ngSubmit)="onCreateExpenseTransactionSubmit()">
-      <div class="row">
-        <div class="col">
-          <mat-form-field>
-            <input matInput type="number" placeholder="Total Amount" formControlName="transactionAmount" required>
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field>
-            <input matInput type="text" placeholder="Debit Account" formControlName="debitAccount" required>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field>
-            <input matInput type="text" placeholder="Credit Account" formControlName="creditAccount" required>
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field>
-            <input matInput type="number" placeholder="Paid Amount" formControlName="paidAmount" required>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field>
-            <input matInput type="text" placeholder="Document Number" formControlName="documentNumber" required>
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field>
-            <input matInput type="text" placeholder="Document Series" formControlName="documentSeries" required>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-       
-        <div class="col">
-          <mat-form-field>
-            <input matInput type="text" placeholder="Description" formControlName="description" required>
-          </mat-form-field>
-        </div> 
-        <div class="col">
-        <mat-form-field>
-          <input matInput [matDatepicker]="dueDatePicker" placeholder="Due Date" formControlName="dueDate" required>
-          <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #dueDatePicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <mat-dialog-actions>
-            <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;" type="submit">Create Expense Transaction</button>
-            <button mat-button mat-dialog-close (click)="closeCreateExpenseTransactionDialog()">Cancel</button>
-          </mat-dialog-actions>
-        </div>
-       
-    </div>
-    </form>
-  </div>
-</div>
 
     
 

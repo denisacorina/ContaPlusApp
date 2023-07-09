@@ -9,5 +9,6 @@ export const environment = {
     baseClientUrl: 'https://localhost:7121/api/Clients',
     baseSupplierUrl: 'https://localhost:7121/api/Suppliers',
     baseInventoryUrl: 'https://localhost:7121/api/Products',
-    baseDocumentUrl: 'https://localhost:7121/api/Documents'
+    baseDocumentUrl: 'https://localhost:7121/api/Documents',
+    baseFinancialReportUrl: 'https://localhost:7121/api/FinancialReports'
   };

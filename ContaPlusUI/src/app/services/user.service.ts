@@ -1,6 +1,6 @@
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { CompanyService } from './company.service';
@@ -58,7 +58,11 @@ export class UserService {
 
   addUserRoleToCompany(userId: string, roleId: number, companyId: string) {
     const url = `${this.baseUserUrl}/addUserRoleToCompany`;
-    const body = { userId, roleId, companyId };
+    const body = {
+      UserId: userId,
+      RoleId: roleId, 
+      CompanyId: companyId
+    };
     return this.http.post(url, body);
   }
 
@@ -68,7 +72,7 @@ export class UserService {
       const decodedToken = this.jwtHelper.decodeToken(token);
       if (decodedToken && decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']) {
         const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-        sessionStorage.setItem('userId', userId); 
+        sessionStorage.setItem('userId', userId);
         return userId;
       }
     }
@@ -76,7 +80,7 @@ export class UserService {
   }
 
   public async getLoggedInUser() {
-    const userId =  sessionStorage.getItem('userId'); 
+    const userId = sessionStorage.getItem('userId');
     if (userId) {
       this.getUserInfo(userId).subscribe(
         response => {
@@ -88,7 +92,7 @@ export class UserService {
       );
     }
   }
-  
+
 
 
   public onFileSelected(event: Event) {
@@ -97,9 +101,9 @@ export class UserService {
       this.selectedFile = inputElement.files[0];
     }
   }
-  
+
   async onUpload() {
-    const userId =  sessionStorage.getItem('userId'); 
+    const userId = sessionStorage.getItem('userId');
     if (userId) {
       await this.uploadProfilePicture(userId, this.selectedFile).toPromise();
       console.log('Profile picture uploaded successfully');
@@ -107,9 +111,9 @@ export class UserService {
       console.error('User is not logged in');
     }
   }
-  
- public async getUserProfilePicture() {
-  const userId =  sessionStorage.getItem('userId'); 
+
+  public async getUserProfilePicture() {
+    const userId = sessionStorage.getItem('userId');
     if (userId) {
       try {
         const response = await this.getProfilePicture(userId).toPromise();
@@ -136,5 +140,5 @@ export class UserService {
     const body = { companyId, firstName, lastName, email, roleId };
     return this.http.post(url, body);
   }
-  
+
 }

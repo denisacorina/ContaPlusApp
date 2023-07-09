@@ -61,7 +61,13 @@ namespace ContaPlusAPI.Repositories.InventoryRepository
         public async Task AddProductSale(ProductSale productSale)
         {
             await _context.AddAsync(productSale);
+            await _context.SaveChangesAsync();
 
+        }
+
+        public async Task AddProductPurchase(ProductPurchase productPurchase)
+        {
+            await _context.AddAsync(productPurchase);
             await _context.SaveChangesAsync();
 
         }

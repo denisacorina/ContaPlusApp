@@ -76,10 +76,12 @@
   </div>
 
 
-  <mat-form-field>
+  <mat-form-field [formGroup]="selectedUserForm">
     <mat-label>User</mat-label>
-    <mat-select [(ngModel)]="selectedUser">
-      <mat-option *ngFor="let user of users" [value]="user.user.userId">{{ user.user.lastName }} {{ user.user.lastName }}</mat-option>
+    <mat-select  (selectionChange)="setSelectedUserId($event)">
+      
+      <mat-option *ngFor="let user of companyUsers" [value]="user.user.userId" >
+        {{ user.user.lastName }} {{ user.user.lastName }}</mat-option>
     </mat-select>
   </mat-form-field>
   

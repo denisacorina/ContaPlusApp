@@ -1,0 +1,26 @@
+.trialBalance {
+    margin-top: 70px;
+}
+
+.export-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+  }
+
+  button {
+    background-color: #5757f3;
+    color: white;
+    margin-right: 10px;
+    border: none;
+  }
+
+  .tableStyle {
+    margin-top: 20px;
+    height: 500px;
+    overflow-y: auto;
+  }
+
+  #picker {
+    margin-top: -50px;
+  }

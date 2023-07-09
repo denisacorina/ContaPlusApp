@@ -4,6 +4,7 @@ using ContaPlusAPI.Models.InventoryModule;
 using ContaPlusAPI.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
+using ContaPlusAPI.Models.UserModule;
 
 namespace ContaPlusAPI.DTOs.AccountingDTO
 {
@@ -24,5 +25,6 @@ namespace ContaPlusAPI.DTOs.AccountingDTO
         public virtual Product? Product { get; set; }
         public virtual Supplier? Supplier { get; set; }
         public virtual Client? Client { get; set; }
+        public virtual User User { get; set; }
     }
 }

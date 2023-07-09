@@ -8,6 +8,48 @@
         <button class="addClient" type="button" style="margin-left: 15px;" (click)="openAddClientDialog()">Add Client</button>
        
        <div class="clients" style="font-size: 14px; margin-top: 30px;">
+        <div *ngIf="isAddClientDialogOpen" class="add-client-dialog">
+          <div class="centered">
+            <form [formGroup]="addClientForm" (ngSubmit)="onAddClientSubmit()">
+              <div class="row">
+                <div class="col" >
+                  <mat-form-field>
+                    <input matInput type="text" placeholder="Client Name" formControlName="clientName" required>
+                  </mat-form-field>
+                </div>
+                <div class="col input">
+                  <mat-form-field>
+                    <input matInput type="text" placeholder="Fiscal Code" formControlName="fiscalCode" required>
+                  </mat-form-field>
+                </div>
+             
+             
+                <div class="col input">
+                  <mat-form-field>
+                    <input matInput type="text" placeholder="Address" formControlName="address" required>
+                  </mat-form-field>
+                </div>
+                <div class="col input">
+                  <mat-form-field>
+                    <input matInput type="text" placeholder="Bank Account" formControlName="bankAccount" required>
+                  </mat-form-field>
+                </div>
+            
+                <div class="col">
+                  <mat-dialog-actions>
+                    <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;" type="submit">Add Client</button>
+                    <button mat-button mat-dialog-close (click)="closeAddClientDialog()">Cancel</button>
+                  </mat-dialog-actions>
+                </div>
+               
+            </div>
+            </form>
+          </div>
+        
+
+</div>
+
+        
          <div>
 
         <div class="table-container">
@@ -45,46 +87,7 @@
           </div>
 
 
-          <div *ngIf="isAddClientDialogOpen" class="add-client-dialog">
-            <div class="centered">
-              <form [formGroup]="addClientForm" (ngSubmit)="onAddClientSubmit()">
-                <div class="row">
-                  <div class="col" >
-                    <mat-form-field>
-                      <input matInput type="text" placeholder="Client Name" formControlName="clientName" required>
-                    </mat-form-field>
-                  </div>
-                  <div class="col input">
-                    <mat-form-field>
-                      <input matInput type="text" placeholder="Fiscal Code" formControlName="fiscalCode" required>
-                    </mat-form-field>
-                  </div>
-               
-               
-                  <div class="col input">
-                    <mat-form-field>
-                      <input matInput type="text" placeholder="Address" formControlName="address" required>
-                    </mat-form-field>
-                  </div>
-                  <div class="col input">
-                    <mat-form-field>
-                      <input matInput type="text" placeholder="Bank Account" formControlName="bankAccount" required>
-                    </mat-form-field>
-                  </div>
-              
-                  <div class="col">
-                    <mat-dialog-actions>
-                      <button mat-raised-button style="background-color: #4f4feb; color: white; margin-right: 10px;" type="submit">Add Client</button>
-                      <button mat-button mat-dialog-close (click)="closeAddClientDialog()">Cancel</button>
-                    </mat-dialog-actions>
-                  </div>
-                 
-              </div>
-              </form>
-            </div>
-          
-
-
+        
        
     
 </div>

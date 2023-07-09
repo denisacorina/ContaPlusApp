@@ -1,6 +1,6 @@
 ﻿using ContaPlusAPI.Context;
+using ContaPlusAPI.DTOs.AccountingDTO;
 using ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface;
-using ContaPlusAPI.Interfaces.IService.AccountingServiceInterface;
 using ContaPlusAPI.Models.AccountingModule;
 using Microsoft.EntityFrameworkCore;
 
@@ -78,6 +78,36 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateTransactionById(int transactionId, Transaction updatedTransaction)
+        {
+            var existingTransaction = await _context.Transactions.FindAsync(transactionId);
+
+            if (existingTransaction != null)
+            {
+                if (existingTransaction.DocumentNumber != updatedTransaction.DocumentNumber)
+                    existingTransaction.DocumentNumber = updatedTransaction.DocumentNumber;
+
+                if (existingTransaction.DocumentSeries != updatedTransaction.DocumentSeries)
+                    existingTransaction.DocumentSeries = updatedTransaction.DocumentSeries;
+
+                if (existingTransaction.TransactionAmount != updatedTransaction.TransactionAmount)
+                    existingTransaction.TransactionAmount = updatedTransaction.TransactionAmount;
+
+                if (existingTransaction.PaidAmount != updatedTransaction.PaidAmount)
+                    existingTransaction.PaidAmount = updatedTransaction.PaidAmount;
+
+                if (existingTransaction.TransactionAmount == updatedTransaction.TransactionAmount || existingTransaction.PaidAmount == updatedTransaction.PaidAmount)
+                    existingTransaction.RemainingAmount = updatedTransaction.TransactionAmount - updatedTransaction.PaidAmount;
+
+
+                if (existingTransaction.Description != updatedTransaction.Description)
+                    existingTransaction.Description = updatedTransaction.Description;
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
 
         public async Task UpdateCompanyChartOfAccountsBalance(CompanyChartOfAccounts account, Guid companyId)
         {
@@ -157,38 +187,7 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
             }
         }
 
-        public async Task DeletePartialPaymentTransaction(int transactionId, Guid companyId)
-        {
-            var partialPaymentTransaction = await _context.Transactions.FindAsync(transactionId);
-
-            if (partialPaymentTransaction != null && partialPaymentTransaction.PaymentStatus == PaymentStatus.Partial)
-            {
-                var debitAccount = partialPaymentTransaction.DebitAccountCode;
-                var creditAccount = partialPaymentTransaction.CreditAccountCode;
-                var transactionAmount = partialPaymentTransaction.TransactionAmount;
-                _context.Transactions.Remove(partialPaymentTransaction);
-                await _context.SaveChangesAsync();
-
-                var existingCreditAccountCompany = await GetCompanyChartOfAccountsByAccountCode(creditAccount, companyId);
-                var existingDebitAccountCompany = await GetCompanyChartOfAccountsByAccountCode(debitAccount, companyId);
-
-                if (partialPaymentTransaction.TransactionType == TransactionType.Income || partialPaymentTransaction.TransactionType == TransactionType.Sale || partialPaymentTransaction.TransactionType == TransactionType.CustomerReceipt)
-                {
-                    existingCreditAccountCompany.CurrentBalance -= transactionAmount;
-                    existingDebitAccountCompany.CurrentBalance += transactionAmount;
-                    await UpdateCompanyChartOfAccountsBalance(existingCreditAccountCompany, companyId);
-                    await UpdateCompanyChartOfAccountsBalance(existingDebitAccountCompany, companyId);
-                }
-                else
-                {
-                    existingCreditAccountCompany.CurrentBalance += transactionAmount;
-                    existingDebitAccountCompany.CurrentBalance -= transactionAmount;
-                    await UpdateCompanyChartOfAccountsBalance(existingCreditAccountCompany, companyId);
-                    await UpdateCompanyChartOfAccountsBalance(existingDebitAccountCompany, companyId);
-                }
-            }
-        }
-
+      
         public async Task<Transaction> GetTransactionById(int transactionId)
         {
             return await _context.Transactions.FirstOrDefaultAsync(t => t.TransactionId == transactionId);
@@ -206,7 +205,7 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
                 .Where(t => t.RemainingAmount > 0 && t.Client.ClientId == clientId)
                 .ToListAsync();
         }
-        
+
         public async Task<ICollection<Transaction>> GetSupplierUnpaidTransactions(int supplierId)
         {
             return await _context.Transactions
@@ -214,5 +213,14 @@ namespace ContaPlusAPI.Repositories.AccountingRepository
                 .Where(t => t.RemainingAmount > 0 && t.Supplier.SupplierId == supplierId)
                 .ToListAsync();
         }
+
+        public async Task<ICollection<Transaction>> GetAllCompanyTransactions(Guid companyId)
+        {
+            return await _context.Transactions
+              .Include(c => c.Company)
+              .Where(t => t.Company.CompanyId == companyId)
+              .ToListAsync();
+        }
+     
     }
 }

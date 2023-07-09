@@ -17,6 +17,9 @@ import { CreateExpenseComponent } from './components/accounting/create-expense/c
 import { CreateSaleComponent } from './components/accounting/create-sale/create-sale.component';
 
 import { CreatePurchaseComponent } from './components/accounting/create-purchase/create-purchase.component';
+import { TeamComponent } from './components/pages/team/team.component';
+import { ReportsComponent } from './components/pages/reports/reports.component';
+
 
 
 export const routes: Routes = [
@@ -37,7 +40,8 @@ export const routes: Routes = [
   {path: 'expense/allExpenses', component: ExpenseComponent},
   {path: 'expense/addExpenseTransaction', component: CreateExpenseComponent},
   {path: 'expense/createPurchase', component: CreatePurchaseComponent},
-
+  {path: 'team', component: TeamComponent},
+  {path: 'reports', component: ReportsComponent}
 
 
 ];

@@ -210,8 +210,6 @@ export class CreateExpenseComponent implements OnInit {
 
         if (amount.value <= 0 || amount.value > transaction.remainingAmount) {
           amount.setErrors({ invalidAmount: true });
-        } else {
-          amount.setErrors(null);
         }
 
         const documentDetails = `Representing the payment of the Transaction ${transaction.documentSeries} ${transaction.documentNumber} from ${this.datePipe.transform(transaction.transactionDate, 'dd/MM/yyyy')}`;

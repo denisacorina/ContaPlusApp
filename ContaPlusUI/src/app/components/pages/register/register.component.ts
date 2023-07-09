@@ -26,14 +26,10 @@ passwordIsValid: boolean = false;
 
 registrationForm!: FormGroup;
 
-  constructor(private authService : AuthService, private router : Router) {
-
-  }
-
+  constructor(private authService : AuthService, private router : Router) {}
 
   ngOnInit(): void {
     this.registrationFormMethod();
-   
   }
 
   registrationFormMethod() {

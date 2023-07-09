@@ -54,6 +54,9 @@ export class CreateSaleComponent implements OnInit {
   isAddClientDialogOpen!: boolean;
   isAddProductDialogOpen!: boolean;
   generalChartOfAccounts!: { title: string; accounts: any[]; }[];
+  payLater!: boolean;
+  isPartialPayment!: boolean;
+  isInvoiceReceiptSelected = false;
 
   constructor(
     private inventoryService: InventoryService,
@@ -73,7 +76,7 @@ export class CreateSaleComponent implements OnInit {
 
     this.inventoryService.getProductsByCompanyId().subscribe(
       (products) => {
-        this.products = products.filter((product) => product.quantity > 0);
+        this.products = products.filter((product) => product.quantity > 0 || product.isService);
       }
     );
 
@@ -83,45 +86,12 @@ export class CreateSaleComponent implements OnInit {
     this.createProductForm();
     this.fetchGeneralChartOfAccountsList();
 
-  }
-
-  onProductSelected(productId: string) {
-    const selectedProduct = this.products.find(product => product.productId === productId);
-    this.form.get('price')?.setValue(selectedProduct?.price);
-  }
-
-  addProduct() {
-    this.selectedProductId = this.form.get('selectedProduct')?.value;
-    this.selectedProduct = this.products.find(product => product.productId === this.selectedProductId);
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    const isService = this.products.find(product => product.productId === this.selectedProductId)?.isService;
-    this.description = this.form.get('description')?.value;
-    if (this.selectedProduct) {
-
-      const quantity = this.form.get('quantity')?.value;
-      const price = this.form.get('price')?.value;
-
-      if (quantity > this.selectedProduct.quantity) {
-        alert("Quantity exceeds available quantity");
-        return;
+    this.form.get('isPartialPayment')?.valueChanges.subscribe(value => {
+      if (!value) {
+        this.form.get('paidAmount')?.setValue(this.form.get('amount')?.value);
       }
+    });
 
-      this.totalWithoutTva = (price * quantity);
-
-      if (isService) {
-        this.totalWithoutTva = price;
-      }
-
-
-      if (companyId) {
-        this.companyService.getCompanyById(companyId).subscribe((response) => {
-          this.isTvaPayer = response.tvaPayer;
-          this.calculateTva();
-        });
-      } else {
-        this.calculateTva();
-      }
-    }
   }
 
   calculateTva() {
@@ -142,12 +112,7 @@ export class CreateSaleComponent implements OnInit {
 
     this.addedProducts.push(newProduct);
 
-    this.form.get('quantity')?.reset();
-    this.form.get('selectedProduct')?.reset();
-    this.form.get('price')?.reset();
-    this.form.get('description')?.reset();
-
-
+    this.form.reset();
 
     this.totalAmountWithoutTva = 0;
     this.totalAmountTva = 0;
@@ -195,9 +160,48 @@ export class CreateSaleComponent implements OnInit {
       quantity: new FormControl(''),
       selectedProduct: new FormControl(''),
       price: new FormControl(''),
+
     });
   }
 
+
+  onProductSelected(productId: string) {
+    const selectedProduct = this.products.find(product => product.productId === productId);
+    this.form.get('price')?.setValue(selectedProduct?.price);
+  }
+
+  addProduct() {
+    this.selectedProductId = this.form.get('selectedProduct')?.value;
+    this.selectedProduct = this.products.find(product => product.productId === this.selectedProductId);
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    const isService = this.products.find(product => product.productId === this.selectedProductId)?.isService;
+    this.description = this.form.get('description')?.value;
+    if (this.selectedProduct) {
+
+      const quantity = this.form.get('quantity')?.value;
+      const price = this.form.get('price')?.value;
+
+      if (quantity > this.selectedProduct.quantity) {
+        alert("Quantity exceeds available quantity");
+        return;
+      }
+
+      this.totalWithoutTva = (price * quantity);
+
+      if (isService) {
+        this.totalWithoutTva = price;
+      }
+
+      if (companyId) {
+        this.companyService.getCompanyById(companyId).subscribe((response) => {
+          this.isTvaPayer = response.tvaPayer;
+          this.calculateTva();
+        });
+      } else {
+        this.calculateTva();
+      }
+    }
+  }
 
   submitForm() {
     let debitAccount = {
@@ -220,8 +224,8 @@ export class CreateSaleComponent implements OnInit {
 
     let isDueDateCorrect = false;
     const dueDate = this.form.get('dueDate')?.value;
-    const transactionDate = this.form.get('transactionDate')?.value
- 
+    const transactionDate = this.form.get('transactionDate')?.value;
+
 
     if (dueDate < transactionDate) {
       alert('Due date cannot be before the Transaction Date');
@@ -233,7 +237,6 @@ export class CreateSaleComponent implements OnInit {
 
       client: client,
       transactionAmount: this.isTvaPayer ? this.totalAmountWithTva : this.totalAmountWithoutTva,
-
       paidAmount: this.isTvaPayer ? this.totalAmountWithTva : this.totalAmountWithoutTva,
 
       transactionDate: this.form.get('transactionDate')?.value,
@@ -246,6 +249,13 @@ export class CreateSaleComponent implements OnInit {
       creditAccount: creditAccount,
       documents: []
     };
+
+    if (!this.isPartialPayment && !this.form.value.payLater)
+      transaction.paidAmount = transaction.transactionAmount;
+    if (this.payLater)
+      transaction.paidAmount = 0
+    if (this.isPartialPayment)
+      transaction.paidAmount = this.form.get('paidAmount')?.value
 
     this.addedProducts.forEach(() => {
       const productId = this.form.get('selectedProduct')?.value;
@@ -266,39 +276,37 @@ export class CreateSaleComponent implements OnInit {
       ProductSaleItems: this.addedProducts
     };
 
-    const htmlContent = `
+    const invoicePDFContent = `
         <div id="invoice-container" class="invoice-container" style="width: 500px">
-          <h3 class="col" style="font-weight: 700; color: #525252;">Invoice Details</h3>
-          <h5>Invoice ${transaction.documentSeries}  ${transaction.documentNumber}</h5>
+          <h5 style="padding: 10px; background-color: #5757f3; color: white; width: 300px; text-align: center;">Invoice <span style="text-transform: uppercase;"> ${transaction.documentSeries} - ${transaction.documentNumber}</span></h5>
           <div class="row">
-          <div class="client col" style="font-size: 10px">
-          <p>Client information:</p>
-          <p>Name ${clientInfo.clientName} </p>
-          <p>Fiscal Code ${clientInfo.fiscalCode} </p>
-          <p>Bank Account ${clientInfo.bankAccount} </p>
-          </div>
           <div class="supplier col" style="font-size: 10px">
           <p>Supplier information:</p>
-          <p>Name ${this.company.companyName} </p>
-          <p>Fiscal Code ${this.company.fiscalCode} </p>
-          <p>Trade Register ${this.company.tradeRegister} </p>
-          <p>Bank Account ${this.company.bankAccount ? this.company.bankAccount : ''} </p>
-          <p>Email ${this.company.email} </p>
+          <p style="font-size: 14px!important; margin-top: -20px;"><b> ${this.company.companyName} </b></p>
+          <p style="margin-top: -20px;">Fiscal Code ${this.company.fiscalCode} </p>
+          <p style="margin-top: -20px;">Trade Register ${this.company.tradeRegister} </p>
+          <p style="margin-top: -20px;">Bank Account ${this.company.bankAccount ? this.company.bankAccount : 'No bank account'} </p>
+          <p style="margin-top: -20px;">Email ${this.company.email} </p>
+          </div>
+          <div class="client col" style="font-size: 10px">
+          <p >Client information:</p>
+          <p style="font-size: 14px!important; margin-top: -20px;"><b>  ${clientInfo.clientName} </b></p>
+          <p style="margin-top: -20px;">Fiscal Code ${clientInfo.fiscalCode} </p>
+          <p style="margin-top: -20px;">Bank Account ${clientInfo.bankAccount} </p>
           </div>
           </div>
-          <p>Transaction Date: ${transaction.transactionDate.toLocaleDateString()}</p>
-          <p>Due Date: ${transaction.dueDate.toLocaleDateString()}</p>
+          <p style="font-size: 10px; ">Transaction Date: ${transaction.transactionDate.toLocaleDateString()}</p>
+          <p style="font-size: 10px; margin-top: -20px;  margin-bottom: 10px;">Due Date: ${transaction.dueDate.toLocaleDateString()}</p>
 
           <table style="font-size: 12px;">
-            <thead style="font-size: 12px; background-color: #5757f3; color: white">
+            <thead style="font-size: 12px;  background-color: #5757f3; color: white">
               <tr>
-                <th>Nr</th>
-                <th>Name of the good/service</th>
+                <th style="margin-right: 12px!important;">Nr</th>
+                <th style="margin-right: 12px!important;">Product</th>
                 <th>Quantity</th>
                 <th>Price</th>
-                <th>Total without TVA</th>
-                <th>TVA</th>
-                <th>Total with TVA</th>
+                <th>Total without TVA </th> 
+                <th>Total with TVA </th>
                 <th>Description</th>
               </tr>
             </thead>
@@ -306,40 +314,65 @@ export class CreateSaleComponent implements OnInit {
               ${this.generateProductRows()}  
             </tbody>
           </table>
-          
-          <div class="totalAmounts" *ngIf="addedProducts.length > 0">
-            <div>Total without TVA: <span class="amount"> ${this.totalAmountWithoutTva ? this.totalAmountWithoutTva : 0}</span></div>
+          <br>
+            <div margin-top: 20px;>Total without TVA: <span class="amount"> ${this.totalAmountWithoutTva ? this.totalAmountWithoutTva : 0}</span></div>
             <div>Total TVA: <span class="amount"> ${this.totalAmountTva ? this.totalAmountTva : 0}</span></div>
-            <div>Total with TVA: <span class="amount"> ${this.totalAmountWithTva ? this.totalAmountWithTva : 0}</span></div>
-          </div>
+            <div style="padding: 10px; background-color: #5757f3; color: white; width: 150px; text-align: center;">Total: <span class="amount"> ${this.totalAmountWithTva ? this.totalAmountWithTva : 0}</span></div>
+            <br>
+            <p style="font-size: 10px">Generated by <b>ContaPlus</b></p>
         </div>
       `;
 
-    if(isDueDateCorrect)
-    this.transactionService.createProductSaleTransaction(model).subscribe(
-      () => {
+    const receiptPDFContent = `
+        <div id="invoice-container" class="invoice-container" style="width: 500px">
+          <h5 style="padding: 10px; background-color: #5757f3; color: white; width: 300px; text-align: center;>Receipt for Invoice <span style="text-transform: uppercase;">Receipt for Invoice ${transaction.documentSeries} - ${transaction.documentNumber}</span></h5>
+          <p style="font-size: 10px; ">Transaction Date: ${transaction.transactionDate.toLocaleDateString()}</p>
+          
+          <div class="supplier col" style="font-size: 10px">
+          <p>Supplier information:</p>
+          <p style="font-size: 14px!important; margin-top: -20px;"><b> ${this.company.companyName} </b></p>
+          <p style="margin-top: -20px;">Fiscal Code ${this.company.fiscalCode} </p>
+          <p style="margin-top: -20px;">Trade Register ${this.company.tradeRegister} </p>
+          <p style="margin-top: -20px;">Bank Account ${this.company.bankAccount ? this.company.bankAccount : 'No bank account'} </p>
+          <p style="margin-top: -20px;">Email ${this.company.email} </p>
+          </div>
+          <div class="client col" style="font-size: 10px">
+          <p>I received from <b>${clientInfo.clientName}</b>, fiscal Code ${clientInfo.fiscalCode}<br> The amount of ${this.totalAmountTva ? this.totalAmountTva : this.totalAmountWithoutTva} representing payment for invoice ${transaction.documentSeries} - ${transaction.documentNumber}</p>
+          </div>
+          <br>
+          <p style="font-size: 10px">Generated by <b>ContaPlus</b></p>
+        </div>
+      `;
 
-        this.generatePDF(htmlContent);
-        this.form.get('quantity')?.reset();
-        this.form.get('selectedProduct')?.reset();
-        this.form.get('price')?.reset();
-        this.form.get('description')?.reset();
-        this.form.get('clientId')?.reset();
-        this.form.get('transactionDate')?.reset();
-        this.form.get('dueDate')?.reset();
-        this.form.get('documentSeries')?.reset();
-        this.form.get('documentNumber')?.reset();
-        this.addedProducts = [];
-      }
-    );
+    if (isDueDateCorrect)
+      this.transactionService.createProductSaleTransaction(model).subscribe(
+        () => {
+
+
+          if (this.isInvoiceReceiptSelected) {
+            this.generateInvoicePDF(invoicePDFContent);
+            this.generateReceiptPDF(receiptPDFContent);
+          }
+          else
+            this.generateInvoicePDF(invoicePDFContent);
+
+          this.form.reset();
+
+          this.addedProducts = [];
+
+          this.router.navigateByUrl('/income/createSale', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['/income/createSale']);
+          });
+        }
+      );
 
   }
 
-  generatePDF(htmlContent: string) {
+  generateInvoicePDF(invoicePDFContent: string) {
     const pdf = new jsPDF.default('p', 'pt', 'a4');
 
 
-    pdf.html(htmlContent, {
+    pdf.html(invoicePDFContent, {
       margin: [10, 30, 30, 30],
 
       callback: (pdf) => {
@@ -356,24 +389,42 @@ export class CreateSaleComponent implements OnInit {
     });
   }
 
+  generateReceiptPDF(receiptPDFContent: string) {
+    const pdf = new jsPDF.default('p', 'pt', 'a4');
+
+
+    pdf.html(receiptPDFContent, {
+      margin: [10, 30, 30, 30],
+
+      callback: (pdf) => {
+        pdf.setProperties({
+          title: 'Receipt',
+
+        });
+
+
+        pdf.output('dataurlnewwindow');
+
+        // pdf.save('receipt.pdf');
+      },
+    });
+  }
+
 
   generateProductRows() {
     let rows = '';
     let index = 1;
 
     this.addedProducts.forEach(product => {
-      rows += `
-        <tr>
+      rows += `<tr>
           <td>${index}</td>
           <td>${product.productName}</td>
-          <td>${product.quantity}</td>
+          <td>${product.quantity ? product.quantity : ''}</td>
           <td>${product.price}</td>
           <td>${product.totalWithoutTva}</td>
-          <td>${product.tva}</td>
           <td>${product.totalWithTva}</td>
-          <td>${product.description}</td>
-        </tr>
-      `;
+          <td>${product.description ? product.description : ''}</td>
+        </tr>`;
 
       index++;
     });
@@ -504,5 +555,18 @@ export class CreateSaleComponent implements OnInit {
       }
     );
   }
+
+  onPartialPaymentChange() {
+    this.payLater = false;
+  }
+
+  onPayLaterChange() {
+    this.isPartialPayment = false;
+  }
+
+  onGenerateInvoiceReceiptChange() {
+    this.isInvoiceReceiptSelected = true;
+  }
+
 
 }

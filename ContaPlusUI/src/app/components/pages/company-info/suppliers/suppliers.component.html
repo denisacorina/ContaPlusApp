@@ -6,43 +6,7 @@
 <button class="addClient" type="button" style="margin-left: 15px;" (click)="openAddSupplierDialog()">Add Supplier</button>
 
 <div class="clients" style="font-size: 14px; margin-top: 30px;">
- <div>
-
-<div class="table-container">
-    <table mat-table [dataSource]="dataSource" >
-
-      <ng-container matColumnDef="supplierName">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let supplier">{{ supplier.supplierName }}</td>
-      </ng-container>
   
-      <ng-container matColumnDef="fiscalCode">
-        <th mat-header-cell *matHeaderCellDef>Fiscal Code</th>
-        <td mat-cell *matCellDef="let supplier">{{ supplier.fiscalCode }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="address">
-        <th mat-header-cell *matHeaderCellDef>Address</th>
-        <td mat-cell *matCellDef="let supplier">{{ supplier.address }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="bankAccount">
-        <th mat-header-cell *matHeaderCellDef>Bank Account</th>
-        <td mat-cell *matCellDef="let supplier">{{ supplier.bankAccount }}</td>
-      </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="displayedSuppliersColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedSuppliersColumns;"></tr>
-  <div *ngIf="suppliers.length === 0">
-    <h3 class="no-data">No suppliers</h3>
-  </div>
-    </table>
-  </div>
-  
-  
-  
-
-
   <div *ngIf="isAddSupplierDialogOpen" class="add-client-dialog">
     <div class="centered">
       <form [formGroup]="addSupplierForm" (ngSubmit)="onAddSupplierSubmit()">
@@ -82,3 +46,40 @@
     </div> 
 
 </div>
+</div>
+ <div>
+
+<div class="table-container">
+    <table mat-table [dataSource]="dataSource" >
+
+      <ng-container matColumnDef="supplierName">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let supplier">{{ supplier.supplierName }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="fiscalCode">
+        <th mat-header-cell *matHeaderCellDef>Fiscal Code</th>
+        <td mat-cell *matCellDef="let supplier">{{ supplier.fiscalCode }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef>Address</th>
+        <td mat-cell *matCellDef="let supplier">{{ supplier.address }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="bankAccount">
+        <th mat-header-cell *matHeaderCellDef>Bank Account</th>
+        <td mat-cell *matCellDef="let supplier">{{ supplier.bankAccount }}</td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedSuppliersColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedSuppliersColumns;"></tr>
+  <div *ngIf="suppliers.length === 0">
+    <h3 class="no-data">No suppliers</h3>
+  </div>
+    </table>
+  </div>
+  
+  
+  
+

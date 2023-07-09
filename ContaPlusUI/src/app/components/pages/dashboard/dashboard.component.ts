@@ -9,6 +9,8 @@ import * as ApexCharts from 'apexcharts';
 import { ClientService } from 'src/app/services/client.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { SupplierService } from 'src/app/services/supplier.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { find } from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -38,6 +40,9 @@ export class DashboardComponent implements OnInit {
   isEarningDropdownOpen: boolean = false;
   isExpenseDropdownOpen: boolean = false;
 
+  expenseTransactionType!: string;
+  incomeTransactionType!: string
+
 
   totalClients: number = 0;
   clients: [] = [];
@@ -51,8 +56,12 @@ export class DashboardComponent implements OnInit {
   totalSuppliers: any;
   totalExpense!: number;
   isFirstLoad = true;
+  overDueTransactions!: any[];
+ 
+  overDueIncomeTransactions!: any[];
+  salesTransactions: any;
 
-
+ 
   constructor(private companyService: CompanyService,
     private clientService: ClientService,
     private supplierService: SupplierService,
@@ -68,9 +77,19 @@ export class DashboardComponent implements OnInit {
     this.getIncomeTransactions();
     this.getExpenseTransactions();
     this.getCurrentCompany();
-  
+    this.getExpenseTransactionsOverdue();
+    this.getIncomeTransactionsOverdue();
+    //this.getSalesTransactions();
    
   }
+
+  getSalesTransactions()
+  {
+    this.transactionService.getAllCompanyTransactions().subscribe((response) => {
+      this.salesTransactions = response.filter((transaction: { transactionType: number; }) => transaction.transactionType === 0);
+    })
+  }
+  
 
   getCurrentCompany()
   {
@@ -102,28 +121,29 @@ export class DashboardComponent implements OnInit {
   barChart() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   
-    if (this.companyId) {
-      this.transactionService.getIncomeTransactions(this.companyId).subscribe(
-        (incomeTransactions) => {
-          const paidAmountByMonth = new Array<number>(12).fill(0);
-          for (const transaction of incomeTransactions) {
-            const transactionDate = new Date(transaction.transactionDate);
-            const monthIndex = transactionDate.getMonth();
-            const paidAmount = transaction.paidAmount;
+    this.transactionService.getAllCompanyTransactions().subscribe(
+      (salesTransactions) => {
+        const filteredSalesTransactions = salesTransactions.filter((transaction: { transactionType: number; }) => transaction.transactionType === 0);
+        const saleTransactionCountByMonth = new Array<number>(12).fill(0);
     
-            paidAmountByMonth[monthIndex] += paidAmount;
-          }
-          if (this.companyId) 
-          this.transactionService.getExpenseTransactions(this.companyId).subscribe(
-            (expenseTransactions) => {
-              const expensePaidAmountByMonth = new Array<number>(12).fill(0);
-              for (const transaction of expenseTransactions) {
-                const transactionDate = new Date(transaction.transactionDate);
-                const monthIndex = transactionDate.getMonth();
-                const paidAmount = transaction.paidAmount;
+        for (const transaction of filteredSalesTransactions) {
+          const transactionDate = new Date(transaction.transactionDate);
+          const monthIndex = transactionDate.getMonth();
     
-                expensePaidAmountByMonth[monthIndex] += paidAmount;
-              }
+          saleTransactionCountByMonth[monthIndex]++;
+        }
+    
+        this.transactionService.getAllCompanyTransactions().subscribe(
+          (purchaseTransactions) => {
+            const filteredSalesTransactions = purchaseTransactions.filter((transaction: { transactionType: number; }) => transaction.transactionType === 1);
+            const purchaseTransactionCountByMonth = new Array<number>(12).fill(0);
+        
+            for (const transaction of filteredSalesTransactions) {
+              const transactionDate = new Date(transaction.transactionDate);
+              const monthIndex = transactionDate.getMonth();
+        
+              purchaseTransactionCountByMonth[monthIndex]++;
+            }
     
               var options = {
                 chart: {
@@ -145,12 +165,12 @@ export class DashboardComponent implements OnInit {
                 },
                 series: [
                   {
-                    name: 'Expenses',
-                    data: expensePaidAmountByMonth,
+                    name: 'Sales',
+                    data: saleTransactionCountByMonth,
                   },
                   {
-                    name: 'Incomes',
-                    data: paidAmountByMonth,
+                    name: 'Purchases',
+                    data: purchaseTransactionCountByMonth,
                   }
                 ],
                 xaxis: {
@@ -169,8 +189,8 @@ export class DashboardComponent implements OnInit {
         }
       );
     }
-  }
   
+
 
   chart() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -316,7 +336,29 @@ export class DashboardComponent implements OnInit {
     }
   }
 
- 
+  getExpenseTransactionsOverdue() {
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
+      this.transactionService.getExpenseTransactions(companyId).subscribe(
+        (response) => {
+          this.overDueTransactions = response.filter(transaction => transaction.paymentStatus === 3);
+          this.expenseTransactionType = "Expense"
+        }
+      );
+    }
+  }
+
+  getIncomeTransactionsOverdue() {
+    const companyId = sessionStorage.getItem('selectedCompanyId');
+    if (companyId) {
+      this.transactionService.getIncomeTransactions(companyId).subscribe(
+        (response) => {
+          this.overDueIncomeTransactions = response.filter(transaction => transaction.paymentStatus === 3);
+          this.incomeTransactionType = "Income"
+        }
+      );
+    }
+  }
 
   getExpenseTransactions() {
     const companyId = sessionStorage.getItem('selectedCompanyId');
@@ -337,5 +379,18 @@ export class DashboardComponent implements OnInit {
     return sum;
   }
 
-
+  getPaymentStatus(status: number): string {
+    switch (status) {
+      case 0:
+        return 'unpaid';
+      case 1:
+        return 'partial';
+      case 2:
+        return 'paid';
+      case 3:
+        return 'overdue';
+      default:
+        return '';
+    }
+  }
 }

@@ -5,11 +5,7 @@
   <div class="custom-scrollbar scrollable">
     <div class="row">
       <h3 class="mb-4 col" style="font-weight: 700; color: #525252;">Dashboard</h3>
-      <!-- <div class="options-bar col">
-        <div class="option" (click)="toggleOption(0)">This Month</div>
-        <div class="option" (click)="toggleOption(1)">This Week</div>
-        <div class="option selected" (click)="toggleOption(2)" style="border-right: 0.5px solid #8e8e8e;">Today</div>
-      </div> -->
+    
     </div>
 
     <div class="cards row" style="margin-left: 1px;">
@@ -90,7 +86,7 @@
               </div>
             </div>
             <h2>${{totalIncome}}</h2>
-            <h6 style="color: #747474; margin-top: 5px;">Total Revenues</h6>
+            <h6 style="color: #747474; margin-top: 5px;">Total Incomes</h6>
 
           </div>
           <div class="card col">
@@ -170,30 +166,84 @@
       </div>
 
       <div class="companies mt-4">
+        <h5 class="mb col" style="font-weight: 700; color: #525252;"> Overdue Transactions</h5>
+      
         <table class="table" id="#company">
           <thead class="thead">
             <tr>
-              <th style="border-top-left-radius: 10px;" scope="col">Company Name</th>
-              <th scope="col">Fiscal Code</th>
-              <th scope="col">Trade Register</th>
-              <th scope="col">Social Capital</th>
-              <th scope="col">Address</th>
-              <th style="border-top-right-radius: 10px;" scope="col">TVA Payer</th>
+              <th style="border-top-left-radius: 10px;" scope="col">Document Number</th>
+              <th scope="col-">Document Series</th>
+              <th scope="col">Total Amount</th>
+              <th scope="col">Paid Amount</th>
+              <th scope="col">Remaining Amount</th>
+              <th scope="col">Transaction Date</th>
+              <th scope="col">Due Date</th>
+              <th scope="col">Transaction Type</th>
+              <th scope="col">Payment Status</th>
+              <th style="border-top-right-radius: 10px;" scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let company of companies">
+            <tr *ngFor="let transaction of overDueTransactions">
 
-              <td>{{ company.companyName }}</td>
-              <td>{{ company.fiscalCode }}</td>
-              <td>{{ company.tradeRegister }}</td>
-              <td>{{ company.socialCapital }}</td>
-              <td>{{ company.address }}</td>
-              <td><input type="checkbox" [(ngModel)]="company.tvaPayer" disabled></td>
+              <td>{{ transaction.documentNumber }}</td>
+              <td>{{ transaction.documentSeries }}</td>
+              <td>{{ transaction.transactionAmount }}</td>
+              <td>{{ transaction.paidAmount }}</td>
+              <td>{{ transaction.remainingAmount }}</td>
+              <td>{{ transaction.transactionDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ transaction.dueDate | date: 'dd/MM/yyyy' }}</td>
+              <td class="expense"><p style="background-color: rgb(117, 196, 230); font-weight: bold;   
+                border-radius: 30px; 
+                font-size: 10px;
+                text-align: center;
+                padding: 10px ;
+                color: rgb(2, 69, 156)">{{expenseTransactionType}}</p></td>
+              <td [ngClass]="getPaymentStatus(transaction.paymentStatus)" id="#paymentStatus"> 
+                <div *ngIf="transaction.paymentStatus === 3">
+                  <p style="background-color: rgb(230, 117, 117); font-weight: bold;   
+                  border-radius: 30px; 
+                  font-size: 10px;
+                  text-align: center;
+                  padding: 10px;
+                  color: #9c0202;">Overdue</p>
+        
+              </div></td>
+              <td><button class="payBtn" [routerLink]="['/expense/addExpenseTransaction']">Register payment</button></td>
+      
+
+            </tr>
+            <tr *ngFor="let transaction of overDueIncomeTransactions">
+
+              <td>{{ transaction.documentNumber }}</td>
+              <td>{{ transaction.documentSeries }}</td>
+              <td>{{ transaction.transactionAmount }}</td>
+              <td>{{ transaction.paidAmount }}</td>
+              <td>{{ transaction.remainingAmount }}</td>
+              <td>{{ transaction.transactionDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ transaction.dueDate | date: 'dd/MM/yyyy' }}</td>
+              <td class="income"><p style="background-color: rgb(240, 191, 233); font-weight: bold;   
+                border-radius: 30px; 
+                font-size: 10px;
+                text-align: center;
+                padding: 10px;
+                color:  rgb(156, 2, 128)">{{incomeTransactionType}}</p></td>
+              <td [ngClass]="getPaymentStatus(transaction.paymentStatus)" id="#paymentStatus"> <div *ngIf="transaction.paymentStatus === 3">
+                <p style="background-color: rgb(230, 117, 117); font-weight: bold;   
+                border-radius: 30px; 
+                font-size: 10px;
+                text-align: center;
+                padding: 10px ;
+                color: #9c0202;">Overdue</p>
+      
+            </div></td>
+              <td><button class="payBtn" [routerLink]="['/income/addIncomeTransaction']">Register payment</button></td>
 
             </tr>
           </tbody>
         </table>
+
+       
         <!-- 
 <div *ngIf="isUpdateCompanyDialogOpen" class="update-company-dialog">
   <div class="centered">

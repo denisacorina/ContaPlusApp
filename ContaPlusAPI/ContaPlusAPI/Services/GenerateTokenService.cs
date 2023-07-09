@@ -14,7 +14,6 @@ namespace ContaPlusAPI.Services
     {
         private readonly IConfiguration _config;
         private readonly ISaveChangesRepository _saveChangesRepository;
-
         public GenerateTokenService(IConfiguration config, ISaveChangesRepository saveChangesRepository)
         {
             _config = config;
@@ -25,9 +24,9 @@ namespace ContaPlusAPI.Services
         {
             List<Claim> claims = new()
             {
-                new Claim(ClaimTypes.Name,user.UserId.ToString()),
-                
+                new Claim(ClaimTypes.Name, user.UserId.ToString()),
             };
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt:Key").Value));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var token = new JwtSecurityToken(

@@ -123,8 +123,35 @@
                 </div>
             </div>
 
+            <div class="col">
+              <div class="col">
+                <div class="col">
+                  <mat-checkbox [(ngModel)]="payLater" formControlName="payLater" (change)="onPayLaterChange()">Pay
+                    Later</mat-checkbox>
+                </div>
+                <div class="col">
+                  <mat-checkbox [(ngModel)]="isPartialPayment" formControlName="isPartialPayment"
+                    (change)="onPartialPaymentChange()">Partial pay</mat-checkbox>
+                </div>
+      
+              </div>
+      
+              <div class="row" *ngIf="isPartialPayment">
+                <div class="col">
+                  <mat-form-field>
+                    <input matInput type="number" placeholder="Paid Amount" formControlName="paidAmount">
+                    <mat-error
+                      *ngIf="form.get('paidAmount')?.invalid || form.get('paidAmount')?.value > form.get('amount')?.value"></mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
 
-            <button class="submitSaleForm" type="submit">Submit and Generate Invoice</button>
+            <div>
+              <span style="margin-right: 20px;"><button class="submitSaleForm" type="submit">Generate Invoice</button></span>
+              <span *ngIf="!payLater"><button class="submitSaleForm" type="submit" (click)="onGenerateInvoiceReceiptChange()">Generate Invoice and Receipt</button></span>
+            </div>
+            
         </div>
     </form>
     <div class="totalAmounts" *ngIf="addedProducts.length > 0">
@@ -195,7 +222,7 @@
           
             <mat-form-field>
               <mat-label>Description</mat-label>
-              <input matInput formControlName="description" required>
+              <input matInput formControlName="description">
             </mat-form-field>
           
             <mat-form-field>

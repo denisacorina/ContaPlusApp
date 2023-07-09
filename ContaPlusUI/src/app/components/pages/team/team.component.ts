@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
 import { UserService } from 'src/app/services/user.service';
@@ -20,16 +20,19 @@ export class TeamComponent implements OnInit {
   companies: any;
   isAddUserToCompanyDialogOpen: any;
   users!: any[];
-  selectedUser!: string | null;
+  selectedUser!: any;
   selectedRole: any;
   isAdmin: any;
   isManager: any;
   isAccountant: any;
-  constructor(private userService: UserService, private companyService: CompanyService, private roleService: RoleService) {
+  selectedUserForm: any;
+  selectedUserId: any;
+  constructor(private userService: UserService, private companyService: CompanyService, private roleService: RoleService, private formBuilder: FormBuilder) {
   }
 
-  getUserService(): UserService {
-    return this.userService;
+  getSelectedUser(): FormBuilder
+  {
+    return this.selectedUserForm;
   }
 
   ngOnInit(): void {
@@ -41,12 +44,22 @@ export class TeamComponent implements OnInit {
     this.getAllUsersToCurrentCompany();
 
     this.getCurrentUserRoleToCompany();
-
-    this.getAllUsersToCurrentCompany();
-    this.getUsers();
+    console.log(this.selectedUser)
+   
     this.getRoles();
     this.addUserToCompany();
 
+  
+  }
+
+  getSelectedUserId() {
+    return this.selectedUserId;
+  }
+
+  setSelectedUserId(event: any) {
+    this.selectedUserId = event.value;
+    console.log(event)
+    console.log(this.selectedUserId)
   }
 
 
@@ -78,7 +91,8 @@ export class TeamComponent implements OnInit {
       this.userService.getUsersAndRolesFromCompany(companyId).subscribe(
         (response) => {
           this.companyUsers = response;
-
+          console.log(this.companyUsers);
+     
           for (const user of this.companyUsers) {
             this.userService.getProfilePicture(user.user.userId).subscribe(
               (res) => {
@@ -93,6 +107,7 @@ export class TeamComponent implements OnInit {
                 user.profilePictureUrl = 'https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png';
               }
             );
+          
           }
         },
         (error) => {
@@ -100,6 +115,11 @@ export class TeamComponent implements OnInit {
         }
       );
     }
+  }
+
+  setSelectedUser() {
+   this.selectedUser = this.selectedUserForm.get("selectedUser")?.value;
+   console.log(this.selectedUser)
   }
 
 
@@ -111,7 +131,6 @@ export class TeamComponent implements OnInit {
       companyId: new FormControl('', Validators.required),
       roleId: new FormControl('', Validators.required)
     });
-
   }
 
   checkIfUserExists(email: string) {
@@ -162,21 +181,14 @@ export class TeamComponent implements OnInit {
   }
 
 
-  getUsers() {
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    if (companyId)
-      this.userService.getUsersAndRolesFromCompany(companyId).subscribe((response) => {
-        this.users = response;
-        if (this.users.length > 0) {
-          this.selectedUser = this.users[0].user.userId;
-        }
-      })
-  }
+
+  
 
   addUserRole() {
     const companyId = sessionStorage.getItem('selectedCompanyId');
-    if (companyId && this.selectedUser && this.selectedRole) {
-      this.userService.addUserRoleToCompany(this.selectedUser, this.selectedRole, companyId).subscribe(
+    if (companyId && this.selectedUserId && this.selectedRole) {
+  
+      this.userService.addUserRoleToCompany(this.selectedUserId, this.selectedRole, companyId).subscribe(
         () =>
           window.location.reload()
 

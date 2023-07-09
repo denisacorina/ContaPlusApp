@@ -52,7 +52,7 @@
   border: none;
   border-radius: 10px;
   margin-right: 20px;
-  box-shadow: 0px 0px 10px -4px rgba(102,102,102,0.74);
+  box-shadow: 0px 0px 10px -4px rgba(102, 102, 102, 0.74);
 }
 
 .small-card {
@@ -63,7 +63,7 @@
   border: none;
   border-radius: 10px;
   margin-right: 20px;
-  box-shadow: 0px 0px 10px -4px rgba(102,102,102,0.74);
+  box-shadow: 0px 0px 10px -4px rgba(102, 102, 102, 0.74);
 }
 
 .chart {
@@ -71,7 +71,7 @@
   border-radius: 10px;
   width: 200px;
   height: 300px;
-  box-shadow: 0px 0px 10px -4px rgba(102,102,102,0.74);
+  box-shadow: 0px 0px 10px -4px rgba(102, 102, 102, 0.74);
 }
 
 
@@ -80,6 +80,22 @@
   margin-top: 100px;
   display: flex;
 }
+
+
+.payBtn {
+  background-color: rgb(62, 62, 62);
+  color: rgb(189, 189, 189);
+  border-radius: 1px;
+  font-weight: bold;
+  border-radius: 30px;
+  font-size: 10px;
+  border: none;
+  padding: 5px;
+  text-align: center;
+  margin-top: 5px;
+
+}
+
 
 
 .update-company-dialog {
@@ -275,11 +291,11 @@ mat-dialog-actions {
 }
 
 
-.dropdown{
- background-color: transparent!important; 
- padding: 0px!important; 
+.dropdown {
+  background-color: transparent !important;
+  padding: 0px !important;
   border-radius: 10px;
-  margin-top: 0px!important; 
+  margin-top: 0px !important;
   position: absolute;
   right: 0;
   display: flex;
@@ -288,7 +304,7 @@ mat-dialog-actions {
 }
 
 #dropdownMenuButton {
-  background-color: transparent!important;
+  background-color: transparent !important;
   color: #333;
   border: none;
 }
@@ -296,17 +312,22 @@ mat-dialog-actions {
 .companies {
   border-radius: 10px;
   padding: 7px;
-  box-shadow: 0px 0px 10px -4px rgba(102,102,102,0.74);
+  box-shadow: 0px 0px 10px -4px rgba(102, 102, 102, 0.74);
   width: 98.5%;
 }
-#company{
+
+#company {
   border-collapse: collapse;
   overflow: hidden;
 }
+
 .table td {
   border: none;
   padding-left: 10px;
-  
+
+}
+th {
+  font-size: 12px;
 }
 
 .options-bar {

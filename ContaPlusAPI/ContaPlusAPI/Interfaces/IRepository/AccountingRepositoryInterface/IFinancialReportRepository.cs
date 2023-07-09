@@ -1,14 +1,12 @@
-﻿namespace ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface
+﻿using ContaPlusAPI.DTOs.AccountingDTO;
+using ContaPlusAPI.Models.AccountingModule;
+
+namespace ContaPlusAPI.Interfaces.IRepository.AccountingRepositoryInterface
 {
     public interface IFinancialReportRepository
     {
-        Task<string> GenerateTrialBalanceReport(DateTime startDate, DateTime endDate); // balanta de verificare
-        Task<string> GenerateGeneralLedgerReport(DateTime startDate, DateTime endDate); // cartea mare
-        Task<string> GenerateJournalEntryReport(DateTime startDate, DateTime endDate); // registru jurnal
-        Task<string> GenerateCashFlowStatement(DateTime startDate, DateTime endDate); 
-        Task<string> GenerateBalanceSheet(DateTime startDate, DateTime endDate); // bilant contabil
-        Task<string> GenerateClosingEntriesReport(DateTime endDate); // inchidere conturi
-        Task<string> GenerateMonthEndClosingReport(DateTime endDate);
-        Task<string> GenerateProfitAndLossReport(DateTime startDate, DateTime endDate); 
+        Task<ICollection<Transaction>> JournalEntryReport(Guid companyId, DateTime startDate, DateTime endDate); // registru jurnal
+        Task<ProfitLossReportModel> ProfitLossReport(Guid companyId, DateTime startDate, DateTime endDate);
+        Task<ICollection<CompanyChartOfAccounts>> TrialBalanceReport(Guid companyId); //  solduri conturi curente
     }
 }

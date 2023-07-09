@@ -5,8 +5,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatSortModule } from '@angular/material/sort';
-
 
 @Component({
   selector: 'app-expense',
@@ -21,8 +19,8 @@ export class ExpenseComponent implements OnInit{
   transactionDateFilter!: any;
   dueDateFilter!: any;
 
-  createExpenseTransactionForm!: FormGroup;
-  isCreateExpenseTransactionDialogOpen: boolean = false;
+  editTransactionForm!: FormGroup;
+
 
   dataSource!: MatTableDataSource<any>;
   displayedColumns: string[] = ['documentNumber', 'documentSeries', 'transactionAmount', 'paidAmount', 'remainingAmount', 'transactionDate', 'dueDate', 'paymentStatus', 'actions'];
@@ -35,13 +33,23 @@ export class ExpenseComponent implements OnInit{
   transactionAmount: any;
   startDate!: Date;
   endDate!: Date;
+  isEditing!: boolean;
+  editingTransactionId!: number;
+  transaction: any;
+  transactionForm: any;
 
 
-  constructor(private transactionService: TransactionService, private datePipe: DatePipe) { }
+  constructor(private transactionService: TransactionService, private datePipe: DatePipe) {
+    this.transactionForm = new FormGroup({
+      documentNumber: new FormControl(),
+      documentSeries: new FormControl(),
+      transactionAmount: new FormControl(),
+      paidAmount: new FormControl()
+    });
+   }
 
   ngOnInit() {
     this.getExpenseTransactions();
-    this.createExpenseTransaction();
     this.filterTable();
   }
 
@@ -50,62 +58,17 @@ export class ExpenseComponent implements OnInit{
     this.dataSource.sort = this.sort;
   }
 
-  createExpenseTransaction() {
-    this.createExpenseTransactionForm = new FormGroup({
-      transactionAmount: new FormControl('', [Validators.required]),
-      debitAccount: new FormControl('', [Validators.required]),
-      creditAccount: new FormControl('', [Validators.required]),
-      paidAmount: new FormControl('', [Validators.required]),
-      documentNumber: new FormControl('', [Validators.required]),
-      documentSeries: new FormControl('', [Validators.required]),
-      dueDate: new FormControl('', [Validators.required]),
-      description: new FormControl('', [Validators.required])
-    });
+
+  editTransaction(transactionId: number) {
+    this.isEditing = true;
+    this.editingTransactionId = transactionId;
+    this.getTransaction(transactionId);
   }
 
-  openCreateExpenseTransactionDialog(): void {
-    this.isCreateExpenseTransactionDialogOpen = true;
+  cancelEdit() {
+    this.isEditing = false;
   }
-
-  closeCreateExpenseTransactionDialog(): void {
-    this.isCreateExpenseTransactionDialogOpen = false;
-  }
-
-  onCreateExpenseTransactionSubmit(): void {
-    const companyId = sessionStorage.getItem('selectedCompanyId');
-    if (companyId) {
-    const transactionAmount = this.createExpenseTransactionForm.value.transactionAmount;
-    const debitAccount = {
-      accountCode: this.createExpenseTransactionForm.value.debitAccount
-    };
-    const creditAccount = {
-      accountCode: this.createExpenseTransactionForm.value.creditAccount
-    };
-    const paidAmount = this.createExpenseTransactionForm.value.paidAmount;
-    const documentNumber = this.createExpenseTransactionForm.value.documentNumber;
-    const documentSeries = this.createExpenseTransactionForm.value.documentSeries;
-    const dueDate = new Date(this.createExpenseTransactionForm.value.dueDate);
-    const description = this.createExpenseTransactionForm.value.description;
-
-    const model = {
-      transactionAmount,
-      debitAccount,
-      creditAccount,
-      paidAmount,
-      documentNumber,
-      documentSeries,
-      dueDate,
-      description
-    };
-
-    this.transactionService.createExpenseTransaction(model).subscribe(
-      () => {
-        window.location.reload();
-      
-      }
-    );
-    }
-  }
+  
 
   getExpenseTransactions() {
     const companyId = sessionStorage.getItem('selectedCompanyId');
@@ -123,8 +86,38 @@ export class ExpenseComponent implements OnInit{
     }
   }
 
+  getTransaction(transactionId: number) {
+    this.transactionService.getTransactionById(transactionId).subscribe((response) => {
+      this.transaction = response;
 
+      this.transactionForm.patchValue({
+        documentNumber: this.transaction.documentNumber,
+        documentSeries: this.transaction.documentSeries,
+        transactionAmount: this.transaction.transactionAmount,
+        paidAmount: this.transaction.paidAmount
+      
+      });
+    });
+  }
 
+  saveTransaction() {
+    let transactionId =  this.transaction.transactionId
+    console.log(transactionId)
+    let transactionAmount = parseFloat(this.transactionForm.value.transactionAmount);
+    let paidAmount = parseFloat(this.transactionForm.value.paidAmount);
+    let model = {
+      DocumentNumber: this.transactionForm.value.documentNumber,
+      DocumentSeries: this.transactionForm.value.documentSeries,
+      TransactionAmount: transactionAmount,
+      PaidAmount: paidAmount,
+    }
+  
+    this.transactionService.updateTransactionById(transactionId, model).subscribe(() => {
+      this.isEditing = false;
+     window.location.reload()
+    });
+  
+  }
 
   getPaymentStatus(status: number): string {
     switch (status) {

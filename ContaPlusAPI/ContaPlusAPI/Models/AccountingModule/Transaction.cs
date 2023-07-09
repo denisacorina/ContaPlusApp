@@ -1,5 +1,6 @@
 ﻿using ContaPlusAPI.Models.CompanyModule;
 using ContaPlusAPI.Models.InventoryModule;
+using ContaPlusAPI.Models.UserModule;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -32,8 +33,10 @@ namespace ContaPlusAPI.Models.AccountingModule
         public virtual GeneralChartOfAccounts CreditAccount { get; set; }
         public virtual Company Company { get; set; }
         public virtual ICollection<ProductSale>? ProductSales { get; set; } = new List<ProductSale>();
+        public virtual ICollection<ProductPurchase>? ProductPurchases { get; set; } = new List<ProductPurchase>();
         public virtual Supplier? Supplier { get; set; }
         public virtual Client? Client { get; set; }
         public virtual ICollection<Document>? Documents { get; set; } = new List<Document>();
+        public virtual User User { get; set; }  
     }
 }

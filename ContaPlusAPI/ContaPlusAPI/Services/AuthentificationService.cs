@@ -14,13 +14,14 @@ namespace ContaPlusAPI.Services
         private readonly IGenerateTokenService _token;
         private readonly IEmailSenderService _emailSenderService;
         private readonly IUserRepository _userRepository;
-        public AuthentificationService(IMapper mapper, IPasswordService passwordService, IGenerateTokenService token, IEmailSenderService emailSenderService, IUserRepository userRepository)
+        public AuthentificationService(IMapper mapper, IPasswordService passwordService, IGenerateTokenService token,
+            IEmailSenderService emailSenderService, IUserRepository userRepository)
         {
             _mapper = mapper;
             _passwordService = passwordService;
             _token = token;
             _emailSenderService = emailSenderService;
-            _userRepository = userRepository;  
+            _userRepository = userRepository;
         }
 
         public async Task<IActionResult> Register(RegisterUserDTO registerUser)

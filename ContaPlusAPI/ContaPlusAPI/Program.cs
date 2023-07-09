@@ -20,8 +20,18 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
+using ContaPlusAPI.Models.UserModule;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using ContaPlusAPI.Interfaces.IService.Logging;
+using ContaPlusAPI.Services.LoggingService;
+using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 builder.Services.AddMvc();
 builder.Services.AddControllers().AddJsonOptions(x =>
@@ -70,9 +80,6 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.AddAutoMapper(typeof(AppDbContext));
 
 
-
-
-
 builder.Services.AddAuthentication(options =>
 {
 
@@ -117,7 +124,8 @@ builder.Services.AddScoped<IUserCompanyRoleService, UserCompanyRoleService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IClientSupplierService, ClientSupplierService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-
+builder.Services.AddScoped<IFinancialReportService, FinancialReportService>();
+builder.Services.AddScoped<ILoggerManager, LoggerManager>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -132,6 +140,7 @@ builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IClientSupplierRepository, ClientSupplierRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
 
 builder.Services.AddHostedService<BackgroundOverdueCheckTask>();
 

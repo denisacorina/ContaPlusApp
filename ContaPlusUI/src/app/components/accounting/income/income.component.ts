@@ -6,8 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
-
-
 @Component({
   selector: 'app-income',
   templateUrl: './income.component.html',
@@ -20,8 +18,8 @@ export class IncomeComponent implements OnInit {
   transactionDateFilter!: any;
   dueDateFilter!: any;
 
-  createIncomeTransactionForm!: FormGroup;
-  isCreateIncomeTransactionDialogOpen: boolean = false;
+  editTransactionForm!: FormGroup;
+
 
   dataSource!: MatTableDataSource<any>;
   displayedColumns: string[] = ['documentNumber', 'documentSeries', 'transactionAmount', 'paidAmount', 'remainingAmount', 'transactionDate', 'dueDate', 'paymentStatus', 'actions'];
@@ -34,13 +32,23 @@ export class IncomeComponent implements OnInit {
   transactionAmount: any;
   startDate!: Date;
   endDate!: Date;
+  transaction: any;
+  isEditing: boolean = false;
+  editingTransactionId!: number;
+  transactionForm: FormGroup;
 
+  constructor(private transactionService: TransactionService, private datePipe: DatePipe) { 
+    this.transactionForm = new FormGroup({
+      documentNumber: new FormControl(),
+      documentSeries: new FormControl(),
+      transactionAmount: new FormControl(),
+      paidAmount: new FormControl()
 
-  constructor(private transactionService: TransactionService, private datePipe: DatePipe) { }
+    });
+  }
 
   ngOnInit() {
     this.getIncomeTransactions();
-    this.createIncomeTransaction();
     this.filterTable();
   }
 
@@ -49,18 +57,49 @@ export class IncomeComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  createIncomeTransaction() {
-    this.createIncomeTransactionForm = new FormGroup({
-      transactionAmount: new FormControl('', [Validators.required]),
-      debitAccount: new FormControl('', [Validators.required]),
-      creditAccount: new FormControl('', [Validators.required]),
-      paidAmount: new FormControl('', [Validators.required]),
-      documentNumber: new FormControl('', [Validators.required]),
-      documentSeries: new FormControl('', [Validators.required]),
-      dueDate: new FormControl('', [Validators.required]),
-      description: new FormControl('', [Validators.required])
+
+  getTransaction(transactionId: number) {
+    this.transactionService.getTransactionById(transactionId).subscribe((response) => {
+      this.transaction = response;
+
+      this.transactionForm.patchValue({
+        documentNumber: this.transaction.documentNumber,
+        documentSeries: this.transaction.documentSeries,
+        transactionAmount: this.transaction.transactionAmount,
+        paidAmount: this.transaction.paidAmount
+      
+      });
     });
   }
+
+saveTransaction() {
+  let transactionId =  this.transaction.transactionId
+  console.log(transactionId)
+  let transactionAmount = parseFloat(this.transactionForm.value.transactionAmount);
+  let paidAmount = parseFloat(this.transactionForm.value.paidAmount);
+  let model = {
+    DocumentNumber: this.transactionForm.value.documentNumber,
+    DocumentSeries: this.transactionForm.value.documentSeries,
+    TransactionAmount: transactionAmount,
+    PaidAmount: paidAmount,
+  }
+
+  this.transactionService.updateTransactionById(transactionId, model).subscribe(() => {
+    this.isEditing = false;
+   window.location.reload()
+  });
+
+}
+
+cancelEdit() {
+  this.isEditing = false;
+}
+
+editTransaction(transactionId: number) {
+  this.isEditing = true;
+  this.editingTransactionId = transactionId;
+  this.getTransaction(transactionId);
+}
 
 
   getIncomeTransactions() {
@@ -125,7 +164,6 @@ export class IncomeComponent implements OnInit {
      
     }
   }
-
 
   filterTable() {
     this.dataSource.filterPredicate = (data: any, filter: string): boolean => {

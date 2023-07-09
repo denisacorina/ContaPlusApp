@@ -15,6 +15,7 @@ namespace ContaPlusAPI.Interfaces.IRepository.InventoryRepositoryInterface
 
 
         Task AddProductSale(ProductSale productSale);
+        Task AddProductPurchase(ProductPurchase productPurchase);
 
         Task<ICollection<GeneralChartOfAccounts>> GeneralChartOfAccountsList();
     }

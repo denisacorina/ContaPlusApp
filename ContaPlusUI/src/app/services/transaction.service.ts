@@ -9,6 +9,7 @@ export class TransactionService {
 
   private readonly baseTransactionUrl = environment.baseTransactionUrl;
   companyId = sessionStorage.getItem('selectedCompanyId');
+  userId = sessionStorage.getItem('userId');
 
   constructor(private http: HttpClient) { }
 
@@ -18,18 +19,33 @@ export class TransactionService {
   }
 
   createIncomeTransactionForClient(model: any, clientId: any): Observable<any> {
-    const url = `${this.baseTransactionUrl}/createIncomeTransaction?companyId=${this.companyId}&clientId=${clientId}`;
+    const url = `${this.baseTransactionUrl}/createIncomeTransaction?companyId=${this.companyId}&clientId=${clientId}&userId=${this.userId}`;
     return this.http.post<any>(url, model);
   }
 
   createIncomeTransaction(model: any): Observable<any> {
-    const url = `${this.baseTransactionUrl}/createIncomeTransaction?companyId=${this.companyId}`;
+    const url = `${this.baseTransactionUrl}/createIncomeTransaction?companyId=${this.companyId}&userId=${this.userId}`;
     return this.http.post<any>(url, model);
   }
 
   payExistingTransaction(transactionId: number, amount: number): Observable<any> {
     const url = `${this.baseTransactionUrl}/payExistingTransaction?transactionId=${transactionId}&amount=${amount}`;
     return this.http.put<any>(url, null);
+  }
+
+  updateTransactionById(transactionId: number, updatedTransaction: any) {
+    const url = `${this.baseTransactionUrl}/updateTransactionById/${transactionId}`;
+    console.log(updatedTransaction)
+    return this.http.put(url, updatedTransaction);
+
+  }
+
+  getTransactionById(transactionId: number): Observable<any> {
+    return this.http.get<any>(`${this.baseTransactionUrl}/getTransactionById`,{ params: { transactionId } });
+  }
+
+  getAllCompanyTransactions(): Observable<any> {
+    return this.http.get<any>(`${this.baseTransactionUrl}/getAllCompanyTransactions?companyId=${this.companyId}`);
   }
 
   deleteTransaction(transactionId: number) {
@@ -42,12 +58,12 @@ export class TransactionService {
   }
 
   createExpenseTransactionForSupplier(model: any, supplierId: any): Observable<any> {
-    const url = `${this.baseTransactionUrl}/createExpenseTransaction?companyId=${this.companyId}&supplierId=${supplierId}`;
+    const url = `${this.baseTransactionUrl}/createExpenseTransaction?companyId=${this.companyId}&supplierId=${supplierId}&userId=${this.userId}`;
     return this.http.post<any>(url, model);
   }
 
   createExpenseTransaction(model: any): Observable<any> {
-    const url = `${this.baseTransactionUrl}/createExpenseTransaction?companyId=${this.companyId}`;
+    const url = `${this.baseTransactionUrl}/createExpenseTransaction?companyId=${this.companyId}&userId=${this.userId}`;
     return this.http.post<any>(url, model);
   }
 
@@ -60,12 +76,12 @@ export class TransactionService {
   }
 
   createProductSaleTransaction(model: any) {
-    const url = `${this.baseTransactionUrl}/createProductSaleTransaction?companyId=${this.companyId}`;
+    const url = `${this.baseTransactionUrl}/createProductSaleTransaction?companyId=${this.companyId}&userId=${this.userId}`;
     return this.http.post<any>(url, model);
   }
 
   createProductPurchaseTransaction(model: any) {
-    const url = `${this.baseTransactionUrl}/createProductPurchaseTransaction?companyId=${this.companyId}`;
+    const url = `${this.baseTransactionUrl}/createProductPurchaseTransaction?companyId=${this.companyId}&userId=${this.userId}`;
     return this.http.post<any>(url, model);
   }
 }

@@ -1,0 +1,212 @@
+<app-side-bar></app-side-bar>
+<div id="main">
+    <app-top-nav-bar></app-top-nav-bar>
+
+    <h3 class="mb-4 col" style="font-weight: 700; color: #525252;">Reports</h3>
+
+    <div>
+
+        <div class="row">
+            <div class="col">
+                <button (click)="onClickTrialBalanceButton()">Trial Balance Report</button>
+                <button (click)="onClickProfitLossButton()">Profit Loss Report</button>
+                <button (click)="onClickJournalEntryButton()">Journal Entry Report</button>
+            </div>
+
+            <div *ngIf="showPickers" class="col" id="picker">
+                <p *ngIf="isProfitLossClicked">Choose dates for <b>Profit Loss</b> Report</p>
+                <p *ngIf="isJournalEntryClicked">Choose dates for <b>Journal Entry</b> Report</p>
+                <mat-form-field style="margin-right: 30px;">
+                    <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date"
+                        (dateChange)="onStartDateChange($event)">
+                    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startDatePicker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput [matDatepicker]="endDatePicker" placeholder="End Date"
+                        (dateChange)="onEndDateChange($event)">
+                    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #endDatePicker></mat-datepicker>
+                </mat-form-field>
+                <button (click)="onClickSend()">Send</button>
+
+            </div>
+        </div>
+
+        <div class="trialBalance" *ngIf="showTrialBalanceTable">
+
+            <div class="export-buttons">
+                <button (click)="exportToExcelTrialBalance()">Export Excel</button>
+                <button (click)="exportTrialBalanceToPdf()">Export to PDF</button>
+            </div>
+            <div class="tableStyle">
+                <table id="table" mat-table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="accountCode">
+                        <th mat-header-cell *matHeaderCellDef> Account Code </th>
+                        <td mat-cell *matCellDef="let data"> {{ data.accountCode }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="currentBalance">
+                        <th mat-header-cell *matHeaderCellDef> Current Balance </th>
+                        <td mat-cell *matCellDef="let data"> {{ data.currentBalance }} $</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="lastUpdatedDate">
+                        <th mat-header-cell *matHeaderCellDef> Last Updated Date </th>
+                        <td mat-cell *matCellDef="let data">{{ formatDate(data.lastUpdatedDate) }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="accountName">
+                        <th mat-header-cell *matHeaderCellDef> Account Name </th>
+                        <td mat-cell *matCellDef="let data"> {{ data.generalChartOfAccounts.accountName }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="accountDescription">
+                        <th mat-header-cell *matHeaderCellDef> Account Description </th>
+                        <td mat-cell *matCellDef="let data"> {{ data.generalChartOfAccounts.accountDescription }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="accountType">
+                        <th mat-header-cell *matHeaderCellDef> Account Type </th>
+                        <td mat-cell *matCellDef="let data"> {{ data.generalChartOfAccounts.accountType }} </td>
+                    </ng-container>
+
+
+                    <tr mat-header-row *matHeaderRowDef="trialBalanceColumns"></tr>
+                    <tr mat-row *matRowDef="let data; columns: trialBalanceColumns"></tr>
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <div *ngIf="isClickedSend && isProfitLossClicked">
+            <div class="export-buttons">
+                <button (click)="exportToExcelProfit()">Export Excel</button>
+                <button (click)="exportProfitToPdf()">Export to PDF</button>
+            </div>
+            <div id="profittable">
+                <h4 class="mb-4 col" style="font-weight: 700; color: #525252;">Profit</h4>
+                <table class="tableStyle" mat-table [dataSource]="profitLossData.companyChartOfAccountsIncome">
+                    <ng-container matColumnDef="accountCode">
+                        <th mat-header-cell *matHeaderCellDef>Account Code</th>
+                        <td mat-cell *matCellDef="let profit">
+                            {{ profit.creditAccount?.accountCode || profit.debitAccount?.accountCode }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="accountName">
+                        <th mat-header-cell *matHeaderCellDef>Account Name</th>
+                        <td mat-cell *matCellDef="let profit">
+                            {{ profit.creditAccount?.accountName || profit.debitAccount?.accountName }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="accountDescription">
+                        <th mat-header-cell *matHeaderCellDef>Account Description</th>
+                        <td mat-cell *matCellDef="let profit">
+                            {{ profit.creditAccount?.accountDescription || profit.debitAccount?.accountDescription }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="amount">
+                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                        <td mat-cell *matCellDef="let profit">{{ profit.transactionAmount }} $</td>
+                    </ng-container>
+                    <ng-container matColumnDef="transactionDate">
+                        <th mat-header-cell *matHeaderCellDef>Transaction Date</th>
+                        <td mat-cell *matCellDef="let profit">{{ formatDate(profit.transactionDate) }}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="profitLossColumns"></tr>
+                    <tr mat-row *matRowDef="let profit; columns: profitLossColumns"></tr>
+                </table>
+                <h5 class="mb-4" style="font-weight: 700; color: #525252;">Income Total: {{ profitLossData.incomeTotal }} $</h5>
+
+                <h4 class="mt-4 mb-4 col" style="font-weight: 700; color: #525252;">Loss</h4>
+                <table class="tableStyle" mat-table [dataSource]="profitLossData.companyChartOfAccountsExpense">
+                    <ng-container matColumnDef="accountCode">
+                        <th mat-header-cell *matHeaderCellDef>Account Code</th>
+                        <td mat-cell *matCellDef="let profit">
+                            {{ profit.creditAccount?.accountCode || profit.debitAccount?.accountCode }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="accountName">
+                        <th mat-header-cell *matHeaderCellDef>Account Name</th>
+                        <td mat-cell *matCellDef="let profit">
+                            {{ profit.creditAccount?.accountName || profit.debitAccount?.accountName }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="accountDescription">
+                        <th mat-header-cell *matHeaderCellDef>Account Description</th>
+                        <td mat-cell *matCellDef="let profit">
+                            {{ profit.creditAccount?.accountDescription || profit.debitAccount?.accountDescription }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="amount">
+                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                        <td mat-cell *matCellDef="let profit">{{ profit.transactionAmount }} $</td>
+                    </ng-container>
+                    <ng-container matColumnDef="transactionDate">
+                        <th mat-header-cell *matHeaderCellDef>Transaction Date</th>
+                        <td mat-cell *matCellDef="let profit">{{ formatDate(profit.transactionDate) }}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="profitLossColumns"></tr>
+                    <tr mat-row *matRowDef="let profit; columns: profitLossColumns"></tr>
+                </table>
+                <h5 class="mb-4" style="font-weight: 700; color: #525252;">Expense Total: {{ profitLossData.expenseTotal }} $</h5>
+
+                <h2 class="mt-4" style="font-weight: 700; color: #525252;">Profit Loss Total: {{
+                    profitLossData.profitLoss }} $</h2>
+
+            </div>
+
+        </div>
+
+        <div *ngIf="isClickedSend && isJournalEntryClicked">
+            <div class="export-buttons">
+                <button (click)="exportToExcelJournalEntry()">Export Excel</button>
+                <button (click)="exportJournalEntryToPdf()">Export to PDF</button>
+            </div>
+          
+            <table id="journalEntryTable" class="tableStyle" mat-table [dataSource]="journalEntryData">
+                    <ng-container matColumnDef="documentNumber">
+                        <th mat-header-cell *matHeaderCellDef>Document Number</th>
+                        <td mat-cell *matCellDef="let transaction">{{ transaction.documentNumber }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="documentSeries">
+                        <th mat-header-cell *matHeaderCellDef>Document Series</th>
+                        <td mat-cell *matCellDef="let transaction">{{ transaction.documentSeries }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="transactionAmount">
+                        <th mat-header-cell *matHeaderCellDef>Transaction Amount</th>
+                        <td mat-cell *matCellDef="let transaction">{{ transaction.transactionAmount }} $ </td>
+                    </ng-container>
+                    <ng-container matColumnDef="paidAmount">
+                        <th mat-header-cell *matHeaderCellDef>Paid Amount</th>
+                        <td mat-cell *matCellDef="let transaction">{{ transaction.paidAmount }} $ </td>
+                    </ng-container>
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef>Description</th>
+                        <td mat-cell *matCellDef="let transaction">{{ transaction.description }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="debitAccountCode">
+                        <th mat-header-cell *matHeaderCellDef>Debited Account</th>
+                        <td mat-cell *matCellDef="let transaction">{{ transaction.debitAccountCode }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="creditAccountCode">
+                        <th mat-header-cell *matHeaderCellDef>Credited Account</th>
+                        <td mat-cell *matCellDef="let transaction">{{ transaction.creditAccountCode }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="transactionDate">
+                        <th mat-header-cell *matHeaderCellDef>Transaction Date</th>
+                        <td mat-cell *matCellDef="let profit">{{ formatDate(profit.transactionDate) }}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="journalEntryColumns"></tr>
+                    <tr mat-row *matRowDef="let profit; columns: journalEntryColumns"></tr>
+                </table>
+
+        </div>
+    </div>

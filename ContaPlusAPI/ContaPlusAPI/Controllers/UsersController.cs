@@ -42,11 +42,10 @@ namespace ContaPlusAPI.Controllers
         }
 
         [HttpPost("addUserRoleToCompany")]
-        public async Task<IActionResult> AddUserRoleToCompany(Guid userId, int roleId, Guid companyId)
+        public async Task<IActionResult> AddUserRoleToCompany([FromBody] AddUserRoleToCompanyDTO addUser)
         {
-            return await _userService.AddUserRoleToCompany(userId, roleId, companyId);
+            return await _userService.AddUserRoleToCompany(addUser.UserId, addUser.RoleId, addUser.CompanyId);
         }
-
 
         [HttpPut("updateUser/{userId}")]
         public async Task<IActionResult> UpdateUser([FromBody] UserProfileUpdateDTO updatedUser, Guid userId)
@@ -64,7 +63,6 @@ namespace ContaPlusAPI.Controllers
                 return Ok("Forgot password link has been sent.");
             else
                 return NotFound();
-
         }
 
         [HttpPost("resetPassword")]
