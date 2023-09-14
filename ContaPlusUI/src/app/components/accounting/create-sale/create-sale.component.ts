@@ -347,22 +347,17 @@ export class CreateSaleComponent implements OnInit {
     if (isDueDateCorrect)
       this.transactionService.createProductSaleTransaction(model).subscribe(
         () => {
-
-
           if (this.isInvoiceReceiptSelected) {
             this.generateInvoicePDF(invoicePDFContent);
             this.generateReceiptPDF(receiptPDFContent);
+            this.form.reset();
+            this.addedProducts = [];
           }
-          else
+          else {
             this.generateInvoicePDF(invoicePDFContent);
-
-          this.form.reset();
-
-          this.addedProducts = [];
-
-          this.router.navigateByUrl('/income/createSale', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['/income/createSale']);
-          });
+            this.form.reset();
+            this.addedProducts = [];
+          }
         }
       );
 
